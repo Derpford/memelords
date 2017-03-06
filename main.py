@@ -31,21 +31,18 @@ keyDelay=0 # Time until next key press can be processed. Only for one-press keys
 
 def updateFunc(room):
     room.update(t,dt,keyDelay,player)
-def drawFunc(roomImg,room):
-    room.draw(roomImg,player,screen,clock,fps)
+def drawFunc(room):
+    room.draw(player,screen,clock,fps)
 
 t=0
 fps=60
 dt=1/60/fps
-mapRoom=rooms.gameRoom(roomLayouts[random.randrange(len(roomLayouts))])
-mapImg=pygame.Surface((400,204))
+#mapRoom=rooms.gameRoom(roomLayouts[random.randrange(len(roomLayouts))])
+mapRoom=rooms.gameRoom(roomLayouts[0])
 player=actors.Player(mapRoom.space,200,150)
-for layer in mapRoom.grid.layers:
-    for x, y, img in layer.tiles():
-        mapImg.blit(img,(x*16,y*16))
 
 # MAIN LOOP
 while 1:
     updateFunc(mapRoom)
-    drawFunc(mapImg,mapRoom)
+    drawFunc(mapRoom)
 

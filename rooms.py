@@ -62,8 +62,11 @@ class gameRoom(Room):
         self.grid=pytmx.load_pygame(tile)
         self.space=pymunk.Space()
         self.space.gravity = 0,0
-        for layer in self.grid.layers:
-            for x,y,img in layer.tiles():
+        self.mapImg=pygame.Surface((400,204))
+        # Tiled iterator.
+        if 'tiles' in self.grid.layernames:
+            for x,y,img in self.grid.layernames['tiles'].tiles():
+                # Tile bounding boxes.
                     props = self.grid.get_tile_properties(x,y,0)
                     if props==None:
                         pass
@@ -73,6 +76,20 @@ class gameRoom(Room):
                             box=pymunk.Poly(body,[(0,0),(0,16),(16,16),(16,0)])
                             body.position=x*16,y*16
                             self.space.add(body,box)
+        if 'exits' in self.grid.layernames:
+            for obj in self.grid.layernames['exits']:
+                # Exit bounding boxes.
+                print(str(obj))
+                props = obj.properties
+                body=pymunk.Body(1,1,pymunk.Body.STATIC)
+                body.sensor=True
+                body.props=props
+                box=pymunk.Poly(body,obj.points)
+                self.space.add(body,box)
+        if 'tiles' in self.grid.layernames:
+            for x, y, img in self.grid.layernames['tiles'].tiles():
+                self.mapImg.blit(img,(x*16,y*16))
+
     # Update the room.
     def update(self,t,dt,keyDelay,player):
         t+=dt
@@ -92,9 +109,9 @@ class gameRoom(Room):
         if pygame.key.get_pressed()[K_ESCAPE]:
             sys.exit()
 
-    def draw(self,roomImg,player,screen,clock,fps):
+    def draw(self,player,screen,clock,fps):
         screen.fill((0,0,0))
-        screen.blit(roomImg,(0,0))
+        screen.blit(self.mapImg,(0,0))
         player.draw(screen)
         fpsReal=getfps(clock,fps)
         if debug:
