@@ -7,13 +7,14 @@ import pymunk.pygame_util
 import os, sys, math, random
 #And my other files.
 import actors, rooms 
+import player
 from helpers import *
 debug=False
 
 #Screen settings.
 pygame.init()
-#screen = pygame.display.set_mode((400,300),FULLSCREEN)
-screen = pygame.display.set_mode((400,300))
+#screen = pygame.display.set_mode((width,height),FULLSCREEN)
+screen = pygame.display.set_mode((width,height))
 
 #Pymunk debug.
 options=pymunk.pygame_util.DrawOptions(screen)
@@ -30,16 +31,16 @@ keyDelay=0 # Time until next key press can be processed. Only for one-press keys
 
 
 def updateFunc(room):
-    room.update(t,dt,keyDelay,player)
+    room.update(t,dt,keyDelay,playerObject)
 def drawFunc(room):
-    room.draw(player,screen,clock,fps)
+    room.draw(playerObject,screen,clock,fps)
 
 t=0
 fps=60
 dt=1/60/fps
 #mapRoom=rooms.gameRoom(roomLayouts[random.randrange(len(roomLayouts))])
 mapRoom=rooms.gameRoom(roomLayouts[0])
-player=actors.Player(mapRoom.space,200,150)
+playerObject=player.Player(mapRoom.space,200,150)
 
 # MAIN LOOP
 while 1:

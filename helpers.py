@@ -1,5 +1,15 @@
 import pygame, math, random
 
+# Width/Height constants.
+width=400
+height=300
+
+# Collision types.
+collisionTypes={
+        "player":1,
+        "exit":2
+        }
+
 # Image Loader.
 def loadImage(path):
     return pygame.image.load(path).convert()
