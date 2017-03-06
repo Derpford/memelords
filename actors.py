@@ -6,7 +6,8 @@ debug=False
 factor=1000000
 def drawAnimation(screen,frames,pos,speed,t):
     screen.blit(frames[math.floor(speed*t%len(frames))],(pos[0],pos[1]))
-    print(str(pos)+" anim pos")
+    if debug:
+        print(str(pos)+" anim pos for "+str(frames))
 
 class Actor(pygame.sprite.Sprite):
     def __init__(self, space, x = 0, y = 0, dt = 1/120):
@@ -47,7 +48,7 @@ class Player(Actor):
                 loadImage("assets/guy-green/guy-green8.png"),
                 loadImage("assets/guy-green/guy-green9.png")]
         self.face=[0,1]
-        self.speed=80
+        self.speed=120
         self.dx=0
         self.dy=0
         self.hp=6
@@ -66,9 +67,9 @@ class Player(Actor):
                     drawAnimation(screen,self.anim[7:9],pos,8*abs(self.face[0]),self.t)
             else:
                 if self.face[1]<0:
-                    drawAnimation(screen,self.anim[10:12],pos,8*abs(self.face[0]),self.t)
+                    drawAnimation(screen,self.anim[10:12],pos,8*abs(self.face[1]),self.t)
                 else:
-                    drawAnimation(screen,self.anim[1:3],pos,8*abs(self.face[0]),self.t)
+                    drawAnimation(screen,self.anim[1:3],pos,8*abs(self.face[1]),self.t)
         else:
             # Standing.
             if self.face[0]!=0:
@@ -124,12 +125,13 @@ class Player(Actor):
                 angle=math.atan2(self.face[1],self.face[0])
                 self.dx=math.cos(angle)*self.speed*self.dt*xFactor
                 self.dy=math.sin(angle)*self.speed*self.dt*yFactor
-                print(str(self.dx)+" dx/"+str(self.dy)+" dy")
                 # Apply force.
                 self.body.apply_force_at_local_point((self.dx*factor,self.dy*factor),(0,0))
             # Apply friction.
             fx = (self.body.velocity.x)*-(frict*xFactor)
             fy = (self.body.velocity.y)*-(frict*yFactor)
             self.body.apply_force_at_local_point((fx,fy),(0,0))
-            print(str(self.body.velocity)+" force")
-            print(str(self.body.position)+" phys position")
+            if debug:
+                print(str(self.dx)+" dx/"+str(self.dy)+" dy")
+                print(str(self.body.velocity)+" force")
+                print(str(self.body.position)+" phys position")
