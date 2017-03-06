@@ -63,7 +63,8 @@ class gameRoom(Room):
         self.space=pymunk.Space()
         self.space.gravity = 0,0
         self.mapImg=pygame.Surface((400,204))
-        # Tiled iterator.
+        # Tiled iterators.
+        #Adding the tile bounding boxes.
         if 'tiles' in self.grid.layernames:
             for x,y,img in self.grid.layernames['tiles'].tiles():
                 # Tile bounding boxes.
@@ -76,19 +77,37 @@ class gameRoom(Room):
                             box=pymunk.Poly(body,[(0,0),(0,16),(16,16),(16,0)])
                             body.position=x*16,y*16
                             self.space.add(body,box)
+        
+
+
+
+        #Adding exits.
         if 'exits' in self.grid.layernames:
             for obj in self.grid.layernames['exits']:
                 # Exit bounding boxes.
-                print(str(obj))
+                if debug:
+                    print(str(obj))
                 props = obj.properties
                 body=pymunk.Body(1,1,pymunk.Body.STATIC)
                 body.sensor=True
                 body.props=props
                 box=pymunk.Poly(body,obj.points)
+                box.collision_type=collisionTypes["exit"]
                 self.space.add(body,box)
+        #Adding the stuff in the 'tiles' layer to the screen.
         if 'tiles' in self.grid.layernames:
             for x, y, img in self.grid.layernames['tiles'].tiles():
                 self.mapImg.blit(img,(x*16,y*16))
+
+        # Exit handler.
+        def exitRoom(arbiter,space,data):
+            exit=arbiter.shapes[0]
+            player=arbiter.shapes[1]
+            if exit.props['xflip']:
+                player.body.position.x = width-player.body.position.x+16
+            if exit.props['yflip']:
+                player.body.position.y = height-player.body.position.y+16
+
 
     # Update the room.
     def update(self,t,dt,keyDelay,player):
