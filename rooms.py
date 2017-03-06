@@ -6,6 +6,7 @@ debug=False
 hudSurface=None
 barSprites=None
 heartSprites=None
+exitFlag=False
 # Hud surface and sprites.
 def hudInit():
     global heartSprites, barSprites, hudSurface
@@ -101,12 +102,22 @@ class gameRoom(Room):
 
         # Exit handler.
         def exitRoom(arbiter,space,data):
+            global exitFlag
+            if debug:
+                print("Exiting room!")
             exit=arbiter.shapes[0]
             player=arbiter.shapes[1]
-            if exit.props['xflip']:
+            if exit.body.props['xflip']:
                 player.body.position.x = width-player.body.position.x+16
-            if exit.props['yflip']:
+            if exit.body.props['yflip']:
                 player.body.position.y = height-player.body.position.y+16
+            exitFlag=True
+
+        h = self.space.add_collision_handler(
+                collisionTypes["exit"],
+                collisionTypes["player"])
+        h.separate = exitRoom
+            
 
 
     # Update the room.
@@ -129,6 +140,10 @@ class gameRoom(Room):
             sys.exit()
 
     def draw(self,player,screen,clock,fps):
+        #Pymunk debug.
+        self.pymunkoptions=pymunk.pygame_util.DrawOptions(screen)
+        self.pymunkoptions.positive_y_is_up=True
+        self.pymunkoptions.DRAW_SHAPES=True
         screen.fill((0,0,0))
         screen.blit(self.mapImg,(0,0))
         player.draw(screen)
@@ -144,5 +159,5 @@ class gameRoom(Room):
             screen.blit(forBlit, (0,32))
         drawHud(screen,hudSurface,(0,204),player)
         if debug:
-           self.space.debug_draw(options) 
+           self.space.debug_draw(self.pymunkoptions) 
         pygame.display.flip()

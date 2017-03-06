@@ -1,5 +1,9 @@
 import pygame, math, random
 
+pygame.font.init()
+# Font.
+font=pygame.font.Font(None,16)
+
 # Width/Height constants.
 width=400
 height=300
