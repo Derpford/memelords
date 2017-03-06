@@ -3,9 +3,10 @@ from helpers import *
 import actors
 debug=False
 
-class Player(Actor):
+class Player(actors.Actor):
     def __init__(self,space, x=0, y=0, dt=1/120):
-        Actor.__init__(self,space,x,y,dt)
+        actors.Actor.__init__(self,space,x,y,dt)
+        self.shape.collision_type = collisionTypes["player"]
         self.anim = [loadImage("assets/guy-green/guy-green1.png"),
                 loadImage("assets/guy-green/guy-green2.png"),
                 loadImage("assets/guy-green/guy-green3.png"),
@@ -33,14 +34,14 @@ class Player(Actor):
             # Walking.
             if self.face[0]!=0:
                 if self.face[0]>0:
-                    drawAnimation(screen,self.anim[4:6],pos,8*abs(self.face[0]),self.t)
+                    actors.drawAnimation(screen,self.anim[4:6],pos,8*abs(self.face[0]),self.t)
                 if self.face[0]<0:
-                    drawAnimation(screen,self.anim[7:9],pos,8*abs(self.face[0]),self.t)
+                    actors.drawAnimation(screen,self.anim[7:9],pos,8*abs(self.face[0]),self.t)
             else:
                 if self.face[1]<0:
-                    drawAnimation(screen,self.anim[10:12],pos,8*abs(self.face[1]),self.t)
+                    actors.drawAnimation(screen,self.anim[10:12],pos,8*abs(self.face[1]),self.t)
                 else:
-                    drawAnimation(screen,self.anim[1:3],pos,8*abs(self.face[1]),self.t)
+                    actors.drawAnimation(screen,self.anim[1:3],pos,8*abs(self.face[1]),self.t)
         else:
             # Standing.
             if self.face[0]!=0:
@@ -97,7 +98,7 @@ class Player(Actor):
                 self.dx=math.cos(angle)*self.speed*self.dt*xFactor
                 self.dy=math.sin(angle)*self.speed*self.dt*yFactor
                 # Apply force.
-                self.body.apply_force_at_local_point((self.dx*factor,self.dy*factor),(0,0))
+                self.body.apply_force_at_local_point((self.dx*actors.factor,self.dy*actors.factor),(0,0))
             # Apply friction.
             fx = (self.body.velocity.x)*-(frict*xFactor)
             fy = (self.body.velocity.y)*-(frict*yFactor)
@@ -106,3 +107,6 @@ class Player(Actor):
                 print(str(self.dx)+" dx/"+str(self.dy)+" dy")
                 print(str(self.body.velocity)+" force")
                 print(str(self.body.position)+" phys position")
+
+            # Handle exiting rooms.
+            
