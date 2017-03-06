@@ -22,12 +22,16 @@
   <object id="6" name="exit1" x="0" y="16">
    <properties>
     <property name="exit" type="int" value="-1"/>
+    <property name="xflip" type="bool" value="true"/>
+    <property name="yflip" type="bool" value="false"/>
    </properties>
    <polyline points="0,0 0,176"/>
   </object>
   <object id="7" name="exit2" x="400" y="16">
    <properties>
     <property name="exit" type="int" value="1"/>
+    <property name="xflip" type="bool" value="true"/>
+    <property name="yflip" type="bool" value="false"/>
    </properties>
    <polyline points="0,0 0,176"/>
   </object>
