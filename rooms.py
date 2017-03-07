@@ -49,13 +49,13 @@ def drawHud(screen,surf,pos,player):
 class Room():
     def __init__():
         #Initialize things.
-        raise NotImplemented
+        raise NotImplementedError
     def update():
         #Update things.
-        raise NotImplemented
+        raise NotImplementedError
     def draw():
         #Draw things.
-        raise NotImplemented
+        raise NotImplementedError
 
 class gameRoom(Room):
     def __init__(self,tile):
