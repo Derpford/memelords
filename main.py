@@ -22,7 +22,7 @@ hudSurface = rooms.hudInit()
 #Rooms to load into the dungeon.
 roomLayouts=['assets/rooms/corridor.tmx','assets/rooms/shrine.tmx','assets/rooms/grave.tmx']
 roomPos=0
-roomList=[roomLayouts[0],roomLayouts[1]]
+roomList=[roomLayouts[0],roomLayouts[1],roomLayouts[2]]
 
 clock=pygame.time.Clock()
 keyDelay=0 # Time until next key press can be processed. Only for one-press keys.
