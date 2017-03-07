@@ -20,9 +20,9 @@ screen = pygame.display.set_mode((width,height))
 hudSurface = rooms.hudInit()
 
 #Rooms to load into the dungeon.
-roomLayouts=['assets/rooms/corridor.tmx','assets/rooms/shrine.tmx','assets/rooms/grave.tmx']
+roomLayouts=['assets/rooms/corridor.tmx','assets/rooms/corridor2.tmx','assets/rooms/corridor3.tmx','assets/rooms/shrine.tmx','assets/rooms/grave.tmx']
 roomPos=0
-roomList=[roomLayouts[0],roomLayouts[1],roomLayouts[2]]
+roomList=[roomLayouts[random.randint(0,2)],roomLayouts[random.randint(0,2)],roomLayouts[random.randint(0,2)],roomLayouts[3],roomLayouts[4]]
 
 clock=pygame.time.Clock()
 keyDelay=0 # Time until next key press can be processed. Only for one-press keys.
@@ -58,8 +58,9 @@ while 1:
             roomPos=0
         rooms.exitFlag=0
         if debug:
-            print(str(roomPos))
-            print(str(roomList[roomPos]))
+            print("Room Position: "+str(roomPos))
+            print("Room Type: "+str(roomLayouts.index(roomList[roomPos])))
+            print("Room .tmx File: "+str(roomList[roomPos]))
         mapRoom=loadRoom(roomList[roomPos])
         mapRoom.space.add(playerObject.body, playerObject.shape)
 
