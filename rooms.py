@@ -108,9 +108,9 @@ class gameRoom(Room):
             exit=arbiter.shapes[0]
             player=arbiter.shapes[1]
             fx,fy=player.body.position
-            if exit.body.props['xflip']==True:
+            if 'xflip' in exit.body.props:
                 fx = width-fx+16
-            if exit.body.props['yflip']==True:
+            if 'yflip' in exit.body.props:
                 fy = height-fy+16
             player.body.jumpTo((fx,fy))
             exitFlag=int(exit.body.props['exit'])
