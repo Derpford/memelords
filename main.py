@@ -53,13 +53,13 @@ while 1:
         mapRoom.space.remove(playerObject.body, playerObject.shape)
         roomPos+=rooms.exitFlag
         if roomPos<0:
-            roomPos=len(roomList)
-        if roomPos>len(roomList):
+            roomPos=len(roomList)-1
+        if roomPos>=len(roomList):
             roomPos=0
         rooms.exitFlag=0
         if debug:
-            print(str(roomPos-1))
-            print(str(roomList[roomPos-1]))
-        mapRoom=loadRoom(roomList[roomPos-1])
+            print(str(roomPos))
+            print(str(roomList[roomPos]))
+        mapRoom=loadRoom(roomList[roomPos])
         mapRoom.space.add(playerObject.body, playerObject.shape)
 

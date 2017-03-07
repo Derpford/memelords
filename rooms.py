@@ -2,7 +2,7 @@ import pygame, math, random, pytmx, pymunk, sys
 from helpers import *
 from pygame.locals import *
 
-debug=True
+debug=False
 hudSurface=None
 barSprites=None
 heartSprites=None
@@ -59,7 +59,6 @@ class Room():
 
 class gameRoom(Room):
     def __init__(self,tile):
-        Room.__init__()
         self.grid=pytmx.load_pygame(tile)
         self.space=pymunk.Space()
         self.space.gravity = 0,0
@@ -106,14 +105,14 @@ class gameRoom(Room):
             if debug:
                 print("Exiting room!")
             exit=arbiter.shapes[0]
+            exitFlag=int(exit.body.props['exit'])
             player=arbiter.shapes[1]
             fx,fy=player.body.position
             if 'xflip' in exit.body.props:
-                fx = width-fx+16
+                fx = width-fx+(24*exitFlag)
             if 'yflip' in exit.body.props:
-                fy = height-fy+16
+                fy = height-fy+(24*exitFlag)
             player.body.jumpTo((fx,fy))
-            exitFlag=int(exit.body.props['exit'])
             if debug:
                 print("Exit num:"+str(exitFlag))
                 print("Xflip: "+str(exit.body.props['xflip'])+", new X: "+str(player.body.position.x))
