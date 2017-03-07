@@ -2,11 +2,11 @@ import pygame, math, random, pytmx, pymunk, sys
 from helpers import *
 from pygame.locals import *
 
-debug=False
+debug=True
 hudSurface=None
 barSprites=None
 heartSprites=None
-exitFlag=False
+exitFlag=0
 # Hud surface and sprites.
 def hudInit():
     global heartSprites, barSprites, hudSurface
@@ -49,13 +49,13 @@ def drawHud(screen,surf,pos,player):
 class Room():
     def __init__():
         #Initialize things.
-        pass
+        raise NotImplemented
     def update():
         #Update things.
-        pass
+        raise NotImplemented
     def draw():
         #Draw things.
-        pass
+        raise NotImplemented
 
 class gameRoom(Room):
     def __init__(self,tile):
@@ -107,16 +107,26 @@ class gameRoom(Room):
                 print("Exiting room!")
             exit=arbiter.shapes[0]
             player=arbiter.shapes[1]
-            if exit.body.props['xflip']:
-                player.body.position.x = width-player.body.position.x+16
-            if exit.body.props['yflip']:
-                player.body.position.y = height-player.body.position.y+16
-            exitFlag=True
+            fx,fy=player.body.position
+            if exit.body.props['xflip']==True:
+                fx = width-fx+16
+            if exit.body.props['yflip']==True:
+                fy = height-fy+16
+            player.body.jumpTo((fx,fy))
+            exitFlag=int(exit.body.props['exit'])
+            if debug:
+                print("Exit num:"+str(exitFlag))
+                print("Xflip: "+str(exit.body.props['xflip'])+", new X: "+str(player.body.position.x))
+                print("New X should be: "+str(fx))
+                print("Yflip: "+str(exit.body.props['yflip'])+", new Y: "+str(player.body.position.y))
+                print("New Y should be: "+str(fy))
+
+            return True
 
         h = self.space.add_collision_handler(
                 collisionTypes["exit"],
                 collisionTypes["player"])
-        h.separate = exitRoom
+        h.begin = exitRoom
             
 
 
