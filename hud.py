@@ -35,12 +35,16 @@ def hudInit():
     hudSurface.blit(hudBottomSprite,(8,88))
     hudSurface.blit(hudLeftSprite,(0,8))
     hudSurface.blit(hudRightSprite,(392,8))
+    hpBlit=gameFont.render("Health",False,textColors["dark"])
+    weaponBlit=gameFont.render("Weapon",False,textColors["dark"])
+    hudSurface.blit(hpBlit,(16,12))
+    hudSurface.blit(weaponBlit,(16,48))
     return hudSurface
 
 def drawHud(screen,surf,pos,player):
     screen.blit(surf,pos)
     for i in range(0,player.maxhp):
         if i >= player.hp:
-            screen.blit(barSprites[1],tupSum(pos,(16+i*4,16)))
+            screen.blit(barSprites[1],tupSum(pos,(16+i*4,24)))
         else:
-            screen.blit(barSprites[0],tupSum(pos,(16+i*4,16)))
+            screen.blit(barSprites[0],tupSum(pos,(16+i*4,24)))

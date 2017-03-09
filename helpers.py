@@ -3,6 +3,11 @@ import pygame, math, random
 pygame.font.init()
 # Font.
 font=pygame.font.Font(None,16)
+gameFont=pygame.font.Font('assets/fonts/Px437_ToshibaLCD_8x8.ttf',8)
+textColors={ "dark":(41,57,65),
+        "light":(186,195,117)
+        }
+
 
 # Width/Height constants.
 width=400
