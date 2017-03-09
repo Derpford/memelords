@@ -17,3 +17,10 @@ class Bad(actors.Actor):
                 loadImage("assets/hood/hood7.png"),
                 loadImage("assets/hood/hood8.png"),
                 loadImage("assets/hood/hood9.png")]
+        self.face=[0,1]
+        self.speed=120
+        self.dx=0
+        self.dy=0
+        self.hp=3
+        self.maxhp=3
+        self.dead=False
