@@ -26,10 +26,7 @@ class Player(actors.Actor):
         self.hp=6
         self.maxhp=6
         self.dead=False
-        self.body.jumpTo=self.jumpTo
 
-    def jumpTo(self,pos):
-        self.body.position = pos
 
     def draw(self,screen):
         pos=(self.body.position.x-8,self.body.position.y-8)

@@ -24,6 +24,10 @@ class Actor(pygame.sprite.Sprite):
         self.t=0
         self.dt=dt
         self.friction=150 # How hard to slow this thing down.
+        self.body.jumpTo=self.jumpTo
+
+    def jumpTo(self,pos):
+        self.body.position = pos
 
     def draw(self,screen):
         screen.blit(self.anim[math.floor(self.t%3)],self.body.position)
