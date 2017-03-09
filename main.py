@@ -22,7 +22,14 @@ screen = pygame.display.set_mode((width,height))
 roomSpecials=['assets/rooms/shrine.tmx','assets/rooms/grave.tmx']
 roomLayouts=['assets/rooms/corridor.tmx','assets/rooms/corridor2.tmx','assets/rooms/corridor3.tmx']
 roomPos=0
-roomList=[roomLayouts[random.randint(0,2)],roomLayouts[random.randint(0,2)],roomLayouts[random.randint(0,2)],roomSpecials[0],roomSpecials[1]]
+roomList=[roomLayouts[random.randint(0,2)],
+        roomLayouts[random.randint(0,2)],
+        roomLayouts[random.randint(0,2)],
+        roomSpecials[random.randint(0,1)],
+        roomLayouts[random.randint(0,2)],
+        roomLayouts[random.randint(0,2)],
+        roomLayouts[random.randint(0,2)],
+        roomSpecials[random.randint(0,1)]]
 
 clock=pygame.time.Clock()
 keyDelay=0 # Time until next key press can be processed. Only for one-press keys.
