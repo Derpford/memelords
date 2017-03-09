@@ -19,9 +19,10 @@ screen = pygame.display.set_mode((width,height))
 
 
 #Rooms to load into the dungeon.
-roomLayouts=['assets/rooms/corridor.tmx','assets/rooms/corridor2.tmx','assets/rooms/corridor3.tmx','assets/rooms/shrine.tmx','assets/rooms/grave.tmx']
+roomSpecials=['assets/rooms/shrine.tmx','assets/rooms/grave.tmx']
+roomLayouts=['assets/rooms/corridor.tmx','assets/rooms/corridor2.tmx','assets/rooms/corridor3.tmx']
 roomPos=0
-roomList=[roomLayouts[random.randint(0,2)],roomLayouts[random.randint(0,2)],roomLayouts[random.randint(0,2)],roomLayouts[3],roomLayouts[4]]
+roomList=[roomLayouts[random.randint(0,2)],roomLayouts[random.randint(0,2)],roomLayouts[random.randint(0,2)],roomSpecials[0],roomSpecials[1]]
 
 clock=pygame.time.Clock()
 keyDelay=0 # Time until next key press can be processed. Only for one-press keys.
@@ -41,7 +42,7 @@ fps=60
 dt=1/60/fps
 #mapRoom=rooms.gameRoom(roomLayouts[random.randrange(len(roomLayouts))])
 mapRoom=loadRoom(roomList[0])
-print("Entering game in room "+str(roomList[0]))
+print("Entering game in room "+str(mapRoom.roomFile))
 playerObject=player.Player(mapRoom.space,200,150)
 
 # MAIN LOOP
@@ -58,8 +59,7 @@ while 1:
         rooms.exitFlag=0
         if debug:
             print("Room Position: "+str(roomPos))
-            print("Room Type: "+str(roomLayouts.index(roomList[roomPos])))
-            print("Room .tmx File: "+str(roomList[roomPos]))
+            print("Room .tmx File: "+str(mapRoom.roomFile))
         mapRoom=loadRoom(roomList[roomPos])
         mapRoom.space.add(playerObject.body, playerObject.shape)
 

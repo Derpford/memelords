@@ -19,6 +19,7 @@ class Room():
 
 class gameRoom(Room):
     def __init__(self,tile):
+        self.roomFile=tile
         self.grid=pytmx.load_pygame(tile)
         self.space=pymunk.Space()
         self.space.gravity = 0,0
