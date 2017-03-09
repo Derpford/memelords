@@ -23,7 +23,6 @@
    <properties>
     <property name="exit" type="int" value="-1"/>
     <property name="xflip" type="bool" value="true"/>
-    <property name="yflip" type="bool" value="false"/>
    </properties>
    <polyline points="0,0 0,176"/>
   </object>
@@ -31,7 +30,6 @@
    <properties>
     <property name="exit" type="int" value="1"/>
     <property name="xflip" type="bool" value="true"/>
-    <property name="yflip" type="bool" value="false"/>
    </properties>
    <polyline points="0,0 0,176"/>
   </object>
