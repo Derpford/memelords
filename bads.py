@@ -25,7 +25,7 @@ class Bad(actors.Actor):
         self.maxhp=3
         self.dead=False
         self.pattern=[(1,0),(0,0),(-1,0),(0,0)]
-        self.patternTimer=0.5
+        self.patternTimer=1
         self.patternTimerMax=0.5
         self.patternStep=-1
 
@@ -78,6 +78,7 @@ class Hood(Bad):
     # Basic bad guy.
     def __init__(self,space,x=0,y=0,dt=1/120):
         Bad.__init__(self,space,x,y,dt)
+        self.patternTimerMax=0.2
         self.pattern=[(0,0),(0,1),
                 (0,0),(1,0),
                 (0,0),(0,-1),
