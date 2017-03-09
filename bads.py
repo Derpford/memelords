@@ -17,7 +17,7 @@ class Bad(actors.Actor):
                 loadImage("assets/hood/hood7.png"),
                 loadImage("assets/hood/hood8.png"),
                 loadImage("assets/hood/hood9.png")]
-        self.face=[0,1]
+        self.face=[0,0]
         self.speed=120
         self.dx=0
         self.dy=0
@@ -34,6 +34,8 @@ class Bad(actors.Actor):
         self.patternTimer-=self.dt
         if self.patternTimer<0:
             self.patternStep+=1
+            if self.patternStep>=len(self.pattern):
+                self.patternStep=0
             dx, dy=self.pattern[self.patternStep]
             self.face=[dx,dy]
             self.patternTimer=self.patternTimerMax
@@ -41,7 +43,9 @@ class Bad(actors.Actor):
         angle=math.atan2(self.face[1],self.face[0])
         self.dx=math.cos(angle)*self.speed*self.dt*self.xFactor
         self.dy=math.sin(angle)*self.speed*self.dt*self.yFactor
-        self.body.apply_force_at_local_point((self.dx*actors.factor,self.dy*actors.factor),(0,0))
+        if self.face!=[0,0]:
+            self.body.apply_force_at_local_point((self.dx*actors.factor,self.dy*actors.factor),(0,0))
+        self.frictionUpdate()
 
     def draw(self,screen):
         pos=(self.body.position.x-8,self.body.position.y-8)
@@ -74,6 +78,10 @@ class Hood(Bad):
     # Basic bad guy.
     def __init__(self,space,x=0,y=0,dt=1/120):
         Bad.__init__(self,space,x,y,dt)
+        self.pattern=[(0,0),(0,1),
+                (0,0),(1,0),
+                (0,0),(0,-1),
+                (0,0),(-1,0)]
 
 #List of bad guy classes.
 badList={"hood":Hood}
