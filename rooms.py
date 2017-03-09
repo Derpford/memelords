@@ -1,7 +1,7 @@
 import pygame, math, random, pytmx, pymunk, sys
 from helpers import *
 from pygame.locals import *
-import hud
+import hud, bads
 
 debug=False
 exitFlag=0
@@ -25,6 +25,7 @@ class gameRoom(Room):
         self.space.gravity = 0,0
         self.mapImg=pygame.Surface((400,204))
         self.hudSurface = hud.hudInit()
+        self.bads=[]
         # Tiled iterators.
         #Adding the tile bounding boxes.
         if 'tiles' in self.grid.layernames:
@@ -40,7 +41,17 @@ class gameRoom(Room):
                             body.position=x*16,y*16
                             self.space.add(body,box)
         
-
+        #Adding enemies.
+        if 'bads' in self.grid.layernames:
+            for obj in self.grid.layernames['bads']:
+                props=obj.properties
+                if props==None:
+                    pass
+                else:
+                    if "bad" in props:
+                        badName=props["bad"]
+                        newBad=bads.badList[badName](self.space,obj.x,obj.y)
+                        self.bads.append(newBad)
 
 
         #Adding exits.
@@ -56,6 +67,7 @@ class gameRoom(Room):
                 box=pymunk.Poly(body,obj.points)
                 box.collision_type=collisionTypes["exit"]
                 self.space.add(body,box)
+
         #Adding the stuff in the 'tiles' layer to the screen.
         if 'tiles' in self.grid.layernames:
             for x, y, img in self.grid.layernames['tiles'].tiles():
@@ -109,6 +121,9 @@ class gameRoom(Room):
             keyDelay=0.25
         if pygame.key.get_pressed()[K_ESCAPE]:
             sys.exit()
+        # Iterate through baddies.
+        for bad in self.bads:
+            bad.update()
 
     # Draw the room.
     def draw(self,player,screen,clock,fps):
@@ -116,9 +131,15 @@ class gameRoom(Room):
         self.pymunkoptions=pymunk.pygame_util.DrawOptions(screen)
         self.pymunkoptions.positive_y_is_up=True
         self.pymunkoptions.DRAW_SHAPES=True
+        #BG.
         screen.fill((0,0,0))
         screen.blit(self.mapImg,(0,0))
+        #Player.
         player.draw(screen)
+        #Bad guys.
+        for bad in self.bads:
+            bad.draw(screen)
+        #Debug info.
         fpsReal=getfps(clock,fps)
         if debug:
             fpsBlit=font.render(str(math.floor(fpsReal)),False,(255,255,255))
