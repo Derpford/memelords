@@ -6,7 +6,7 @@ import pymunk.pygame_util
 #And system libs.
 import os, sys, math, random
 #And my other files.
-import actors, rooms 
+import actors, rooms, hud 
 import player
 from helpers import *
 debug=True
@@ -17,7 +17,6 @@ pygame.init()
 #screen = pygame.display.set_mode((width,height),FULLSCREEN)
 screen = pygame.display.set_mode((width,height))
 
-hudSurface = rooms.hudInit()
 
 #Rooms to load into the dungeon.
 roomLayouts=['assets/rooms/corridor.tmx','assets/rooms/corridor2.tmx','assets/rooms/corridor3.tmx','assets/rooms/shrine.tmx','assets/rooms/grave.tmx']
