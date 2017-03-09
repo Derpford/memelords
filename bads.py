@@ -72,7 +72,7 @@ class Bad(actors.Actor):
 
 class Hood(Bad):
     # Basic bad guy.
-    def init(self,space,x=0,y=0,dt=1/120):
+    def __init__(self,space,x=0,y=0,dt=1/120):
         Bad.__init__(self,space,x,y,dt)
 
 #List of bad guy classes.
