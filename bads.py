@@ -34,7 +34,38 @@ class Bad(actors.Actor):
         self.patternTimer-=dt
         if self.patternTimer<0:
             self.patternStep+=1
-            self.dx, self.dy=self.pattern[self.patternStep]
+            dx, dy=self.pattern[self.patternStep]
+            self.face=[dx,dy]
             self.patternTimer=self.patternTimerMax
+
+        angle=math.atan2(self.face[1],self.face[0])
+        self.dx=math.cos(angle)*self.speed*self.dt*self.xFactor
+        self.dy=math.sin(angle)*self.speed*self.dt*self.yFactor
         self.body.apply_force_at_local_point((self.dx*actors.factor,self.dy*actors.factor),(0,0))
 
+    def draw(self,screen):
+        pos=(self.body.position.x-8,self.body.position.y-8)
+        if self.pattern[self.patternStep]!=(0,0):
+            # Walking.
+            if self.face[0]!=0:
+                if self.face[0]>0:
+                    actors.drawAnimation(screen,self.anim[4:6],pos,8*abs(self.face[0]),self.t)
+                if self.face[0]<0:
+                    actors.drawAnimation(screen,self.anim[7:9],pos,8*abs(self.face[0]),self.t)
+            else:
+                if self.face[1]<0:
+                    actors.drawAnimation(screen,self.anim[10:12],pos,8*abs(self.face[1]),self.t)
+                else:
+                    actors.drawAnimation(screen,self.anim[1:3],pos,8*abs(self.face[1]),self.t)
+        else:
+            # Standing.
+            if self.face[0]!=0:
+                if self.face[0]>0:
+                        screen.blit(self.anim[3],pos)
+                if self.face[0]<0:
+                        screen.blit(self.anim[6],pos)
+            else:
+                if self.face[1]<0:
+                    screen.blit(self.anim[9],pos)
+                else:
+                    screen.blit(self.anim[0],pos)
