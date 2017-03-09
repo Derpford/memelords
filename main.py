@@ -7,7 +7,7 @@ import pymunk.pygame_util
 import os, sys, math, random
 #And my other files.
 import actors, rooms, hud 
-import player
+import player, bads
 from helpers import *
 debug=True
 
