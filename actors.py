@@ -11,7 +11,7 @@ def drawAnimation(screen,frames,pos,speed,t):
 
 class Actor(pygame.sprite.Sprite):
     def __init__(self, space, x = 0, y = 0, dt = 1/120):
-        pygame.sprite.Sprite.__init__()
+        pygame.sprite.Sprite.__init__(self)
         self.body=pymunk.Body(1,math.inf) # Magic numbers!
         self.body.position=(x,y)
         #self.shape=pymunk.Circle(self.body,8)
