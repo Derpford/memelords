@@ -66,11 +66,19 @@ class Player(actors.Actor):
 
         
     def update(self,mapGrid):
-        frict=self.friction
         self.t+=self.dt
         if not self.dead:
-            xFactor=1
-            yFactor=1
+            self.xFactor=1
+            self.yFactor=1
+            # Adjust friction for moving the other way.
+            if self.body.velocity.x !=0:
+                if self.face[0]!=self.body.velocity.x/abs(self.body.velocity.x):
+                    self.xFactor*=2
+                    self.face[0]*=2
+            if self.body.velocity.y !=0:
+                if self.face[1]!=self.body.velocity.y/abs(self.body.velocity.y):
+                    self.yFactor*=2
+                    self.face[1]*=2
             if pygame.key.get_pressed()[pygame.K_LEFT] or pygame.key.get_pressed()[pygame.K_RIGHT] or pygame.key.get_pressed()[pygame.K_UP] or pygame.key.get_pressed()[pygame.K_DOWN]:
                 # Reset facing at the beginning of each frame that we walk.
                 self.face[0]=0
@@ -84,29 +92,15 @@ class Player(actors.Actor):
                     self.face[1]=-1
                 if pygame.key.get_pressed()[pygame.K_DOWN]:
                     self.face[1]=1
-                # Adjust friction for moving the other way.
-                if self.body.velocity.x !=0:
-                    if self.face[0]!=self.body.velocity.x/abs(self.body.velocity.x):
-                        xFactor*=2
-                        self.face[0]*=2
-                if self.body.velocity.y !=0:
-                    if self.face[1]!=self.body.velocity.y/abs(self.body.velocity.y):
-                        yFactor*=2
-                        self.face[1]*=2
                 # Apply new movement.
                 angle=math.atan2(self.face[1],self.face[0])
-                self.dx=math.cos(angle)*self.speed*self.dt*xFactor
-                self.dy=math.sin(angle)*self.speed*self.dt*yFactor
+                self.dx=math.cos(angle)*self.speed*self.dt*self.xFactor
+                self.dy=math.sin(angle)*self.speed*self.dt*self.yFactor
                 # Apply force.
                 self.body.apply_force_at_local_point((self.dx*actors.factor,self.dy*actors.factor),(0,0))
-            # Apply friction.
-            fx = (self.body.velocity.x)*-(frict*xFactor)
-            fy = (self.body.velocity.y)*-(frict*yFactor)
-            self.body.apply_force_at_local_point((fx,fy),(0,0))
-            if debug:
-                print(str(self.dx)+" dx/"+str(self.dy)+" dy")
-                print(str(self.body.velocity)+" force")
-                print(str(self.body.position)+" phys position")
+
+            # Friction.
+            self.frictionUpdate()
 
             # Handle exiting rooms.
             

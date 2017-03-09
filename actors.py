@@ -25,6 +25,7 @@ class Actor(pygame.sprite.Sprite):
         self.dt=dt
         self.friction=150 # How hard to slow this thing down.
         self.body.jumpTo=self.jumpTo
+        self.xFactor, self.yFactor= 1,1
 
     def jumpTo(self,pos):
         self.body.position = pos
@@ -34,5 +35,15 @@ class Actor(pygame.sprite.Sprite):
 
     def update(self):
         self.t +=self.dt
+
+    def frictionUpdate(self):
+        # Apply friction.
+        fx = (self.body.velocity.x)*-(self.friction*self.xFactor)
+        fy = (self.body.velocity.y)*-(self.friction*self.yFactor)
+        self.body.apply_force_at_local_point((fx,fy),(0,0))
+        if debug:
+            print(str(self.dx)+" dx/"+str(self.dy)+" dy")
+            print(str(self.body.velocity)+" force")
+            print(str(self.body.position)+" phys position")
 
 
