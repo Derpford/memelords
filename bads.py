@@ -24,14 +24,14 @@ class Bad(actors.Actor):
         self.hp=3
         self.maxhp=3
         self.dead=False
-        self.pattern=[(1,0),(-1,0)]
+        self.pattern=[(1,0),(0,0),(-1,0),(0,0)]
         self.patternTimer=0.5
         self.patternTimerMax=0.5
         self.patternStep=-1
 
     def update(self):
         self.t+=self.dt
-        self.patternTimer-=dt
+        self.patternTimer-=self.dt
         if self.patternTimer<0:
             self.patternStep+=1
             dx, dy=self.pattern[self.patternStep]
@@ -69,3 +69,11 @@ class Bad(actors.Actor):
                     screen.blit(self.anim[9],pos)
                 else:
                     screen.blit(self.anim[0],pos)
+
+class Hood(Bad):
+    # Basic bad guy.
+    def init(self,space,x=0,y=0,dt=1/120):
+        Bad.__init__(self,space,x,y,dt)
+
+#List of bad guy classes.
+badList={"hood":Hood}
