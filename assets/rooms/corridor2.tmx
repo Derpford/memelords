@@ -20,7 +20,11 @@
 </data>
  </layer>
  <objectgroup name="bads">
-  <object id="9" gid="17" x="176" y="96" width="16" height="16"/>
+  <object id="9" gid="17" x="176" y="96" width="16" height="16">
+   <properties>
+    <property name="bad" value="hood"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup name="exits">
   <object id="6" name="exit1" x="0" y="16">
