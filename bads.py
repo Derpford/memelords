@@ -24,3 +24,4 @@ class Bad(actors.Actor):
         self.hp=3
         self.maxhp=3
         self.dead=False
+        self.pattern=[(1,0),(-1,0)]
