@@ -4,7 +4,7 @@ from helpers import *
 
 class Bad(actors.Actor):
     def __init__(self,space,x=0,y=0,dt=1/120):
-        actors.Actor.__init__(space,x,y,dt)
+        actors.Actor.__init__(self,space,x,y,dt)
         self.anim = [loadImage("assets/hood/hood1.png"),
                 loadImage("assets/hood/hood2.png"),
                 loadImage("assets/hood/hood3.png"),
@@ -73,7 +73,7 @@ class Bad(actors.Actor):
 class Hood(Bad):
     # Basic bad guy.
     def __init__(self,space,x=0,y=0,dt=1/120):
-        Bad.__init__(space,x,y,dt)
+        Bad.__init__(self,space,x,y,dt)
 
 #List of bad guy classes.
 badList={"hood":Hood}
