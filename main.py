@@ -20,7 +20,7 @@ screen = pygame.display.set_mode((width,height))
 
 #Rooms to load into the dungeon.
 roomSpecials=['assets/rooms/shrine.tmx','assets/rooms/grave.tmx']
-roomLayouts=['assets/rooms/corridor.tmx','assets/rooms/corridor2.tmx','assets/rooms/corridor3.tmx']
+roomLayouts=['assets/rooms/corridor.tmx','assets/rooms/corridor2.tmx','assets/rooms/corridor3.tmx','assets/rooms/chokepoint.tmx']
 roomPos=0
 roomList=[random.choice(roomLayouts),
         random.choice(roomLayouts),
