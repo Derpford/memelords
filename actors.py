@@ -1,16 +1,17 @@
 import pygame, math, random, pymunk
 from helpers import *
-debug=False
+debug=True
 
 # Movement force factor.
 factor=1000000
 def drawAnimation(screen,frames,pos,speed,t):
     screen.blit(frames[math.floor(speed*t%len(frames))],(pos[0],pos[1]))
     if debug:
-        print(str(pos)+" anim pos for "+str(frames))
+        print(str(pos)+" anim pos for "+str(math.floor(speed*t%len(frames)))+" in "+str(frames))
 
 class Actor(pygame.sprite.Sprite):
     def __init__(self, space, x = 0, y = 0, dt = 1/120):
+        self.name=None
         pygame.sprite.Sprite.__init__(self)
         self.body=pymunk.Body(1,math.inf) # Magic numbers!
         self.body.position=(x,y)
@@ -35,15 +36,19 @@ class Actor(pygame.sprite.Sprite):
 
     def update(self):
         self.t +=self.dt
+        if debug:
+            if self.name:
+                print(str(self.name))
+            print(str(self.dx)+" dx/"+str(self.dy)+" dy")
+            print(str(self.body.velocity)+" force")
+            print(str(self.body.position)+" phys position")
+            print(str(self.face)+" facing")
+            print(str(self.t))
 
     def frictionUpdate(self):
         # Apply friction.
         fx = (self.body.velocity.x)*-(self.friction*self.xFactor)
         fy = (self.body.velocity.y)*-(self.friction*self.yFactor)
         self.body.apply_force_at_local_point((fx,fy),(0,0))
-        if debug:
-            print(str(self.dx)+" dx/"+str(self.dy)+" dy")
-            print(str(self.body.velocity)+" force")
-            print(str(self.body.position)+" phys position")
 
 
