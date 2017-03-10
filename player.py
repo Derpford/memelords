@@ -66,17 +66,17 @@ class Player(actors.Actor):
 
         
     def update(self,mapGrid):
-        self.t+=self.dt
+        actors.Actor.update(self)
         if not self.dead:
             self.xFactor=1
             self.yFactor=1
             # Adjust friction for moving the other way.
             if self.body.velocity.x !=0:
-                if self.face[0]!=self.body.velocity.x/abs(self.body.velocity.x):
+                if self.face[0]!=normal(self.body.velocity.x):
                     self.xFactor*=2
                     self.face[0]*=2
             if self.body.velocity.y !=0:
-                if self.face[1]!=self.body.velocity.y/abs(self.body.velocity.y):
+                if self.face[1]!=normal(self.body.velocity.y):
                     self.yFactor*=2
                     self.face[1]*=2
             if pygame.key.get_pressed()[pygame.K_LEFT] or pygame.key.get_pressed()[pygame.K_RIGHT] or pygame.key.get_pressed()[pygame.K_UP] or pygame.key.get_pressed()[pygame.K_DOWN]:

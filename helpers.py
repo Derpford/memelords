@@ -8,6 +8,9 @@ textColors={ "dark":(41,57,65),
         "light":(186,195,117)
         }
 
+# Normalize a number.
+def normal(num):
+    return num/abs(num)
 
 # Width/Height constants.
 width=400
