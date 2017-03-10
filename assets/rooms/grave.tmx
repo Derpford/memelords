@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="25" height="13" tilewidth="16" tileheight="16" nextobjectid="9">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="25" height="13" tilewidth="16" tileheight="16" nextobjectid="11">
  <tileset firstgid="1" source="basegreenbleh.tsx"/>
- <tileset firstgid="17" source="bads.tsx"/>
+ <tileset firstgid="17" name="bads" tilewidth="16" tileheight="16" tilecount="16" columns="4">
+  <image source="../tiles/bads.png" width="64" height="64"/>
+  <tile id="0">
+   <properties>
+    <property name="bad" value="hood"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="bad" value="knight"/>
+   </properties>
+  </tile>
+ </tileset>
  <layer name="tiles" width="25" height="13">
   <data encoding="csv">
 2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
@@ -39,7 +51,7 @@
   </object>
  </objectgroup>
  <objectgroup name="bads">
-  <object id="8" gid="19" x="192" y="112" width="16" height="16">
+  <object id="8" type="enemy" gid="19" x="192" y="112" width="16" height="16">
    <properties>
     <property name="bad" value="knight"/>
    </properties>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="25" height="13" tilewidth="16" tileheight="16" nextobjectid="8">
+ <tileset firstgid="1" source="bads.tsx"/>
+ <tileset firstgid="17" source="basegreenbleh.tsx"/>
+ <layer name="Tile Layer 1" width="25" height="13">
+  <data encoding="csv">
+18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,
+21,17,17,17,17,17,17,21,19,17,17,18,17,18,21,17,17,17,17,17,17,17,17,17,17,
+17,17,17,17,17,17,17,17,17,17,17,18,18,18,21,17,17,17,17,17,17,21,17,17,21,
+17,17,17,17,17,17,17,17,17,17,21,21,18,17,17,19,17,17,17,17,17,21,21,17,19,
+19,17,21,17,17,20,17,17,17,21,17,19,18,17,17,19,17,17,17,21,17,21,17,19,17,
+17,17,17,21,17,21,17,17,17,21,17,17,17,17,17,21,21,17,21,17,17,17,17,17,17,
+17,17,17,17,17,17,17,17,17,17,17,17,17,19,17,17,17,17,19,17,17,17,17,17,17,
+17,17,21,21,17,17,17,21,17,17,17,21,17,21,17,17,17,17,17,17,17,17,17,17,17,
+17,17,17,17,17,17,17,17,17,17,17,17,18,17,17,17,17,17,17,17,17,17,17,17,17,
+19,21,21,17,17,17,19,21,17,21,17,21,18,21,21,17,17,21,17,17,19,17,17,19,21,
+17,17,17,17,17,17,17,21,21,17,17,18,18,18,17,17,17,21,17,17,17,21,17,17,21,
+21,17,17,17,21,21,17,17,17,21,17,18,17,18,20,21,17,17,17,19,17,19,17,21,17,
+18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18
+</data>
+ </layer>
+ <objectgroup name="exits">
+  <object id="1" type="exit" x="400" y="16">
+   <properties>
+    <property name="exit" type="int" value="1"/>
+    <property name="xflip" type="int" value="1"/>
+   </properties>
+   <polyline points="0,0 0,176"/>
+  </object>
+  <object id="2" type="exit" x="0" y="16">
+   <properties>
+    <property name="exit" type="int" value="-1"/>
+    <property name="xflip" type="int" value="1"/>
+   </properties>
+   <polyline points="0,0 0,176"/>
+  </object>
+ </objectgroup>
+ <objectgroup name="bads">
+  <object id="3" type="enemy" gid="1" x="96" y="80" width="16" height="16">
+   <properties>
+    <property name="bad" value="hood"/>
+   </properties>
+  </object>
+  <object id="4" type="enemy" gid="1" x="96" y="144" width="16" height="16">
+   <properties>
+    <property name="bad" value="hood"/>
+   </properties>
+  </object>
+  <object id="6" type="enemy" gid="1" x="288" y="80" width="16" height="16">
+   <properties>
+    <property name="bad" value="hood"/>
+   </properties>
+  </object>
+  <object id="7" type="enemy" gid="1" x="288" y="144" width="16" height="16">
+   <properties>
+    <property name="bad" value="hood"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

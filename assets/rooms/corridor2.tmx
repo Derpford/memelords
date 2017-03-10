@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="25" height="13" tilewidth="16" tileheight="16" nextobjectid="10">
  <tileset firstgid="1" source="basegreenbleh.tsx"/>
- <tileset firstgid="17" source="bads.tsx"/>
+ <tileset firstgid="17" name="bads" tilewidth="16" tileheight="16" tilecount="16" columns="4">
+  <image source="../tiles/bads.png" width="64" height="64"/>
+  <tile id="0">
+   <properties>
+    <property name="bad" value="hood"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="bad" value="knight"/>
+   </properties>
+  </tile>
+ </tileset>
  <layer name="tiles" width="25" height="13">
   <data encoding="csv">
 2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
@@ -20,21 +32,21 @@
 </data>
  </layer>
  <objectgroup name="bads">
-  <object id="9" gid="17" x="176" y="96" width="16" height="16">
+  <object id="9" type="enemy" gid="17" x="176" y="96" width="16" height="16">
    <properties>
     <property name="bad" value="hood"/>
    </properties>
   </object>
  </objectgroup>
  <objectgroup name="exits">
-  <object id="6" name="exit1" x="0" y="16">
+  <object id="6" name="exit1" type="exit" x="0" y="16">
    <properties>
     <property name="exit" type="int" value="-1"/>
     <property name="xflip" type="bool" value="true"/>
    </properties>
    <polyline points="0,0 0,176"/>
   </object>
-  <object id="7" name="exit2" x="400" y="16">
+  <object id="7" name="exit2" type="exit" x="400" y="16">
    <properties>
     <property name="exit" type="int" value="1"/>
     <property name="xflip" type="bool" value="true"/>
