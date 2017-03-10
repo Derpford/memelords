@@ -123,7 +123,7 @@ class gameRoom(Room):
             sys.exit()
         # Iterate through baddies.
         for bad in self.bads:
-            bad.update()
+            bad.update(player)
 
     # Draw the room.
     def draw(self,player,screen,clock,fps):
