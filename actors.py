@@ -1,6 +1,6 @@
 import pygame, math, random, pymunk
 from helpers import *
-debug=True
+debug=False
 
 # Movement force factor.
 factor=1000000
@@ -32,7 +32,7 @@ class Actor(pygame.sprite.Sprite):
         self.body.position = pos
 
     def draw(self,screen):
-        screen.blit(self.anim[math.floor(self.t%3)],self.body.position)
+        screen.blit(self.anim[math.floor(self.t%len(self.anim))],self.body.position)
 
     def update(self):
         self.t +=self.dt
