@@ -32,7 +32,8 @@ class Actor(pygame.sprite.Sprite):
         self.body.position = pos
 
     def draw(self,screen):
-        screen.blit(self.anim[math.floor(self.t%len(self.anim))],self.body.position)
+        pos=self.body.position.x+8,self.body.position.y+8
+        drawAnimation(screen,self.anim,pos,8,self.t)
 
     def update(self):
         self.t +=self.dt
