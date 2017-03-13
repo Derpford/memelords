@@ -1,6 +1,7 @@
-import math, random, pymunk
+import math, random, pymunk, pygame
 import actors
 from helpers import *
+from pygame.locals import *
 debug=False
 
 class Bad(actors.Actor):
@@ -20,6 +21,11 @@ class Bad(actors.Actor):
                 loadImage("assets/hood/hood7.png"),
                 loadImage("assets/hood/hood8.png"),
                 loadImage("assets/hood/hood9.png")]
+
+        self.deadAnim=[img.copy() for img in self.anim]
+        for img in self.deadAnim:
+            img.fill(pygame.Color("blue"),None)
+
         self.shape.collision_type = collisionTypes["bad"]
         self.shape.hurt=self.hurt
         self.face=[0,0]
@@ -55,6 +61,8 @@ class Bad(actors.Actor):
             if self.face!=[0,0]:
                 self.body.apply_force_at_local_point((self.dx*actors.factor,self.dy*actors.factor),(0,0))
         self.frictionUpdate()
+        if self.dead and self.anim != self.deadAnim:
+            self.anim = self.deadAnim
 
     def draw(self,screen):
         pos=(self.body.position.x-8,self.body.position.y-8)
