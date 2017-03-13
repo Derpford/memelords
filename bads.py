@@ -1,4 +1,4 @@
-import math, random
+import math, random, pymunk
 import actors
 from helpers import *
 debug=True
@@ -6,6 +6,8 @@ debug=True
 class Bad(actors.Actor):
     def __init__(self,space,x=0,y=0,dt=1/120):
         actors.Actor.__init__(self,space,x,y,dt)
+        self.shape=pymunk.Circle(self.body,8)
+        space.add(self.body,self.shape)
         self.anim = [loadImage("assets/hood/hood1.png"),
                 loadImage("assets/hood/hood2.png"),
                 loadImage("assets/hood/hood3.png"),
@@ -18,6 +20,8 @@ class Bad(actors.Actor):
                 loadImage("assets/hood/hood7.png"),
                 loadImage("assets/hood/hood8.png"),
                 loadImage("assets/hood/hood9.png")]
+        self.shape.collision_type = collisionTypes["bad"]
+        self.shape.hurt=self.hurt
         self.face=[0,0]
         self.speed=120
         self.animSpeed=8
@@ -75,6 +79,10 @@ class Bad(actors.Actor):
                     screen.blit(self.anim[9],pos)
                 else:
                     screen.blit(self.anim[0],pos)
+
+    def hurt(self,amount):
+        self.hp -= amount
+
 
 class Hood(Bad):
     # Basic bad guy.

@@ -1,11 +1,13 @@
 import pygame, math, random, pymunk
 from helpers import *
-import actors
+import actors,shots
 debug=False
 
 class Player(actors.Actor):
     def __init__(self,space, x=0, y=0, dt=1/120):
         actors.Actor.__init__(self,space,x,y,dt)
+        self.shape=pymunk.Circle(self.body,8)
+        space.add(self.body,self.shape)
         self.shape.collision_type = collisionTypes["player"]
         self.anim = [loadImage("assets/guy-green/guy-green1.png"),
                 loadImage("assets/guy-green/guy-green2.png"),
@@ -26,11 +28,12 @@ class Player(actors.Actor):
         self.hp=6
         self.maxhp=6
         self.dead=False
+        self.shotList=[]
 
 
     def draw(self,screen):
         pos=(self.body.position.x-8,self.body.position.y-8)
-        if pygame.key.get_pressed()[pygame.K_LEFT] or pygame.key.get_pressed()[pygame.K_RIGHT] or pygame.key.get_pressed()[pygame.K_UP] or pygame.key.get_pressed()[pygame.K_DOWN]:
+        if self.keys[pygame.K_LEFT] or self.keys[pygame.K_RIGHT] or self.keys[pygame.K_UP] or self.keys[pygame.K_DOWN]:
             # Walking.
             if self.face[0]!=0:
                 if self.face[0]>0:
@@ -55,6 +58,10 @@ class Player(actors.Actor):
                 else:
                     screen.blit(self.anim[0],pos)
 
+        # Draw shots.
+        for shot in self.shotList:
+            shot.draw(screen)
+
     def hurt(self,amount):
         self.hp-=amount
         if self.hp <= 0:
@@ -64,10 +71,7 @@ class Player(actors.Actor):
         if self.dead:
             self.dead=False
 
-        
-    def update(self,mapGrid):
-        actors.Actor.update(self)
-        if not self.dead:
+    def physicsUpdate(self):
             self.xFactor=1
             self.yFactor=1
             # Adjust friction for moving the other way.
@@ -79,18 +83,18 @@ class Player(actors.Actor):
                 if self.face[1]!=normal(self.body.velocity.y):
                     self.yFactor*=2
                     self.face[1]*=2
-            if pygame.key.get_pressed()[pygame.K_LEFT] or pygame.key.get_pressed()[pygame.K_RIGHT] or pygame.key.get_pressed()[pygame.K_UP] or pygame.key.get_pressed()[pygame.K_DOWN]:
+            if self.keys[pygame.K_LEFT] or self.keys[pygame.K_RIGHT] or self.keys[pygame.K_UP] or self.keys[pygame.K_DOWN]:
                 # Reset facing at the beginning of each frame that we walk.
                 self.face[0]=0
                 self.face[1]=0
                 # Set new facing.
-                if pygame.key.get_pressed()[pygame.K_LEFT]:
+                if self.keys[pygame.K_LEFT]:
                     self.face[0]=-1
-                if pygame.key.get_pressed()[pygame.K_RIGHT]:
+                if self.keys[pygame.K_RIGHT]:
                     self.face[0]=1
-                if pygame.key.get_pressed()[pygame.K_UP]:
+                if self.keys[pygame.K_UP]:
                     self.face[1]=-1
-                if pygame.key.get_pressed()[pygame.K_DOWN]:
+                if self.keys[pygame.K_DOWN]:
                     self.face[1]=1
                 # Apply new movement.
                 angle=math.atan2(self.face[1],self.face[0])
@@ -102,5 +106,20 @@ class Player(actors.Actor):
             # Friction.
             self.frictionUpdate()
 
-            # Handle exiting rooms.
-            
+
+        
+    def update(self,mapGrid):
+        actors.Actor.update(self)
+        if not self.dead:
+            self.keys=pygame.key.get_pressed()
+            self.physicsUpdate()
+            for shot in self.shotList:
+                if shot.shape.removeFlag == True:
+                    mapGrid.space.remove(shot.body)
+                    mapGrid.space.remove(shot.shape)
+                shot.update()
+            self.shotList=[shot for shot in self.shotList if shot.shape.removeFlag==False]
+            if self.keys[pygame.K_LCTRL] and len(self.shotList)==0:
+                newShot=shots.Shot(mapGrid.space,self.body.position.x,self.body.position.y,self.face[0],self.face[1])
+                self.shotList.append(newShot)
+

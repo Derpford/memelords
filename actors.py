@@ -16,8 +16,6 @@ class Actor(pygame.sprite.Sprite):
         self.body=pymunk.Body(1,math.inf) # Magic numbers!
         self.body.position=(x,y)
         #self.shape=pymunk.Circle(self.body,8)
-        self.shape=pymunk.Circle(self.body,8)
-        space.add(self.body,self.shape)
         self.rect = pygame.Rect(x,y,16,16)
         self.anim = [loadImage("assets/guy-green/guy-green1.png"),
             loadImage("assets/guy-green/guy-green2.png"),
@@ -32,7 +30,7 @@ class Actor(pygame.sprite.Sprite):
         self.body.position = pos
 
     def draw(self,screen):
-        pos=self.body.position.x+8,self.body.position.y+8
+        pos=self.body.position.x,self.body.position.y
         drawAnimation(screen,self.anim,pos,8,self.t)
 
     def update(self):
