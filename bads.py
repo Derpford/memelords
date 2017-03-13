@@ -24,7 +24,7 @@ class Bad(actors.Actor):
 
         self.deadAnim=[img.copy() for img in self.anim]
         for img in self.deadAnim:
-            img.fill(pygame.Color("blue"),None)
+            img.fill(pygame.Color(41,57,65,255),None,BLEND_RGBA_MIN)
 
         self.shape.collision_type = collisionTypes["bad"]
         self.shape.hurt=self.hurt
