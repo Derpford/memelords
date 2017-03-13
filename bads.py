@@ -54,7 +54,7 @@ class Bad(actors.Actor):
             self.dy=math.sin(angle)*self.speed*self.dt*self.yFactor
             if self.face!=[0,0]:
                 self.body.apply_force_at_local_point((self.dx*actors.factor,self.dy*actors.factor),(0,0))
-            self.frictionUpdate()
+        self.frictionUpdate()
 
     def draw(self,screen):
         pos=(self.body.position.x-8,self.body.position.y-8)
