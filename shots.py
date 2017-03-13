@@ -14,19 +14,17 @@ class Shot(actors.Actor):
                     loadImage('assets/shots/orb3.png'),
                     loadImage('assets/shots/orb4.png')]
         self.face=[fx,fy]
-        self.damage=1
+        self.shape.damage=1
         self.speed=160
         self.shape.removeFlag=False
         def hitEnemy(arbiter,space,data):
-            print("hit enemy")
             other=arbiter.shapes[1]
             shot=arbiter.shapes[0]
-            if type(other.hurt)==types.FunctionType:
-                other.hurt(self.damage)
+            if type(other.hurt)==types.MethodType:
+                other.hurt(shot.damage)
             shot.removeFlag=True
             return True
         def hitShot(arbiter,space,data):
-            print("hit enemy shot")
             other=arbiter.shapes[1]
             shot=arbiter.shapes[0]
             for body in space.bodies:
@@ -36,17 +34,17 @@ class Shot(actors.Actor):
             other.removeFlag=True
             return False
         def hitWall(arbiter,space,data):
-            print("hit wall")
             shot=arbiter.shapes[0]
             shot.removeFlag=True
             return False
         def hitPlayer(arbiter,space,data):
-            print("hit player")
             return False
-        space.add_collision_handler(collisionTypes["shot"],collisionTypes["bad"]).begin=hitEnemy
-        space.add_collision_handler(collisionTypes["shot"],collisionTypes["badshot"]).begin=hitShot
-        space.add_collision_handler(collisionTypes["shot"],collisionTypes["wall"]).begin=hitWall
-        space.add_collision_handler(collisionTypes["shot"],collisionTypes["player"]).begin=hitPlayer
+        space.add_collision_handler(collisionTypes["shot"], collisionTypes["bad"]).begin=hitEnemy
+        space.add_collision_handler(collisionTypes["shot"], collisionTypes["wall"]).begin=hitWall
+        space.add_collision_handler(collisionTypes["shot"], collisionTypes["exit"]).begin=hitWall
+        space.add_collision_handler(collisionTypes["shot"], collisionTypes["player"]).begin=hitPlayer
+        space.add_collision_handler(collisionTypes["shot"], collisionTypes["badshot"]).begin=hitShot
+        space.add_collision_handler(collisionTypes["shot"], collisionTypes["shot"]).begin=hitPlayer
 
     def update(self):
         actors.Actor.update(self)

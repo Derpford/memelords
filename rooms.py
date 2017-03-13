@@ -38,9 +38,11 @@ class gameRoom(Room):
                         if "solid" in props:
                             body=pymunk.Body(1,1,pymunk.Body.STATIC)
                             box=pymunk.Poly(body,[(0,0),(0,16),(16,16),(16,0)])
-                            box.collison_type=collisionTypes["wall"]
                             body.position=x*16,y*16
                             self.space.add(body,box)
+                            box.collision_type=collisionTypes["wall"]
+                            if debug:
+                                print("Made a wall at "+str(body.position)+" with collision type "+str(box.collision_type))
         
         #Adding enemies.
         if 'bads' in self.grid.layernames:
@@ -95,7 +97,7 @@ class gameRoom(Room):
                 print("Yflip: "+str(exit.body.props['yflip'])+", new Y: "+str(player.body.position.y))
                 print("New Y should be: "+str(fy))
 
-            return True
+            return False
 
         h = self.space.add_collision_handler(
                 collisionTypes["exit"],

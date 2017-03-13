@@ -1,7 +1,7 @@
 import math, random, pymunk
 import actors
 from helpers import *
-debug=True
+debug=False
 
 class Bad(actors.Actor):
     def __init__(self,space,x=0,y=0,dt=1/120):
@@ -36,22 +36,25 @@ class Bad(actors.Actor):
         self.patternStep=-1
 
     def update(self,player):
-        actors.Actor.update(self)
-        self.patternTimer-=self.dt
-        if self.patternTimer<0:
-            self.patternStep+=1
-            if self.patternStep>=len(self.pattern):
-                self.patternStep=0
-            dx, dy=self.pattern[self.patternStep]
-            self.face=[dx,dy]
-            self.patternTimer=self.patternTimerMax
+        if self.hp<1:
+            self.dead=True
+        if not self.dead:
+            actors.Actor.update(self)
+            self.patternTimer-=self.dt
+            if self.patternTimer<0:
+                self.patternStep+=1
+                if self.patternStep>=len(self.pattern):
+                    self.patternStep=0
+                dx, dy=self.pattern[self.patternStep]
+                self.face=[dx,dy]
+                self.patternTimer=self.patternTimerMax
 
-        angle=math.atan2(self.face[1],self.face[0])
-        self.dx=math.cos(angle)*self.speed*self.dt*self.xFactor
-        self.dy=math.sin(angle)*self.speed*self.dt*self.yFactor
-        if self.face!=[0,0]:
-            self.body.apply_force_at_local_point((self.dx*actors.factor,self.dy*actors.factor),(0,0))
-        self.frictionUpdate()
+            angle=math.atan2(self.face[1],self.face[0])
+            self.dx=math.cos(angle)*self.speed*self.dt*self.xFactor
+            self.dy=math.sin(angle)*self.speed*self.dt*self.yFactor
+            if self.face!=[0,0]:
+                self.body.apply_force_at_local_point((self.dx*actors.factor,self.dy*actors.factor),(0,0))
+            self.frictionUpdate()
 
     def draw(self,screen):
         pos=(self.body.position.x-8,self.body.position.y-8)
@@ -81,6 +84,7 @@ class Bad(actors.Actor):
                     screen.blit(self.anim[0],pos)
 
     def hurt(self,amount):
+        if debug: print(self.name+" got hurt for "+str(amount))
         self.hp -= amount
 
 
