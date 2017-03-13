@@ -23,7 +23,7 @@ collisionTypes={
         "bad":3,
         "shot":4,
         "badshot":5,
-        "wall":6
+        "wall":6,
         }
 
 # Image Loader.
