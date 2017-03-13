@@ -38,6 +38,7 @@ class gameRoom(Room):
                         if "solid" in props:
                             body=pymunk.Body(1,1,pymunk.Body.STATIC)
                             box=pymunk.Poly(body,[(0,0),(0,16),(16,16),(16,0)])
+                            box.collison_type=collisionTypes["wall"]
                             body.position=x*16,y*16
                             self.space.add(body,box)
         

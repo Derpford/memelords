@@ -19,7 +19,11 @@ height=300
 # Collision types.
 collisionTypes={
         "player":1,
-        "exit":2
+        "exit":2,
+        "bad":3,
+        "shot":4,
+        "badshot":5,
+        "wall":6
         }
 
 # Image Loader.
