@@ -2,7 +2,7 @@
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="25" height="13" tilewidth="16" tileheight="16" nextobjectid="8">
  <tileset firstgid="1" source="bads.tsx"/>
  <tileset firstgid="17" source="basegreenbleh.tsx"/>
- <layer name="Tile Layer 1" width="25" height="13">
+ <layer name="tiles" width="25" height="13">
   <data encoding="csv">
 18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,
 21,17,17,17,17,17,17,21,19,17,17,18,17,18,21,17,17,17,17,17,17,17,17,17,17,
