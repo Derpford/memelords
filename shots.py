@@ -17,34 +17,6 @@ class Shot(actors.Actor):
         self.shape.damage=1
         self.speed=160
         self.shape.removeFlag=False
-        def hitEnemy(arbiter,space,data):
-            other=arbiter.shapes[1]
-            shot=arbiter.shapes[0]
-            if type(other.hurt)==types.MethodType:
-                other.hurt(shot.damage)
-            shot.removeFlag=True
-            return True
-        def hitShot(arbiter,space,data):
-            other=arbiter.shapes[1]
-            shot=arbiter.shapes[0]
-            for body in space.bodies:
-                if math.hypot(other.position.x-shot.position.x,other.position.y-shot.position.y)<8:
-                    body.apply_impulse_at_world_point(40*actors.factor,shot.position)
-            shot.removeFlag=True
-            other.removeFlag=True
-            return False
-        def hitWall(arbiter,space,data):
-            shot=arbiter.shapes[0]
-            shot.removeFlag=True
-            return False
-        def hitPlayer(arbiter,space,data):
-            return False
-        space.add_collision_handler(collisionTypes["shot"], collisionTypes["bad"]).begin=hitEnemy
-        space.add_collision_handler(collisionTypes["shot"], collisionTypes["wall"]).begin=hitWall
-        space.add_collision_handler(collisionTypes["shot"], collisionTypes["exit"]).begin=hitWall
-        space.add_collision_handler(collisionTypes["shot"], collisionTypes["player"]).begin=hitPlayer
-        space.add_collision_handler(collisionTypes["shot"], collisionTypes["badshot"]).begin=hitShot
-        space.add_collision_handler(collisionTypes["shot"], collisionTypes["shot"]).begin=hitPlayer
 
     def update(self):
         actors.Actor.update(self)
