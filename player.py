@@ -7,6 +7,7 @@ class Player(actors.Actor):
     def __init__(self,space, x=0, y=0, dt=1/120):
         actors.Actor.__init__(self,space,x,y,dt)
         self.shape=pymunk.Circle(self.body,8)
+        self.shape.newRoomFlag=False
         space.add(self.body,self.shape)
         self.shape.collision_type = collisionTypes["player"]
         self.anim = [loadImage("assets/guy-green/guy-green1.png"),
@@ -29,7 +30,6 @@ class Player(actors.Actor):
         self.maxhp=6
         self.dead=False
         self.shotList=[]
-
 
     def draw(self,screen):
         pos=(self.body.position.x-8,self.body.position.y-8)
@@ -110,10 +110,18 @@ class Player(actors.Actor):
         
     def update(self,mapGrid):
         actors.Actor.update(self)
+        if self.shape.newRoomFlag:
+            for shot in self.shotList:
+                mapGrid.space.remove(shot.body, shot.shape)
+            self.shotList=[]
+            self.shape.newRoomFlag=False
         if not self.dead:
             self.keys=pygame.key.get_pressed()
             self.physicsUpdate()
             for shot in self.shotList:
+                if debug:
+                    print("Handling shot, removeFlag: "+str(shot.shape.removeFlag))
+                    print("shot position: "+str(shot.body.position))
                 if shot.shape.removeFlag == True:
                     mapGrid.space.remove(shot.body)
                     mapGrid.space.remove(shot.shape)

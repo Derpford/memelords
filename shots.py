@@ -19,6 +19,19 @@ class Shot(actors.Actor):
         self.shape.removeFlag=False
 
     def update(self):
+        #if self.body.position.x < 0 or self.body.position.y < 0 or self.body.position.x > width or self.body.position.y > height:
+        if self.body.position.x<0: 
+            self.shape.removeFlag=True
+            if debug:print("Out of bounds -x")
+        if self.body.position.y<0: 
+            self.shape.removeFlag=True
+            if debug:print("Out of bounds -y")
+        if self.body.position.x>width: 
+            self.shape.removeFlag=True
+            if debug:print("Out of bounds +x")
+        if self.body.position.y>height: 
+            self.shape.removeFlag=True
+            if debug:print("Out of bounds +y")
         actors.Actor.update(self)
         # Apply new movement.
         angle=math.atan2(self.face[1],self.face[0])

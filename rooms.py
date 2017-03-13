@@ -90,6 +90,7 @@ class gameRoom(Room):
             if 'yflip' in exit.body.props:
                 fy = height-fy+(24*exitFlag)
             player.body.jumpTo((fx,fy))
+            player.newRoomFlag=True
             if debug:
                 print("Exit num:"+str(exitFlag))
                 print("Xflip: "+str(exit.body.props['xflip'])+", new X: "+str(player.body.position.x))
