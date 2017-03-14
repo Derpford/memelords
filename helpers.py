@@ -10,7 +10,9 @@ textColors={ "dark":(41,57,65),
 
 # Normalize a number.
 def normal(num):
-    return num/abs(num)
+    if num!=0:
+        return num/abs(num)
+    else: return 0
 
 # Width/Height constants.
 width=400
@@ -49,5 +51,6 @@ debugFlags={"room":False,
         "player":False,
         "bad":False,
         "main":False,
-        "physics":True,
+        "physics":False,
+        "anim":False,
         }
