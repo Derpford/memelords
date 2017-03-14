@@ -10,6 +10,8 @@ class Player(actors.Actor):
         self.shape.newRoomFlag=False
         space.add(self.body,self.shape)
         self.shape.collision_type = collisionTypes["player"]
+        self.shape.hurt=self.hurt
+        self.shape.heal=self.heal
         self.anim = [loadImage("assets/guy-green/guy-green1.png"),
                 loadImage("assets/guy-green/guy-green2.png"),
                 loadImage("assets/guy-green/guy-green3.png"),
@@ -33,11 +35,21 @@ class Player(actors.Actor):
         self.weapon=weapons.Sword()
         self.weaponAnim=0
 
+    def hurt(self,amount):
+        self.hp-=amount
+        if self.hp <= 0:
+            self.dead=True
+    def heal(self,amount):
+        self.hp=min(self.maxhp, self.hp+amount)
+        if self.dead:
+            self.dead=False
+
     def draw(self,screen):
         pos=(self.body.position.x-8,self.body.position.y-8)
         # Draw weapon.
         if self.weaponAnim>0.2:
             self.weaponAnim-=self.dt*4
+            if debug:print(str(self.weaponAnim)+" weapon timer")
             self.weapon.draw(screen,pos,self.weaponAnim)
 
         if self.keys[pygame.K_LEFT] or self.keys[pygame.K_RIGHT] or self.keys[pygame.K_UP] or self.keys[pygame.K_DOWN]:
@@ -70,14 +82,6 @@ class Player(actors.Actor):
         for shot in self.shotList:
             shot.draw(screen)
 
-    def hurt(self,amount):
-        self.hp-=amount
-        if self.hp <= 0:
-            self.dead=True
-    def heal(self,amount):
-        self.hp=min(self.maxhp, self.hp+amount)
-        if self.dead:
-            self.dead=False
 
     def physicsUpdate(self):
             self.xFactor=1
@@ -85,12 +89,12 @@ class Player(actors.Actor):
             # Adjust friction for moving the other way.
             if self.body.velocity.x !=0:
                 if self.face[0]!=normal(self.body.velocity.x):
-                    self.xFactor*=2
-                    self.face[0]*=2
+                    self.xFactor==2
+                    self.face[0]==2
             if self.body.velocity.y !=0:
                 if self.face[1]!=normal(self.body.velocity.y):
-                    self.yFactor*=2
-                    self.face[1]*=2
+                    self.yFactor==2
+                    self.face[1]==2
             if self.keys[pygame.K_LEFT] or self.keys[pygame.K_RIGHT] or self.keys[pygame.K_UP] or self.keys[pygame.K_DOWN]:
                 # Reset facing at the beginning of each frame that we walk.
                 self.face[0]=0
