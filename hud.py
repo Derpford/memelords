@@ -43,8 +43,11 @@ def hudInit():
 
 def drawHud(screen,surf,pos,player):
     screen.blit(surf,pos)
+    # Health.
     for i in range(0,player.maxhp):
         if i >= player.hp:
             screen.blit(barSprites[1],tupSum(pos,(16+i*4,24)))
         else:
             screen.blit(barSprites[0],tupSum(pos,(16+i*4,24)))
+    # Weapon.
+    player.weapon.draw(screen,tupSum(pos,(16,64)),0)
