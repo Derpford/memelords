@@ -1,7 +1,7 @@
 import pygame, math, random, pytmx, pymunk, sys, types
 from helpers import *
 from pygame.locals import *
-import hud, bads
+import hud, bads, actors
 debug=debugFlags["room"]
 
 exitFlag=0
@@ -112,8 +112,11 @@ class gameRoom(Room):
             other=arbiter.shapes[1]
             shot=arbiter.shapes[0]
             for body in space.bodies:
-                if math.hypot(other.position.x-shot.position.x,other.position.y-shot.position.y)<8:
-                    body.apply_impulse_at_world_point(40*actors.factor,shot.position)
+                if abs(math.hypot(body.position.x-shot.body.position.x,body.position.y-shot.body.position.y))<8:
+                    #body.apply_impulse_at_world_point(40*actors.factor,shot.body.position)
+                    dx=800*actors.factor*normal(body.position.x-shot.body.position.x)
+                    dy=800*actors.factor*normal(body.position.y-shot.body.position.y)
+                    body.apply_impulse_at_world_point((dx,dy),shot.body.position)
             shot.removeFlag=True
             other.removeFlag=True
             return False
@@ -121,16 +124,23 @@ class gameRoom(Room):
             shot=arbiter.shapes[0]
             shot.removeFlag=True
             return False
-        def hitPlayer(arbiter,space,data):
+        def hitFriend(arbiter,space,data):
             return False
+
+        self.space.add_collision_handler(collisionTypes["shot"], collisionTypes["badshot"]).begin=hitShot
+        #For player shots.
         self.space.add_collision_handler(collisionTypes["shot"], collisionTypes["bad"]).begin=hitEnemy
         self.space.add_collision_handler(collisionTypes["shot"], collisionTypes["wall"]).begin=hitWall
         self.space.add_collision_handler(collisionTypes["shot"], collisionTypes["exit"]).begin=hitWall
-        self.space.add_collision_handler(collisionTypes["shot"], collisionTypes["player"]).begin=hitPlayer
-        self.space.add_collision_handler(collisionTypes["shot"], collisionTypes["badshot"]).begin=hitShot
-        self.space.add_collision_handler(collisionTypes["shot"], collisionTypes["shot"]).begin=hitPlayer
-
-
+        self.space.add_collision_handler(collisionTypes["shot"], collisionTypes["player"]).begin=hitFriend
+        self.space.add_collision_handler(collisionTypes["shot"], collisionTypes["shot"]).begin=hitFriend
+        #For enemy shots.
+        self.space.add_collision_handler(collisionTypes["badshot"],collisionTypes["bad"]).begin=hitFriend
+        self.space.add_collision_handler(collisionTypes["badshot"], collisionTypes["wall"]).begin=hitWall
+        self.space.add_collision_handler(collisionTypes["badshot"], collisionTypes["exit"]).begin=hitWall
+        self.space.add_collision_handler(collisionTypes["badshot"], collisionTypes["player"]).begin=hitEnemy
+        self.space.add_collision_handler(collisionTypes["badshot"], collisionTypes["badshot"]).begin=hitFriend
+        # For exits.
         h = self.space.add_collision_handler(
                 collisionTypes["exit"],
                 collisionTypes["player"])
@@ -158,7 +168,7 @@ class gameRoom(Room):
             sys.exit()
         # Iterate through baddies.
         for bad in self.bads:
-            bad.update(player)
+            bad.update(self.space,player)
 
     # Draw the room.
     def draw(self,player,screen,clock,fps):
@@ -181,10 +191,12 @@ class gameRoom(Room):
             hpBlit=font.render(str(player.hp),False,(255,0,0))
             velBlit=font.render(str(math.floor(player.dx))+" dx/"+str(math.floor(player.dy))+" dy",False,(255,255,255))
             forBlit=font.render(str(math.floor(player.body.force.x))+","+str(math.floor(player.body.force.y)),False,(0,255,255))
+            shotTimerBlit=font.render(str(player.weaponAnim)+" shotTimer",False,(255,0,0))
             screen.blit(fpsBlit,(0,0))
             screen.blit(hpBlit,(0,16))
             screen.blit(velBlit, (0,24))
             screen.blit(forBlit, (0,32))
+            screen.blit(shotTimerBlit, (0,48))
         hud.drawHud(screen,self.hudSurface,(0,204),player)
         if debug or debugFlags["physics"]:
            self.space.debug_draw(self.pymunkoptions) 
