@@ -2,8 +2,8 @@ import pygame, math, random, pytmx, pymunk, sys, types
 from helpers import *
 from pygame.locals import *
 import hud, bads
+debug=debugFlags["room"]
 
-debug=False
 exitFlag=0
 
 class Room():
@@ -186,6 +186,6 @@ class gameRoom(Room):
             screen.blit(velBlit, (0,24))
             screen.blit(forBlit, (0,32))
         hud.drawHud(screen,self.hudSurface,(0,204),player)
-        if debug:
+        if debug or debugFlags["physics"]:
            self.space.debug_draw(self.pymunkoptions) 
         pygame.display.flip()
