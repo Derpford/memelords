@@ -1,7 +1,7 @@
 import pygame, math, random, pymunk
 from helpers import *
-import actors,shots
-debug=False
+import actors,weapons
+debug=debugFlags["player"]
 
 class Player(actors.Actor):
     def __init__(self,space, x=0, y=0, dt=1/120):
@@ -30,9 +30,16 @@ class Player(actors.Actor):
         self.maxhp=6
         self.dead=False
         self.shotList=[]
+        self.weapon=weapons.Sword()
+        self.weaponAnim=0
 
     def draw(self,screen):
         pos=(self.body.position.x-8,self.body.position.y-8)
+        # Draw weapon.
+        if self.weaponAnim>0.2:
+            self.weaponAnim-=self.dt*4
+            self.weapon.draw(screen,pos,self.weaponAnim)
+
         if self.keys[pygame.K_LEFT] or self.keys[pygame.K_RIGHT] or self.keys[pygame.K_UP] or self.keys[pygame.K_DOWN]:
             # Walking.
             if self.face[0]!=0:
@@ -57,6 +64,7 @@ class Player(actors.Actor):
                     screen.blit(self.anim[9],pos)
                 else:
                     screen.blit(self.anim[0],pos)
+
 
         # Draw shots.
         for shot in self.shotList:
@@ -119,15 +127,15 @@ class Player(actors.Actor):
             self.keys=pygame.key.get_pressed()
             self.physicsUpdate()
             for shot in self.shotList:
+                shot.update()
                 if debug:
                     print("Handling shot, removeFlag: "+str(shot.shape.removeFlag))
                     print("shot position: "+str(shot.body.position))
                 if shot.shape.removeFlag == True:
                     mapGrid.space.remove(shot.body)
                     mapGrid.space.remove(shot.shape)
-                shot.update()
             self.shotList=[shot for shot in self.shotList if shot.shape.removeFlag==False]
-            if self.keys[pygame.K_LCTRL] and len(self.shotList)==0:
-                newShot=shots.Shot(mapGrid.space,self.body.position.x,self.body.position.y,self.face[0],self.face[1])
-                self.shotList.append(newShot)
+            if self.keys[pygame.K_LCTRL] and self.weaponAnim<=0.5:
+                newShot=self.weapon.shoot(mapGrid.space,self.body.position,self.face,self)
+                if newShot:self.weaponAnim=1
 
