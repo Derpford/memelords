@@ -6,3 +6,9 @@ You are a mighty adventurer, sent to the temple of Bigfroggr the World Toad to f
 
 ## I'm sorry, what?
 This is a game about fighting skeletons and stuff. It's a work in progress.
+
+## Instructions:
+Run main.py. When you start the game, you should see an empty room--empty except for a little guy in green armor. That's you.
+Use the ARROW KEYS to move around. If you let go, you'll slide to a stop; press the opposite arrow key to stop faster.
+Press the LEFT CONTROL KEY to shoot a burst of fire from your blade. You can have up to TWO sword shots on screen at once. They fire in the direction of your movement.
+Beware the ENEMIES, who always wear bloody RED colors. They will fire their own shots at you. You can avoid the incoming attacks, or--if you're cornered, or courageous--you can hit the incoming shots with your own shots to PARRY them.
