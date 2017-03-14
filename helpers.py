@@ -41,4 +41,13 @@ def getfps(clock,fps=None):
 def tupSum(tup1, tup2):
     return tuple(map(lambda x, y: x + y, tup1,tup2))
 
-
+# Debug values.
+debugFlags={"room":False,
+        "actor":False,
+        "weapon":False,
+        "shot":False,
+        "player":False,
+        "bad":False,
+        "main":False,
+        "physics":True,
+        }

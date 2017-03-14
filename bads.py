@@ -2,7 +2,7 @@ import math, random, pymunk, pygame
 import actors
 from helpers import *
 from pygame.locals import *
-debug=False
+debug=debugFlags["bad"]
 
 class Bad(actors.Actor):
     def __init__(self,space,x=0,y=0,dt=1/120):

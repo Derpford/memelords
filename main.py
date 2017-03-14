@@ -9,7 +9,7 @@ import os, sys, math, random
 import actors, rooms, hud 
 import player, bads, shots
 from helpers import *
-debug=True
+debug=debugFlags["main"]
 
 pygame.init()
 
