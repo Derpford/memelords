@@ -1,10 +1,10 @@
 import math, random, types, pymunk
 import actors
 from helpers import *
-debug=False
+debug=debugFlags["shot"]
 
 class Shot(actors.Actor):
-    def __init__(self,space,x,y,fx,fy,dt=1/120):
+    def __init__(self,space,x,y,fx,fy,speed=160,damage=1,dt=1/120):
         actors.Actor.__init__(self,space,x,y,dt)
         self.shape=pymunk.Circle(self.body,1)
         self.shape.collision_type=collisionTypes["shot"]
@@ -14,12 +14,17 @@ class Shot(actors.Actor):
                     loadImage('assets/shots/orb3.png'),
                     loadImage('assets/shots/orb4.png')]
         self.face=[fx,fy]
-        self.shape.damage=1
-        self.speed=160
+        self.shape.damage=damage
+        self.speed=speed
+        self.timer=0.70
         self.shape.removeFlag=False
 
     def update(self):
-        #if self.body.position.x < 0 or self.body.position.y < 0 or self.body.position.x > width or self.body.position.y > height:
+        # Handle removal.
+        self.timer -= self.dt
+        if debug:print("Shot timer: "+str(self.timer))
+        if self.timer<=0:
+            self.shape.removeFlag=True
         if self.body.position.x<0: 
             self.shape.removeFlag=True
             if debug:print("Out of bounds -x")
