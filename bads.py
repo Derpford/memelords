@@ -1,5 +1,5 @@
 import math, random, pymunk, pygame
-import actors
+import actors,weapons
 from helpers import *
 from pygame.locals import *
 debug=debugFlags["bad"]
@@ -40,12 +40,16 @@ class Bad(actors.Actor):
         self.patternTimer=1
         self.patternTimerMax=0.5
         self.patternStep=-1
+        self.weapon=weapons.BadWeapon()
+        self.shotTimer=0
+        self.shotList=[]
 
-    def update(self,player):
+    def update(self,space,player):
         if self.hp<1:
             self.dead=True
         if not self.dead:
             actors.Actor.update(self)
+            if self.shotTimer>0:self.shotTimer-=self.dt
             self.patternTimer-=self.dt
             if self.patternTimer<0:
                 self.patternStep+=1
@@ -63,6 +67,16 @@ class Bad(actors.Actor):
         self.frictionUpdate()
         if self.dead and self.anim != self.deadAnim:
             self.anim = self.deadAnim
+        # Update shots.
+        for shot in self.shotList:
+            shot.update()
+            if debug:
+                print("Handling shot, removeFlag: "+str(shot.shape.removeFlag))
+                print("shot position: "+str(shot.body.position))
+            if shot.shape.removeFlag == True:
+                space.remove(shot.body)
+                space.remove(shot.shape)
+        self.shotList=[shot for shot in self.shotList if shot.shape.removeFlag==False]
 
     def draw(self,screen):
         pos=(self.body.position.x-8,self.body.position.y-8)
@@ -90,6 +104,9 @@ class Bad(actors.Actor):
                     screen.blit(self.anim[9],pos)
                 else:
                     screen.blit(self.anim[0],pos)
+        # Draw shots.
+        for shot in self.shotList:
+            shot.draw(screen)
 
     def hurt(self,amount):
         if debug: print(self.name+" got hurt for "+str(amount))
@@ -106,6 +123,13 @@ class Hood(Bad):
                 (0,0),(1,0),
                 (0,0),(0,-1),
                 (0,0),(-1,0)]
+    def update(self,space,player):
+        Bad.update(self,space,player)
+        if self.pattern[self.patternStep]==(0,0) and self.shotTimer<=0:
+            self.weapon.shoot(self.body.space,self.body.position,self.pattern[self.patternStep-1],self)
+            self.shotTimer=1
+            if debug:
+                print("Firing a shot at "+str(self.body.position)+" toward "+str(self.pattern[self.patternStep-1]))
 
 class Knight(Bad):
     def __init__(self,space,x=0,y=0,dt=1/120):
@@ -126,7 +150,7 @@ class Knight(Bad):
                 loadImage("assets/knight/knight8.png"),
                 loadImage("assets/knight/knight9.png")]
 
-    def update(self,player):
+    def update(self,space,player):
         actors.Actor.update(self)
         self.t+=self.dt
         tpos = player.body.position
