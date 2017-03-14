@@ -1,13 +1,13 @@
 import pygame, math, random, pymunk
 from helpers import *
-debug=False
+debug=debugFlags["actor"]
 
 # Movement force factor.
 factor=1000000
 def drawAnimation(screen,frames,pos,speed,t):
-    screen.blit(frames[math.floor(speed*t%len(frames))],(pos[0],pos[1]))
-    if debug:
-        print(str(pos)+" anim pos for "+str(math.floor(speed*t%len(frames)))+" in "+str(frames))
+    if debug or debugFlags["anim"]:
+        print(str(math.floor(pos[0]))+","+str(math.floor(pos[1]))+" anim pos for "+str(math.floor(speed*t%len(frames)))+" in "+str(frames))
+    screen.blit(frames[math.floor(speed*t%len(frames))],(math.floor(pos[0]),math.floor(pos[1])))
 
 class Actor(pygame.sprite.Sprite):
     def __init__(self, space, x = 0, y = 0, dt = 1/120):
@@ -16,7 +16,6 @@ class Actor(pygame.sprite.Sprite):
         self.body=pymunk.Body(1,math.inf) # Magic numbers!
         self.body.position=(x,y)
         #self.shape=pymunk.Circle(self.body,8)
-        self.rect = pygame.Rect(x,y,16,16)
         self.anim = [loadImage("assets/guy-green/guy-green1.png"),
             loadImage("assets/guy-green/guy-green2.png"),
             loadImage("assets/guy-green/guy-green3.png")]
