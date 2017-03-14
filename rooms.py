@@ -53,7 +53,7 @@ class gameRoom(Room):
                 else:
                     if "bad" in props:
                         badName=props["bad"]
-                        newBad=bads.badList[badName](self.space,obj.x,obj.y)
+                        newBad=bads.badList[badName](self.space,obj.x+8,obj.y+8)
                         self.bads.append(newBad)
 
 
