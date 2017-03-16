@@ -8,6 +8,7 @@ import os, sys, math, random
 #And my other files.
 import actors, rooms, hud 
 import player, bads, shots
+import sound
 from helpers import *
 debug=debugFlags["main"]
 
@@ -19,6 +20,10 @@ def loadRoom(room):
 
 def updateFunc(room):
     global roomPos
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
     room.update(t,dt,keyDelay,playerObject)
         
 def drawFunc(room):
@@ -38,7 +43,8 @@ roomList=[loadRoom(roomStart),
         loadRoom(random.choice(roomLayouts)),
         loadRoom(random.choice(roomLayouts)),
         loadRoom(random.choice(roomLayouts)),
-        loadRoom(random.choice(roomSpecials)),
+        #loadRoom(random.choice(roomSpecials)),
+        loadRoom(roomSpecials[1]),
         loadRoom(random.choice(roomLayouts)),
         loadRoom(random.choice(roomLayouts)),
         loadRoom(random.choice(roomLayouts)),

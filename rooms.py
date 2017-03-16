@@ -1,7 +1,7 @@
 import pygame, math, random, pytmx, pymunk, sys, types
 from helpers import *
 from pygame.locals import *
-import hud, bads, actors
+import hud, bads, actors, sound
 debug=debugFlags["room"]
 
 exitFlag=0
@@ -123,6 +123,7 @@ class gameRoom(Room):
         def hitWall(arbiter,space,data):
             shot=arbiter.shapes[0]
             shot.removeFlag=True
+            sound.sounds["hurt"].play()
             return False
         def hitFriend(arbiter,space,data):
             return False
@@ -155,8 +156,6 @@ class gameRoom(Room):
         self.space.step(dt)
         if keyDelay>0:
             keyDelay=max(0,keyDelay-dt)
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT: sys.exit()
         player.update(self)
         if pygame.key.get_pressed()[K_q] and keyDelay==0:
             player.hurt(1)
@@ -166,6 +165,7 @@ class gameRoom(Room):
             keyDelay=0.25
         if pygame.key.get_pressed()[K_ESCAPE]:
             sys.exit()
+            pygame.quit()
         # Iterate through baddies.
         for bad in self.bads:
             bad.update(self.space,player)

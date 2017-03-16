@@ -1,5 +1,5 @@
 import math, random, types, pymunk
-import actors
+import actors,sound
 from helpers import *
 debug=debugFlags["shot"]
 
@@ -18,6 +18,8 @@ class Shot(actors.Actor):
         self.speed=speed
         self.timer=0.70
         self.shape.removeFlag=False
+        sound.shotChannel.play(sound.sounds["shot"])
+
 
     def update(self):
         # Handle removal.
