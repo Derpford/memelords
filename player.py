@@ -1,6 +1,6 @@
 import pygame, math, random, pymunk
 from helpers import *
-import actors,weapons
+import actors,weapons,sound
 debug=debugFlags["player"]
 
 class Player(actors.Actor):
@@ -24,6 +24,7 @@ class Player(actors.Actor):
                 loadImage("assets/guy-green/guy-green7.png"),
                 loadImage("assets/guy-green/guy-green8.png"),
                 loadImage("assets/guy-green/guy-green9.png")]
+        self.deadAnim=actors.makeDeadAnim(self.anim)
         self.face=[0,1]
         self.speed=120
         self.dx=0
@@ -37,18 +38,21 @@ class Player(actors.Actor):
 
     def hurt(self,amount):
         self.hp-=amount
+        if self.hp > 0:
+            sound.hurtChannel.play(sound.sounds["hurt"])
         if self.hp <= 0:
             self.dead=True
+            self.anim=self.deadAnim
+            sound.sounds["die2"].play()
     def heal(self,amount):
-        self.hp=min(self.maxhp, self.hp+amount)
-        if self.dead:
-            self.dead=False
+        if not self.dead:
+            self.hp=min(self.maxhp, self.hp+amount)
 
     def draw(self,screen):
         pos=(self.body.position.x-8,self.body.position.y-8)
         # Draw weapon.
         if self.weaponAnim>0.2:
-            self.weaponAnim-=self.dt*4
+            self.weaponAnim-=self.dt*6
             if debug:print(str(self.weaponAnim)+" weapon timer")
             self.weapon.draw(screen,pos,self.weaponAnim)
 
@@ -115,8 +119,6 @@ class Player(actors.Actor):
                 # Apply force.
                 self.body.apply_force_at_local_point((self.dx*actors.factor,self.dy*actors.factor),(0,0))
 
-            # Friction.
-            self.frictionUpdate()
 
 
         
@@ -142,4 +144,6 @@ class Player(actors.Actor):
             if self.keys[pygame.K_LCTRL] and self.weaponAnim<=0.5:
                 newShot=self.weapon.shoot(mapGrid.space,self.body.position,self.face,self)
                 if newShot:self.weaponAnim=1
+        # Friction.
+        self.frictionUpdate()
 
