@@ -124,6 +124,14 @@ class Player(actors.Actor):
         
     def update(self,mapGrid):
         actors.Actor.update(self)
+        for shot in self.shotList:
+            shot.update()
+            if debug:
+                print("Handling shot, removeFlag: "+str(shot.shape.removeFlag))
+                print("shot position: "+str(shot.body.position))
+            if shot.shape.removeFlag == True:
+                mapGrid.space.remove(shot.body)
+                mapGrid.space.remove(shot.shape)
         if self.shape.newRoomFlag:
             for shot in self.shotList:
                 mapGrid.space.remove(shot.body, shot.shape)
@@ -132,14 +140,6 @@ class Player(actors.Actor):
         if not self.dead:
             self.keys=pygame.key.get_pressed()
             self.physicsUpdate()
-            for shot in self.shotList:
-                shot.update()
-                if debug:
-                    print("Handling shot, removeFlag: "+str(shot.shape.removeFlag))
-                    print("shot position: "+str(shot.body.position))
-                if shot.shape.removeFlag == True:
-                    mapGrid.space.remove(shot.body)
-                    mapGrid.space.remove(shot.shape)
             self.shotList=[shot for shot in self.shotList if shot.shape.removeFlag==False]
             if self.keys[pygame.K_LCTRL] and self.weaponAnim<=0.5:
                 newShot=self.weapon.shoot(mapGrid.space,self.body.position,self.face,self)
