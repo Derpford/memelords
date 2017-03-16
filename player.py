@@ -33,14 +33,14 @@ class Player(actors.Actor):
         self.maxhp=6
         self.dead=False
         self.shotList=[]
-        self.weapon=weapons.Sword()
+        self.weapon=weapons.Axe()
         self.weaponAnim=0
 
     def hurt(self,amount):
         self.hp-=amount
         if self.hp > 0:
             sound.hurtChannel.play(sound.sounds["hurt"])
-        if self.hp <= 0:
+        if self.hp <= 0 and not self.dead:
             self.dead=True
             self.anim=self.deadAnim
             sound.sounds["die2"].play()
