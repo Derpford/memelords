@@ -129,7 +129,6 @@ class gameRoom(Room):
         def hitFriend(arbiter,space,data):
             return False
         def hitPickup(arbiter,space,data):
-            print("Hit pickup")
             item=arbiter.shapes[0]
             other=arbiter.shapes[1]
             item.pickup(other)
