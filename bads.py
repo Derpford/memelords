@@ -74,8 +74,8 @@ class Bad(actors.Actor):
                 self.patternTimer=self.patternTimerMax
 
             angle=math.atan2(self.face[1],self.face[0])
-            self.dx=math.cos(angle)*self.speed*self.dt*self.xFactor
-            self.dy=math.sin(angle)*self.speed*self.dt*self.yFactor
+            self.dx=math.cos(angle)*self.speed*self.dt*abs(self.pattern[self.patternStep][0])
+            self.dy=math.sin(angle)*self.speed*self.dt*abs(self.pattern[self.patternStep][1])
             if self.face!=[0,0]:
                 self.body.apply_force_at_local_point((self.dx*actors.factor,self.dy*actors.factor),(0,0))
         self.frictionUpdate()
@@ -174,7 +174,6 @@ class Knight(Bad):
     def update(self,space,player):
         Bad.update(self,space,player)
         if not self.dead:
-            self.t+=self.dt
             tpos = player.body.position
             spos = self.body.position
             self.face=[normal(tpos[0]-spos[0]),normal(tpos[1]-spos[1])]
@@ -189,7 +188,42 @@ class Knight(Bad):
                 self.body.apply_force_at_local_point((self.dx*actors.factor,self.dy*actors.factor),(0,0))
             self.frictionUpdate()
 
+class Skeleton(Bad):
+    def __init__(self,space,x=0,y=0,dt=1/120):
+        Bad.__init__(self,space,x,y,dt)
+        self.name="Skeltan"
+        self.speed=100
+        self.animSpeed=4
+        self.patternTimerMax=0.2
+        self.hp=4
+        self.maxhp=4
+        self.anim = [loadImage("assets/skel/skel1.png"),
+                loadImage("assets/skel/skel2.png"),
+                loadImage("assets/skel/skel3.png"),
+                loadImage("assets/skel/skel4.png"),
+                loadImage("assets/skel/skel5.png"),
+                loadImage("assets/skel/skel6.png"),
+                pygame.transform.flip(loadImage("assets/skel/skel4.png"),True,False),
+                pygame.transform.flip(loadImage("assets/skel/skel5.png"),True,False),
+                pygame.transform.flip(loadImage("assets/skel/skel6.png"),True,False),
+                loadImage("assets/skel/skel7.png"),
+                loadImage("assets/skel/skel8.png"),
+                loadImage("assets/skel/skel9.png")]
+        self.deadAnim=actors.makeDeadAnim(self.anim)
+
+    def update(self,space,player):
+        Bad.update(self,space,player)
+        if not self.dead and self.pattern[self.patternStep]==(0,0):
+            tx,ty = player.body.position
+            fx,fy = tx-self.body.position.x,ty-self.body.position.y
+            if abs(fx)<abs(fy):
+                fx=0
+            if abs(fx)>abs(fy):
+                fy=0
+            if fx!=0:fx=normal(fx)
+            if fy!=0:fy=normal(fy)
+            self.pattern=[(fx,fy),(-fx,-fy),(2*fx,2*fy),(0,0),(0,0)]
 
 
 #List of bad guy classes.
-badList={"hood":Hood,"knight":Knight}
+badList={"hood":Hood,"knight":Knight,"skel":Skeleton,}
