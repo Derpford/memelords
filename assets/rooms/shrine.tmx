@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="25" height="13" tilewidth="16" tileheight="16" nextobjectid="5">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="25" height="13" tilewidth="16" tileheight="16" nextobjectid="6">
  <tileset firstgid="1" source="basegreenbleh.tsx"/>
  <tileset firstgid="17" name="bads" tilewidth="16" tileheight="16" tilecount="16" columns="4">
   <image source="../tiles/bads.png" width="64" height="64"/>
@@ -51,6 +51,11 @@
   <object id="3" type="enemy" gid="17" x="176" y="96" width="16" height="16">
    <properties>
     <property name="bad" value="hood"/>
+   </properties>
+  </object>
+  <object id="5" gid="18" x="176" y="64" width="16" height="16">
+   <properties>
+    <property name="bad" value="skel"/>
    </properties>
   </object>
  </objectgroup>
