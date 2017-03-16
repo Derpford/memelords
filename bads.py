@@ -1,5 +1,5 @@
 import math, random, pymunk, pygame
-import actors,weapons
+import actors,weapons,sound
 from helpers import *
 from pygame.locals import *
 debug=debugFlags["bad"]
@@ -22,12 +22,11 @@ class Bad(actors.Actor):
                 loadImage("assets/hood/hood8.png"),
                 loadImage("assets/hood/hood9.png")]
 
-        self.deadAnim=[img.copy() for img in self.anim]
-        for img in self.deadAnim:
-            img.fill(pygame.Color(41,57,65,255),None,BLEND_RGBA_MIN)
+        self.deadAnim=actors.makeDeadAnim(self.anim)
 
         self.shape.collision_type = collisionTypes["bad"]
         self.shape.hurt=self.hurt
+        # Basic vars.
         self.face=[0,0]
         self.speed=120
         self.animSpeed=8
@@ -36,17 +35,20 @@ class Bad(actors.Actor):
         self.hp=3
         self.maxhp=3
         self.dead=False
+        # Pattern settings.
         self.pattern=[(1,0),(0,0),(-1,0),(0,0)]
         self.patternTimer=1
         self.patternTimerMax=0.5
         self.patternStep=-1
+        # Weapon settings.
         self.weapon=weapons.BadWeapon()
         self.shotTimer=0
         self.shotList=[]
 
     def update(self,space,player):
-        if self.hp<1:
+        if self.hp<1 and not self.dead:
             self.dead=True
+            sound.sounds["die"].play()
         if not self.dead:
             actors.Actor.update(self)
             if self.shotTimer>0:self.shotTimer-=self.dt
@@ -110,6 +112,7 @@ class Bad(actors.Actor):
 
     def hurt(self,amount):
         if debug: print(self.name+" got hurt for "+str(amount))
+        sound.hurtChannel.play(sound.sounds["hurt"])
         self.hp -= amount
 
 
@@ -125,11 +128,14 @@ class Hood(Bad):
                 (0,0),(-1,0)]
     def update(self,space,player):
         Bad.update(self,space,player)
-        if self.pattern[self.patternStep]==(0,0) and self.shotTimer<=0:
-            self.weapon.shoot(self.body.space,self.body.position,self.pattern[self.patternStep-1],self)
-            self.shotTimer=1
-            if debug:
-                print("Firing a shot at "+str(self.body.position)+" toward "+str(self.pattern[self.patternStep-1]))
+        if not self.dead:
+            if self.pattern[self.patternStep]==(0,0) and self.shotTimer<=0:
+                tx,ty=player.body.position
+                fx,fy=normal(tx-self.body.position.x),normal(ty-self.body.position.y)
+                self.weapon.shoot(self.body.space,self.body.position,(fx,fy),self)
+                self.shotTimer=1
+                if debug:
+                    print("Firing a shot at "+str(self.body.position)+" toward "+str(self.pattern[self.patternStep-1]))
 
 class Knight(Bad):
     def __init__(self,space,x=0,y=0,dt=1/120):
@@ -137,6 +143,8 @@ class Knight(Bad):
         self.name="Knight"
         self.speed=80
         self.animSpeed=4
+        self.hp=6
+        self.maxhp=6
         self.anim = [loadImage("assets/knight/knight1.png"),
                 loadImage("assets/knight/knight2.png"),
                 loadImage("assets/knight/knight3.png"),
@@ -149,18 +157,25 @@ class Knight(Bad):
                 loadImage("assets/knight/knight7.png"),
                 loadImage("assets/knight/knight8.png"),
                 loadImage("assets/knight/knight9.png")]
+        self.deadAnim=actors.makeDeadAnim(self.anim)
 
     def update(self,space,player):
-        actors.Actor.update(self)
-        self.t+=self.dt
-        tpos = player.body.position
-        spos = self.body.position
-        self.face=[normal(tpos[0]-spos[0]),normal(tpos[1]-spos[1])]
-        angle = math.atan2(tpos[1]-spos[1],tpos[0]-spos[0])
-        self.dx=math.cos(angle)*self.speed*self.dt*self.xFactor
-        self.dy=math.sin(angle)*self.speed*self.dt*self.yFactor
-        self.body.apply_force_at_local_point((self.dx*actors.factor,self.dy*actors.factor),(0,0))
-        self.frictionUpdate()
+        Bad.update(self,space,player)
+        if not self.dead:
+            self.t+=self.dt
+            tpos = player.body.position
+            spos = self.body.position
+            self.face=[normal(tpos[0]-spos[0]),normal(tpos[1]-spos[1])]
+            angle = math.atan2(tpos[1]-spos[1],tpos[0]-spos[0])
+            if abs(math.hypot(tpos[0]-spos[0],tpos[1]-spos[1]))>64:
+                self.dx=math.cos(angle)*self.speed*self.dt*self.xFactor
+                self.dy=math.sin(angle)*self.speed*self.dt*self.yFactor
+                self.body.apply_force_at_local_point((self.dx*actors.factor,self.dy*actors.factor),(0,0))
+            else:
+                self.dx=-math.cos(angle)*self.speed*self.dt*self.xFactor
+                self.dy=-math.sin(angle)*self.speed*self.dt*self.yFactor
+                self.body.apply_force_at_local_point((self.dx*actors.factor,self.dy*actors.factor),(0,0))
+            self.frictionUpdate()
 
 
 
