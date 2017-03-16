@@ -26,6 +26,7 @@ collisionTypes={
         "shot":4,
         "badshot":5,
         "wall":6,
+        "pickup":7,
         }
 
 # Image Loader.
@@ -53,4 +54,5 @@ debugFlags={"room":False,
         "main":False,
         "physics":False,
         "anim":False,
+        "pickup":False,
         }

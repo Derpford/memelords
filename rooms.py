@@ -26,6 +26,7 @@ class gameRoom(Room):
         self.mapImg=pygame.Surface((400,204))
         self.hudSurface = hud.hudInit()
         self.bads=[]
+        self.drops=[]
         # Tiled iterators.
         #Adding the tile bounding boxes.
         if 'tiles' in self.grid.layernames:
@@ -53,7 +54,7 @@ class gameRoom(Room):
                 else:
                     if "bad" in props:
                         badName=props["bad"]
-                        newBad=bads.badList[badName](self.space,obj.x+8,obj.y+8)
+                        newBad=bads.badList[badName](self,obj.x+8,obj.y+8)
                         self.bads.append(newBad)
 
 
@@ -127,7 +128,15 @@ class gameRoom(Room):
             return False
         def hitFriend(arbiter,space,data):
             return False
+        def hitPickup(arbiter,space,data):
+            print("Hit pickup")
+            item=arbiter.shapes[0]
+            other=arbiter.shapes[1]
+            item.pickup(other)
+            item.removeFlag=True
+            return False
 
+        self.space.add_collision_handler(collisionTypes["pickup"],collisionTypes["player"]).begin=hitPickup
         self.space.add_collision_handler(collisionTypes["shot"], collisionTypes["badshot"]).begin=hitShot
         #For player shots.
         self.space.add_collision_handler(collisionTypes["shot"], collisionTypes["bad"]).begin=hitEnemy
@@ -168,7 +177,13 @@ class gameRoom(Room):
             pygame.quit()
         # Iterate through baddies.
         for bad in self.bads:
-            bad.update(self.space,player)
+            bad.update(self,player)
+        for item in self.drops:
+            if item.shape.removeFlag:
+                self.space.remove(item.shape)
+                self.space.remove(item.body)
+                self.drops.remove(item)
+            item.update()
 
     # Draw the room.
     def draw(self,player,screen,clock,fps):
@@ -184,6 +199,8 @@ class gameRoom(Room):
         #Bad guys.
         for bad in self.bads:
             bad.draw(screen)
+        for item in self.drops:
+            item.draw(screen)
         #Debug info.
         fpsReal=getfps(clock,fps)
         if debug:

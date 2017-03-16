@@ -1,5 +1,5 @@
 import math, random, pymunk, pygame
-import actors,weapons,sound
+import actors,weapons,sound,pickups
 from helpers import *
 from pygame.locals import *
 debug=debugFlags["bad"]
@@ -8,7 +8,7 @@ class Bad(actors.Actor):
     def __init__(self,space,x=0,y=0,dt=1/120):
         actors.Actor.__init__(self,space,x,y,dt)
         self.shape=pymunk.Circle(self.body,8)
-        space.add(self.body,self.shape)
+        space.space.add(self.body,self.shape)
         self.anim = [loadImage("assets/hood/hood1.png"),
                 loadImage("assets/hood/hood2.png"),
                 loadImage("assets/hood/hood3.png"),
@@ -23,6 +23,8 @@ class Bad(actors.Actor):
                 loadImage("assets/hood/hood9.png")]
 
         self.deadAnim=actors.makeDeadAnim(self.anim)
+
+        self.drops=[(pickups.Pickup,128)]
 
         self.shape.collision_type = collisionTypes["bad"]
         self.shape.hurt=self.hurt
@@ -49,6 +51,16 @@ class Bad(actors.Actor):
         if self.hp<1 and not self.dead:
             self.dead=True
             sound.sounds["die"].play()
+            for drop in self.drops:
+                item,chance=drop
+                roll=random.randrange(0,255)
+                if debugFlags["pickup"]:
+                    print("Dropping item!")
+                    print(str(roll)+">"+str(chance))
+                if roll > chance:
+                    if debugFlags["pickup"]:print("Dropping a "+str(item))
+                    newDrop=item(space.space,self.body.position.x,self.body.position.y)
+                    space.drops.append(newDrop)
         if not self.dead:
             actors.Actor.update(self)
             if self.shotTimer>0:self.shotTimer-=self.dt
@@ -76,8 +88,8 @@ class Bad(actors.Actor):
                 print("Handling shot, removeFlag: "+str(shot.shape.removeFlag))
                 print("shot position: "+str(shot.body.position))
             if shot.shape.removeFlag == True:
-                space.remove(shot.body)
-                space.remove(shot.shape)
+                space.space.remove(shot.body)
+                space.space.remove(shot.shape)
         self.shotList=[shot for shot in self.shotList if shot.shape.removeFlag==False]
 
     def draw(self,screen):
@@ -132,7 +144,7 @@ class Hood(Bad):
             if self.pattern[self.patternStep]==(0,0) and self.shotTimer<=0:
                 tx,ty=player.body.position
                 fx,fy=normal(tx-self.body.position.x),normal(ty-self.body.position.y)
-                self.weapon.shoot(self.body.space,self.body.position,(fx,fy),self)
+                self.weapon.shoot(space.space,self.body.position,(fx,fy),self)
                 self.shotTimer=1
                 if debug:
                     print("Firing a shot at "+str(self.body.position)+" toward "+str(self.pattern[self.patternStep-1]))
