@@ -197,6 +197,7 @@ class Skeleton(Bad):
         self.patternTimerMax=0.2
         self.hp=4
         self.maxhp=4
+        self.weapon=weapons.BadAxe()
         self.anim = [loadImage("assets/skel/skel1.png"),
                 loadImage("assets/skel/skel2.png"),
                 loadImage("assets/skel/skel3.png"),
@@ -222,7 +223,12 @@ class Skeleton(Bad):
                 fy=0
             if fx!=0:fx=normal(fx)
             if fy!=0:fy=normal(fy)
+            self.face=fx,fy
             self.pattern=[(fx,fy),(-fx,-fy),(2*fx,2*fy),(0,0),(0,0)]
+        if not self.dead and self.patternStep==3:
+            if self.shotTimer<=0:
+                self.weapon.shoot(space.space,self.body.position,self.face,self)
+                self.shotTimer=1
 
 
 #List of bad guy classes.
