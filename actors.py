@@ -1,5 +1,6 @@
 import pygame, math, random, pymunk
 from helpers import *
+from pygame.locals import *
 debug=debugFlags["actor"]
 
 # Movement force factor.
@@ -8,6 +9,12 @@ def drawAnimation(screen,frames,pos,speed,t):
     if debug or debugFlags["anim"]:
         print(str(math.floor(pos[0]))+","+str(math.floor(pos[1]))+" anim pos for "+str(math.floor(speed*t%len(frames)))+" in "+str(frames))
     screen.blit(frames[math.floor(speed*t%len(frames))],(math.floor(pos[0]),math.floor(pos[1])))
+
+def makeDeadAnim(anim):
+    deadAnim=[img.copy() for img in anim]
+    for img in deadAnim:
+        img.fill(pygame.Color(41,57,65,255),None,BLEND_RGBA_MIN)
+    return deadAnim
 
 class Actor(pygame.sprite.Sprite):
     def __init__(self, space, x = 0, y = 0, dt = 1/120):
