@@ -4,6 +4,19 @@ from helpers import *
 from pygame.locals import *
 debug=debugFlags["bad"]
 
+def chooseDrops(drops,space):
+        newItem=None
+        for drop in drops:
+            item,chance=drop
+            roll=random.randrange(0,255)
+            if debugFlags["pickup"]:
+                print("Dropping item!")
+                print(str(roll)+">"+str(chance))
+            if roll > chance and newItem==None:
+                if debugFlags["pickup"]:print("Dropping a "+str(item))
+                newItem=item
+        return newItem
+
 class Bad(actors.Actor):
     def __init__(self,space,x=0,y=0,dt=1/120):
         actors.Actor.__init__(self,space,x,y,dt)
@@ -48,21 +61,15 @@ class Bad(actors.Actor):
         self.shotList=[]
 
     def update(self,space,player):
+        actors.Actor.update(self)
         if self.hp<1 and not self.dead:
             self.dead=True
             sound.sounds["die"].play()
-            for drop in self.drops:
-                item,chance=drop
-                roll=random.randrange(0,255)
-                if debugFlags["pickup"]:
-                    print("Dropping item!")
-                    print(str(roll)+">"+str(chance))
-                if roll > chance:
-                    if debugFlags["pickup"]:print("Dropping a "+str(item))
-                    newDrop=item(space.space,self.body.position.x,self.body.position.y)
-                    space.drops.append(newDrop)
+            item=chooseDrops(self.drops,space.space,)
+            if item != None:
+                newDrop=item(space.space,self.body.position.x,self.body.position.y)
+                space.drops.append(newDrop)
         if not self.dead:
-            actors.Actor.update(self)
             if self.shotTimer>0:self.shotTimer-=self.dt
             self.patternTimer-=self.dt
             if self.patternTimer<0:
@@ -78,7 +85,6 @@ class Bad(actors.Actor):
             self.dy=math.sin(angle)*self.speed*self.dt*abs(self.pattern[self.patternStep][1])
             if self.face!=[0,0]:
                 self.body.apply_force_at_local_point((self.dx*actors.factor,self.dy*actors.factor),(0,0))
-        self.frictionUpdate()
         if self.dead and self.anim != self.deadAnim:
             self.anim = self.deadAnim
         # Update shots.
@@ -138,6 +144,7 @@ class Hood(Bad):
                 (0,0),(1,0),
                 (0,0),(0,-1),
                 (0,0),(-1,0)]
+        self.drops=[(pickups.Money,128),(pickups.Pickup,128)]
     def update(self,space,player):
         Bad.update(self,space,player)
         if not self.dead:

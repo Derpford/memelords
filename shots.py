@@ -46,8 +46,6 @@ class Shot(actors.Actor):
         self.dy=math.sin(angle)*self.speed*self.dt*self.yFactor
         # Apply force.
         self.body.apply_force_at_local_point((self.dx*actors.factor,self.dy*actors.factor),(0,0))
-        # Friction.
-        self.frictionUpdate()
 
     def draw(self,screen):
         pos=(self.body.position.x-3,self.body.position.y-3)

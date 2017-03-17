@@ -6,12 +6,14 @@ debug=debugFlags["player"]
 class Player(actors.Actor):
     def __init__(self,space, x=0, y=0, dt=1/120):
         actors.Actor.__init__(self,space,x,y,dt)
+        #Physics
         self.shape=pymunk.Circle(self.body,8)
         self.shape.newRoomFlag=False
         space.add(self.body,self.shape)
         self.shape.collision_type = collisionTypes["player"]
         self.shape.hurt=self.hurt
         self.shape.heal=self.heal
+        #Animation
         self.anim = [loadImage("assets/guy-green/guy-green1.png"),
                 loadImage("assets/guy-green/guy-green2.png"),
                 loadImage("assets/guy-green/guy-green3.png"),
@@ -25,16 +27,23 @@ class Player(actors.Actor):
                 loadImage("assets/guy-green/guy-green8.png"),
                 loadImage("assets/guy-green/guy-green9.png")]
         self.deadAnim=actors.makeDeadAnim(self.anim)
+        #Basic Vars
         self.face=[0,1]
         self.speed=120
         self.dx=0
         self.dy=0
+        #Health and Combat
         self.hp=6
         self.maxhp=6
         self.dead=False
         self.shotList=[]
         self.weapon=weapons.Axe()
         self.weaponAnim=0
+        self.money=0
+        self.shape.addMoney=self.addMoney
+
+    def addMoney(self,amount):
+        self.money+=amount
 
     def hurt(self,amount):
         self.hp-=amount
@@ -144,6 +153,4 @@ class Player(actors.Actor):
             if self.keys[pygame.K_LCTRL] and self.weaponAnim<=0.5:
                 newShot=self.weapon.shoot(mapGrid.space,self.body.position,self.face,self)
                 if newShot:self.weaponAnim=1
-        # Friction.
-        self.frictionUpdate()
 

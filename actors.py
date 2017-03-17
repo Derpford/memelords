@@ -19,6 +19,7 @@ def makeDeadAnim(anim):
 class Actor(pygame.sprite.Sprite):
     def __init__(self, space, x = 0, y = 0, dt = 1/120):
         self.name=None
+        self.dead=False
         pygame.sprite.Sprite.__init__(self)
         self.body=pymunk.Body(1,math.inf) # Magic numbers!
         self.body.position=(x,y)
@@ -33,6 +34,7 @@ class Actor(pygame.sprite.Sprite):
         self.dx=0
         self.dy=0
         self.face=[0,0]
+        self.doFriction=True
         self.xFactor, self.yFactor= 1,1
 
     def jumpTo(self,pos):
@@ -43,7 +45,10 @@ class Actor(pygame.sprite.Sprite):
         drawAnimation(screen,self.anim,pos,8,self.t)
 
     def update(self):
-        self.t +=self.dt
+        if not self.dead:
+            self.t +=self.dt
+        if self.doFriction:
+            self.frictionUpdate()
         if debug:
             if self.name:
                 print(str(self.name))
