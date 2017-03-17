@@ -19,6 +19,7 @@ class Room():
 
 class gameRoom(Room):
     def __init__(self,tile):
+        self.pause=False
         self.roomFile=tile
         self.grid=pytmx.load_pygame(tile)
         self.space=pymunk.Space()
@@ -105,6 +106,7 @@ class gameRoom(Room):
         def hitEnemy(arbiter,space,data):
             other=arbiter.shapes[1]
             shot=arbiter.shapes[0]
+            if debugFlags["physics"]:print("Collision between "+str(shot.collision_type)+" and "+str(other.collision_type))
             if type(other.hurt)==types.MethodType:
                 other.hurt(shot.damage)
             shot.removeFlag=True
@@ -112,14 +114,17 @@ class gameRoom(Room):
         def hitShot(arbiter,space,data):
             other=arbiter.shapes[1]
             shot=arbiter.shapes[0]
+            if debugFlags["physics"]:print("Collision between "+str(shot.collision_type)+" and "+str(other.collision_type))
             for body in space.bodies:
                 if abs(math.hypot(body.position.x-shot.body.position.x,body.position.y-shot.body.position.y))<8:
                     #body.apply_impulse_at_world_point(40*actors.factor,shot.body.position)
                     dx=800*actors.factor*normal(body.position.x-shot.body.position.x)
                     dy=800*actors.factor*normal(body.position.y-shot.body.position.y)
                     body.apply_impulse_at_world_point((dx,dy),shot.body.position)
-            shot.removeFlag=True
-            other.removeFlag=True
+            if shot.collision_type==collisionTypes["shot"] or shot.collision_type==collisionTypes["badshot"]:
+                shot.removeFlag=True
+            if other.collision_type==collisionTypes["shot"] or other.collision_type==collisionTypes["badshot"]:
+                other.removeFlag=True
             return False
         def hitWall(arbiter,space,data):
             shot=arbiter.shapes[0]
@@ -158,31 +163,32 @@ class gameRoom(Room):
 
 
     # Update the room.
-    def update(self,t,dt,keyDelay,player):
+    def update(self,t,dt,player):
         t+=dt
-        # Step through simulation.
-        self.space.step(dt)
-        if keyDelay>0:
-            keyDelay=max(0,keyDelay-dt)
-        player.update(self)
-        if pygame.key.get_pressed()[K_q] and keyDelay==0:
-            player.hurt(1)
-            keyDelay=0.25
-        if pygame.key.get_pressed()[K_h] and keyDelay==0:
-            player.heal(1)
-            keyDelay=0.25
-        if pygame.key.get_pressed()[K_ESCAPE]:
-            sys.exit()
-            pygame.quit()
-        # Iterate through baddies.
-        for bad in self.bads:
-            bad.update(self,player)
-        for item in self.drops:
-            if item.shape.removeFlag:
-                self.space.remove(item.shape)
-                self.space.remove(item.body)
-                self.drops.remove(item)
-            item.update()
+        for event in pygame.event.get():
+            if debug or debugFlags["input"]: print("Got event: "+str(event.type))
+            if event.type==pygame.KEYDOWN and event.key==K_ESCAPE:
+                print("PAUSING")
+                self.pause = not self.pause
+        if not self.pause:
+            # Step through simulation.
+            self.space.step(dt)
+            player.update(self)
+            if pygame.key.get_pressed()[K_q] and keyDelay==0:
+                player.hurt(1)
+                keyDelay=0.25
+            if pygame.key.get_pressed()[K_h] and keyDelay==0:
+                player.heal(1)
+                keyDelay=0.25
+            # Iterate through baddies.
+            for bad in self.bads:
+                bad.update(self,player)
+            for item in self.drops:
+                if item.shape.removeFlag:
+                    self.space.remove(item.shape)
+                    self.space.remove(item.body)
+                    self.drops.remove(item)
+                item.update()
 
     # Draw the room.
     def draw(self,player,screen,clock,fps):
@@ -216,4 +222,8 @@ class gameRoom(Room):
         hud.drawHud(screen,self.hudSurface,(0,204),player)
         if debug or debugFlags["physics"]:
            self.space.debug_draw(self.pymunkoptions) 
+        if self.pause:
+            pauseBlit=gameFont.render("PAUSED",False,textColors["light"])
+            screen.blit(pauseBlit,(180,140))
+            print("PAUSED")
         pygame.display.flip()
