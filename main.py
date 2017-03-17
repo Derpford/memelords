@@ -6,10 +6,10 @@ import pymunk.pygame_util
 #And system libs.
 import os, sys, math, random
 #And my other files.
+from helpers import *
 import actors, rooms, hud 
 import player, bads, shots, pickups
 import sound
-from helpers import *
 debug=debugFlags["main"]
 
 pygame.init()
@@ -19,12 +19,16 @@ def loadRoom(room):
     return rooms.gameRoom(room)
 
 def updateFunc(room):
+    global t,dt,keyDelay
+    if keyDelay>0:
+        keyDelay=max(0,keyDelay-dt)
+    t+=dt
     global roomPos
-    for event in pygame.event.get():
+    for event in pygame.event.get(pygame.QUIT):
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
-    room.update(t,dt,keyDelay,playerObject)
+    room.update(t,dt,playerObject)
         
 def drawFunc(room):
     room.draw(playerObject,screen,clock,fps)
@@ -44,7 +48,7 @@ roomList=[loadRoom(roomStart),
         loadRoom(random.choice(roomLayouts)),
         loadRoom(random.choice(roomLayouts)),
         #loadRoom(random.choice(roomSpecials)),
-        loadRoom(roomSpecials[1]),
+        loadRoom(roomSpecials[0]),
         loadRoom(random.choice(roomLayouts)),
         loadRoom(random.choice(roomLayouts)),
         loadRoom(random.choice(roomLayouts)),
@@ -52,12 +56,8 @@ roomList=[loadRoom(roomStart),
 
 
 clock=pygame.time.Clock()
-keyDelay=0 # Time until next key press can be processed. Only for one-press keys.
 
 
-t=0
-fps=60
-dt=1/60/fps
 #mapRoom=rooms.gameRoom(roomLayouts[random.randrange(len(roomLayouts))])
 mapRoom=roomList[0]
 print("Entering game in room "+str(mapRoom.roomFile))

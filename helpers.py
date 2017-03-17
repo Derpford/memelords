@@ -8,6 +8,7 @@ textColors={ "dark":(41,57,65),
         "light":(186,195,117)
         }
 
+keyDelay=0 # Time until next key press can be processed. Only for one-press keys.
 # Normalize a number.
 def normal(num):
     if num!=0:
@@ -46,6 +47,7 @@ def tupSum(tup1, tup2):
 
 # Debug values.
 debugFlags={"room":False,
+        "input":False,
         "actor":False,
         "weapon":False,
         "shot":False,
@@ -56,3 +58,7 @@ debugFlags={"room":False,
         "anim":False,
         "pickup":False,
         }
+# Time vars.
+t=0
+fps=60
+dt=1/60/fps
