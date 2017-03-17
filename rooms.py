@@ -17,6 +17,36 @@ class Room():
         #Draw things.
         raise NotImplementedError
 
+class menuRoom(Room):
+    def __init__(self):
+        self.menu=[("START",self.startGame),("QUIT",pygame.quit)]
+        self.menuPos=0
+        pass
+
+    def startGame():
+        newRoom=gameRoom(roomList[0])
+        playerObject=player.Player(mapRoom.space,200,150)
+        pass
+    
+    def update(self,t,dt,player):
+        global keyDelay
+        for event in pygame.event.get():
+            if event.type==pygame.KEYDOWN:
+                if event.key==K_UP and keyDelay==0:
+                    self.menuPos-=1
+                    keyDelay=0.5
+                if event.key==K_DOWN and keyDelay==0:
+                    self.menuPos+=1
+                    keyDelay=0.5
+
+    def draw(self,player,screen,clock,fps):
+        pos=(150,150)
+        for i in self.menu:
+            menuBlit=gameFont.render(i[0],False,textColors["dark"])
+            screen.blit(menuBlit,tupSum(pos,(0,self.menu.index(i)*16)))
+
+
+
 class gameRoom(Room):
     def __init__(self,tile):
         self.pause=False
@@ -226,4 +256,3 @@ class gameRoom(Room):
             pauseBlit=gameFont.render("PAUSED",False,textColors["light"])
             screen.blit(pauseBlit,(180,140))
             print("PAUSED")
-        pygame.display.flip()
