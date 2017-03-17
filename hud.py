@@ -1,4 +1,7 @@
 from helpers import *
+from pygame.locals import *
+import pygame
+import actors,pickups
 
 
 hudSurface=None
@@ -37,11 +40,15 @@ def hudInit():
     hudSurface.blit(hudRightSprite,(392,8))
     hpBlit=gameFont.render("Health",False,textColors["dark"])
     weaponBlit=gameFont.render("Weapon",False,textColors["dark"])
+    moneyBlit=gameFont.render("Money",False,textColors["dark"])
     hudSurface.blit(hpBlit,(16,12))
     hudSurface.blit(weaponBlit,(16,48))
+    hudSurface.blit(moneyBlit,(128,12))
+
     return hudSurface
 
 def drawHud(screen,surf,pos,player):
+    global t
     screen.blit(surf,pos)
     # Health.
     for i in range(0,player.maxhp):
@@ -51,3 +58,9 @@ def drawHud(screen,surf,pos,player):
             screen.blit(barSprites[0],tupSum(pos,(16+i*4,24)))
     # Weapon.
     player.weapon.draw(screen,tupSum(pos,(16,64)),0)
+    # Money.
+    moneyBlit=gameFont.render(str(player.money),False,textColors["dark"])
+    anim=[loadImage('assets/sapir1.png'),loadImage('assets/sapir2.png')]
+    actors.drawAnimation(screen,anim,tupSum(pos,(112,20)),16,t)
+    screen.blit(moneyBlit,tupSum(pos,(128,24)))
+
