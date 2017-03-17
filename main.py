@@ -3,6 +3,7 @@ from pygame.locals import *
 import pygame
 import pymunk
 import pymunk.pygame_util
+pygame.init()
 #And system libs.
 import os, sys, math, random
 #And my other files.
@@ -12,7 +13,6 @@ import player, bads, shots, pickups
 import sound
 debug=debugFlags["main"]
 
-pygame.init()
 
 # Functions.
 def loadRoom(room):
@@ -57,16 +57,17 @@ roomList=[loadRoom(roomStart),
 
 clock=pygame.time.Clock()
 
+playerObject=None
 
 #mapRoom=rooms.gameRoom(roomLayouts[random.randrange(len(roomLayouts))])
-mapRoom=roomList[0]
-print("Entering game in room "+str(mapRoom.roomFile))
-playerObject=player.Player(mapRoom.space,200,150)
+mapRoom=rooms.menuRoom()
+print("Entering game in room "+str(mapRoom))
 
 # MAIN LOOP
 while 1:
     updateFunc(mapRoom)
     drawFunc(mapRoom)
+    pygame.display.flip()
     if rooms.exitFlag != 0:
         mapRoom.space.remove(playerObject.body, playerObject.shape)
         roomPos+=rooms.exitFlag
