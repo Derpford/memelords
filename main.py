@@ -39,17 +39,19 @@ screen = pygame.display.set_mode((width,height))
 #Rooms to load into the dungeon.
 roomSpecials=['assets/rooms/shrine.tmx','assets/rooms/grave.tmx']
 roomStart='assets/rooms/start.tmx'
+roomEnd='assets/rooms/exit-floor1.tmx'
 roomLayouts=['assets/rooms/corridor.tmx','assets/rooms/corridor2.tmx','assets/rooms/corridor3.tmx','assets/rooms/chokepoint.tmx']
 roomPos=-1
-roomList=[loadRoom(roomStart),
-        loadRoom(random.choice(roomLayouts)),
-        loadRoom(random.choice(roomLayouts)),
-        loadRoom(random.choice(roomLayouts)),
-        loadRoom(random.choice(roomSpecials)),
-        loadRoom(random.choice(roomLayouts)),
-        loadRoom(random.choice(roomLayouts)),
-        loadRoom(random.choice(roomLayouts)),
-        loadRoom(random.choice(roomSpecials))]
+roomList=rooms.makeRoomList(roomLayouts,roomSpecials,roomStart,roomEnd,10,4)
+#[loadRoom(roomStart),
+#        loadRoom(random.choice(roomLayouts)),
+#        loadRoom(random.choice(roomLayouts)),
+#        loadRoom(random.choice(roomLayouts)),
+#        loadRoom(random.choice(roomSpecials)),
+#        loadRoom(random.choice(roomLayouts)),
+#        loadRoom(random.choice(roomLayouts)),
+#        loadRoom(random.choice(roomLayouts)),
+#        loadRoom(random.choice(roomSpecials))]
 
 
 clock=pygame.time.Clock()
@@ -75,8 +77,14 @@ while 1:
         if rooms.exitFlag==NEXT_FLOOR:
             roomPos=0
             mapRoom.space.remove(playerObject.body, playerObject.shape)
-            playerObject=None
             rooms.exitFlag=0
+            roomList=rooms.makeRoomList(roomLayouts,roomSpecials,roomStart,roomEnd,10,4)
+            mapRoom=roomList[roomPos]
+            if playerObject==None:
+                playerObject=player.Player(mapRoom.space,200,150)
+            else:
+                mapRoom.space.add(playerObject.body, playerObject.shape)
+            playerObject.body.position=200,150
 
     if type(rooms.exitFlag) is int:
         if rooms.exitFlag != 0:

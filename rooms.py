@@ -6,6 +6,19 @@ debug=debugFlags["room"]
 
 exitFlag=0
 
+def makeRoomList(roomSet,specialRoomSet,start,end,length,freq):
+    newList=[]
+    for i in range(0,length):
+        if i==0:newList.append(gameRoom(start))
+        if i==length-1:newList.append(gameRoom(end))
+        if i>0 and i<length-1:
+            if i%freq==0:
+                newList.append(gameRoom(random.choice(specialRoomSet)))
+            else:
+                newList.append(gameRoom(random.choice(roomSet)))
+    return newList
+
+
 class Room():
     def __init__():
         #Initialize things.
