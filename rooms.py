@@ -43,11 +43,13 @@ class menuRoom(Room):
                     if self.menuPos<0:
                         self.menuPos=len(self.menu)-1
                     self.keyDelay=self.keyDelay
+                    sound.sounds["boop"].play()
                 if event.key==K_DOWN and self.keyDelay==0:
                     self.menuPos+=1
                     if self.menuPos>=len(self.menu):
                         self.menuPos=0
                     self.keyDelay=self.keyDelay
+                    sound.sounds["boop"].play()
                 if event.key==K_LCTRL and self.keyDelay==0:
                     self.menu[self.menuPos][1]()
                     self.keyDelay=self.keyDelay
@@ -165,6 +167,7 @@ class gameRoom(Room):
         def hitShot(arbiter,space,data):
             other=arbiter.shapes[1]
             shot=arbiter.shapes[0]
+            sound.pingChannel.play(sound.sounds["ping"])
             if debugFlags["physics"]:print("Collision between "+str(shot.collision_type)+" and "+str(other.collision_type))
             for body in space.bodies:
                 if abs(math.hypot(body.position.x-shot.body.position.x,body.position.y-shot.body.position.y))<8:
