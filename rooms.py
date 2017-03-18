@@ -1,7 +1,7 @@
 import pygame, math, random, pytmx, pymunk, sys, types
 from helpers import *
 from pygame.locals import *
-import hud, bads, actors, sound
+import hud, bads, actors, sound, player
 debug=debugFlags["room"]
 
 exitFlag=0
@@ -28,14 +28,13 @@ class menuRoom(Room):
         pygame.quit()
         sys.exit()
 
-    def startGame():
-        newRoom=gameRoom(roomList[0])
-        playerObject=player.Player(mapRoom.space,200,150)
-        pass
+    def startGame(self):
+        global exitFlag
+        exitFlag=1
+        print(str(exitFlag))
     
     def update(self,t,dt,player):
         self.keyDelay=max(0,self.keyDelay-dt)
-        print(str(self.keyDelay)+" keyDelay")
         for event in pygame.event.get():
             if event.type==pygame.KEYDOWN:
                 if event.key==K_UP and self.keyDelay==0:
