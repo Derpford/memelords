@@ -3,6 +3,7 @@ from pygame.locals import *
 import pygame
 import pymunk
 import pymunk.pygame_util
+import sound
 pygame.init()
 #And system libs.
 import os, sys, math, random
@@ -10,7 +11,6 @@ import os, sys, math, random
 from helpers import *
 import actors, rooms, hud 
 import player, bads, shots, pickups
-import sound
 debug=debugFlags["main"]
 
 
@@ -40,13 +40,12 @@ screen = pygame.display.set_mode((width,height))
 roomSpecials=['assets/rooms/shrine.tmx','assets/rooms/grave.tmx']
 roomStart='assets/rooms/start.tmx'
 roomLayouts=['assets/rooms/corridor.tmx','assets/rooms/corridor2.tmx','assets/rooms/corridor3.tmx','assets/rooms/chokepoint.tmx']
-roomPos=0
+roomPos=-1
 roomList=[loadRoom(roomStart),
         loadRoom(random.choice(roomLayouts)),
         loadRoom(random.choice(roomLayouts)),
         loadRoom(random.choice(roomLayouts)),
-        #loadRoom(random.choice(roomSpecials)),
-        loadRoom(roomSpecials[0]),
+        loadRoom(random.choice(roomSpecials)),
         loadRoom(random.choice(roomLayouts)),
         loadRoom(random.choice(roomLayouts)),
         loadRoom(random.choice(roomLayouts)),
@@ -66,8 +65,10 @@ while 1:
     updateFunc(mapRoom)
     drawFunc(mapRoom)
     pygame.display.flip()
+    print(str(rooms.exitFlag)+" Exit Flag")
     if rooms.exitFlag != 0:
-        mapRoom.space.remove(playerObject.body, playerObject.shape)
+        if playerObject!=None:
+            mapRoom.space.remove(playerObject.body, playerObject.shape)
         roomPos+=rooms.exitFlag
         if roomPos<0:
             roomPos=len(roomList)-1
@@ -78,5 +79,8 @@ while 1:
             print("Room Position: "+str(roomPos))
             print("Room .tmx File: "+str(mapRoom.roomFile))
         mapRoom=roomList[roomPos]
-        mapRoom.space.add(playerObject.body, playerObject.shape)
+        if playerObject==None:
+            playerObject=player.Player(mapRoom.space,200,150)
+        else:
+            mapRoom.space.add(playerObject.body, playerObject.shape)
 
