@@ -218,17 +218,19 @@ class gameRoom(Room):
         self.keyDelay=max(0,self.keyDelay-dt)
         t+=dt
         for event in pygame.event.get():
-            if debug or debugFlags["input"]: print("Got event: "+str(event.type))
-            if event.type==pygame.KEYDOWN and event.key==K_ESCAPE and self.keyDelay==0:
-                self.pause = not self.pause
-                self.keyDelay=keyDelayMax
+            if event.type==pygame.KEYDOWN:
+                if debug or debugFlags["input"]: print("Got event: "+str(event.type)+","+str(event.key))
+                if event.key==K_ESCAPE and self.keyDelay==0:
+                    self.pause = not self.pause
+                    self.keyDelay=keyDelayMax
+                if event.key==K_q and self.pause:
+                    print("Quitting")
+                    global exitFlag
+                    exitFlag=QUIT_GAME
         if not self.pause:
             # Step through simulation.
             self.space.step(dt)
             player.update(self)
-            if pygame.key.get_pressed()[K_q] and self.pause and self.keyDelay==0:
-                global exitFlag
-                exitFlag="quit"
             # Iterate through baddies.
             for bad in self.bads:
                 bad.update(self,player)

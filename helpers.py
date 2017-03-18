@@ -47,7 +47,7 @@ def tupSum(tup1, tup2):
 
 # Debug values.
 debugFlags={"room":False,
-        "input":False,
+        "input":True,
         "actor":False,
         "weapon":False,
         "shot":False,
@@ -63,3 +63,5 @@ t=0
 fps=60
 dt=1/60/fps
 
+# Quit check constant.
+QUIT_GAME="quit"
