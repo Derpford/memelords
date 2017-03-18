@@ -34,18 +34,29 @@ class menuRoom(Room):
             if event.type==pygame.KEYDOWN:
                 if event.key==K_UP and keyDelay==0:
                     self.menuPos-=1
+                    if self.menuPos<0:
+                        self.menuPos=len(self.menu)-1
                     keyDelay=0.5
                 if event.key==K_DOWN and keyDelay==0:
                     self.menuPos+=1
+                    if self.menuPos>=len(self.menu):
+                        self.menuPos=0
                     keyDelay=0.5
+        print(str(keyDelay)+" KeyDelay")
 
     def draw(self,player,screen,clock,fps):
+        global t,dt
+        t+=dt
+        screen.fill((0,0,0))
         pos=(150,150)
         for i in self.menu:
             menuBlit=gameFont.render(i[0],False,textColors["dark"])
             screen.blit(menuBlit,tupSum(pos,(0,self.menu.index(i)*16)))
-
-
+        if t%2>1:
+            selBlit=loadImage('assets/guy-green/guy-green5.png')
+        else:
+            selBlit=loadImage('assets/guy-green/guy-green6.png')
+        screen.blit(selBlit,tupSum(pos,(-16,self.menuPos*16))) 
 
 class gameRoom(Room):
     def __init__(self,tile):
