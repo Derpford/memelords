@@ -9,7 +9,7 @@ textColors={ "dark":(41,57,65),
         }
 
 keyDelayMax=0.01 # Time until next key press can be processed. Only for one-press keys.
-# Normalize a number.
+# Pseudo-Normalize a number.
 def normal(num):
     if num!=0:
         return num/abs(num)
@@ -62,3 +62,4 @@ debugFlags={"room":False,
 t=0
 fps=60
 dt=1/60/fps
+
