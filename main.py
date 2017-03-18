@@ -65,21 +65,30 @@ while 1:
     updateFunc(mapRoom)
     drawFunc(mapRoom)
     pygame.display.flip()
-    if rooms.exitFlag != 0:
-        if playerObject!=None:
+    if type(rooms.exitFlag)==types.StringType:
+        if rooms.exitFlag=="exit":
+            roomPos=-1
             mapRoom.space.remove(playerObject.body, playerObject.shape)
-        roomPos+=rooms.exitFlag
-        if roomPos<0:
-            roomPos=len(roomList)-1
-        if roomPos>=len(roomList):
-            roomPos=0
-        rooms.exitFlag=0
-        if debug:
-            print("Room Position: "+str(roomPos))
-            print("Room .tmx File: "+str(mapRoom.roomFile))
-        mapRoom=roomList[roomPos]
-        if playerObject==None:
-            playerObject=player.Player(mapRoom.space,200,150)
-        else:
-            mapRoom.space.add(playerObject.body, playerObject.shape)
+            playerObject=None
+            mapRoom=rooms.menuRoom()
+            rooms.exitFlag=0
+
+    if type(rooms.exitFlag)==types.IntType:
+        if rooms.exitFlag != 0:
+            if playerObject!=None:
+                mapRoom.space.remove(playerObject.body, playerObject.shape)
+            roomPos+=rooms.exitFlag
+            if roomPos<0:
+                roomPos=len(roomList)-1
+            if roomPos>=len(roomList):
+                roomPos=0
+            rooms.exitFlag=0
+            if debug:
+                print("Room Position: "+str(roomPos))
+                print("Room .tmx File: "+str(mapRoom.roomFile))
+            mapRoom=roomList[roomPos]
+            if playerObject==None:
+                playerObject=player.Player(mapRoom.space,200,150)
+            else:
+                mapRoom.space.add(playerObject.body, playerObject.shape)
 
