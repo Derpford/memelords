@@ -66,7 +66,7 @@ dt=1/60/fps
 roomPos=-1
 # Floor counter.
 floor=0
-def floorSet(num):
+def floorAdd(num):
     global floor
     floor+=num
 def floorGet():

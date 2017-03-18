@@ -69,7 +69,7 @@ while 1:
             rooms.exitFlag=0
         if rooms.exitFlag==NEXT_FLOOR:
             roomPos=-1
-            floorSet(1)
+            floorAdd(1)
             if playerObject!=None and mapRoom.space!=None:
                 mapRoom.space.remove(playerObject.body, playerObject.shape)
                 playerObject.body.position=200,150
