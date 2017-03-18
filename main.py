@@ -1,12 +1,12 @@
-from pygame.locals import *
 #Import Pygame.
+from pygame.locals import *
 import pygame
 import pymunk
 import pymunk.pygame_util
 import sound
 pygame.init()
 #And system libs.
-import os, sys, math, random
+import os, sys, math, random, types
 #And my other files.
 from helpers import *
 import actors, rooms, hud 
