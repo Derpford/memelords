@@ -30,6 +30,29 @@ class Room():
         #Draw things.
         raise NotImplementedError
 
+class loadRoom(Room):
+    def __init__(self):
+        self.bg=loadImage('assets/load.png')
+        self.newRoomList=[]
+
+    def update(self,t,dt,player):
+        global exitFlag
+        global floor
+        if floor==1:
+            self.newRoomList=makeRoomList(roomLayouts1,roomSpecials1,roomStart1,roomEnd1,3,4)
+        if floor==2:
+            self.newRoomList=makeRoomList(roomLayouts1,roomSpecials1,roomStart2,roomEnd1,10,4)
+        if floor==3:
+            #End.
+            self.newRoomList=[creditsRoom()]
+        exitFlag=LOAD_COMPLETE
+
+            
+
+    def draw(self,player,screen,clock,fps):
+        screen.fill((0,0,0))
+        screen.blit(self.bg,(0,0))
+
 class menuRoom(Room):
     def __init__(self):
         self.menu=[("START",self.startGame),("QUIT",self.quit)]
@@ -44,7 +67,7 @@ class menuRoom(Room):
 
     def startGame(self):
         global exitFlag
-        exitFlag=1
+        exitFlag=NEXT_FLOOR
         print(str(exitFlag))
     
     def update(self,t,dt,player):

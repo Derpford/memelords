@@ -53,7 +53,7 @@ debugFlags={"room":False,
         "shot":False,
         "player":False,
         "bad":False,
-        "main":False,
+        "main":True,
         "physics":False,
         "anim":False,
         "pickup":False,
@@ -62,8 +62,22 @@ debugFlags={"room":False,
 t=0
 fps=60
 dt=1/60/fps
+# Floor counter.
+floor=1
+#List of rooms.
+roomList=[]
+
+#Rooms to load into the dungeon.
+# Floor 1.
+roomSpecials1=['assets/rooms/shrine.tmx','assets/rooms/grave.tmx']
+roomStart1='assets/rooms/start.tmx'
+roomEnd1='assets/rooms/exit-floor1.tmx'
+roomLayouts1=['assets/rooms/corridor.tmx','assets/rooms/corridor2.tmx','assets/rooms/corridor3.tmx','assets/rooms/chokepoint.tmx']
+# Floor 2
+roomStart2='assets/rooms/start-floor2.tmx'
 
 # Quit check constant.
 QUIT_GAME="quit"
 # New floor constant.
 NEXT_FLOOR="floor"
+LOAD_COMPLETE="load"
