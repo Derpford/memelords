@@ -137,7 +137,8 @@ class gameRoom(Room):
             if debug:
                 print("Exiting room!")
             exit=arbiter.shapes[0]
-            exitFlag=int(exit.body.props['exit'])
+            try: exitFlag=int(exit.body.props['exit'])
+            except ValueError: exitFlag=exit.body.props['exit']
             player=arbiter.shapes[1]
             fx,fy=player.body.position
             if 'xflip' in exit.body.props:

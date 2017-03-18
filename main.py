@@ -72,6 +72,11 @@ while 1:
             playerObject=None
             mapRoom=rooms.menuRoom()
             rooms.exitFlag=0
+        if rooms.exitFlag==NEXT_FLOOR:
+            roomPos=0
+            mapRoom.space.remove(playerObject.body, playerObject.shape)
+            playerObject=None
+            rooms.exitFlag=0
 
     if type(rooms.exitFlag) is int:
         if rooms.exitFlag != 0:
