@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="25" height="13" tilewidth="16" tileheight="16" nextobjectid="5">
+ <tileset firstgid="1" source="baseblueold.tsx"/>
+ <tileset firstgid="17" source="bads.tsx"/>
+ <layer name="tiles" width="25" height="13">
+  <data encoding="csv">
+2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+1,1,1,1,5,3,1,1,4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,5,1,1,1,1,5,1,1,1,1,1,4,5,1,1,5,1,1,5,
+1,1,1,1,1,1,1,1,1,4,3,1,1,5,1,1,1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,5,1,1,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+1,5,1,1,1,1,1,1,1,1,1,1,4,1,1,1,3,1,1,4,1,1,1,1,1,
+1,3,1,1,1,1,1,1,3,1,1,1,1,4,1,1,1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,1,5,1,2,1,1,
+1,5,1,1,1,1,1,1,1,1,1,1,1,1,5,1,1,1,1,1,1,1,2,1,1,
+3,1,1,1,1,1,2,1,1,4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+1,5,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,1,1,1,1,1,1,1,
+1,1,1,3,1,1,1,1,1,1,1,1,1,1,1,3,1,1,1,4,3,1,1,1,1,
+2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2
+</data>
+ </layer>
+ <objectgroup name="bads">
+  <object id="1" type="enemy" gid="17" x="128" y="112" width="16" height="16">
+   <properties>
+    <property name="bad" value="hood"/>
+   </properties>
+  </object>
+  <object id="2" type="enemy" gid="17" x="256" y="112" width="16" height="16">
+   <properties>
+    <property name="bad" value="hood"/>
+   </properties>
+  </object>
+  <object id="4" type="enemy" gid="19" x="192" y="80" width="16" height="16">
+   <properties>
+    <property name="bad" value="knight"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

@@ -45,7 +45,7 @@ class loadRoom(Room):
         if floorGet()==1 and exitFlag==0:
             self.newRoomList=makeRoomList(roomLayouts1,roomSpecials1,roomStart1,roomEnd1,10,4)
         if floorGet()==2 and exitFlag==0:
-            self.newRoomList=makeRoomList(roomLayouts1,roomSpecials1,roomStart2,roomEnd1,10,4)
+            self.newRoomList=makeRoomList(roomLayouts2,roomLayouts2,roomStart2,roomEnd1,10,4)
         if floorGet()==3 and exitFlag==0:
             #End.
             self.newRoomList=[creditsRoom()]
