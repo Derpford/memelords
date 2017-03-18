@@ -22,6 +22,7 @@ class menuRoom(Room):
         self.menu=[("START",self.startGame),("QUIT",self.quit)]
         self.menuPos=0
         self.keyDelay=0
+        self.menuBG=loadImage('assets/title.png')
         pass
 
     def quit(self):
@@ -55,11 +56,12 @@ class menuRoom(Room):
         global t,dt
         t+=dt
         screen.fill((0,0,0))
+        screen.blit(self.menuBG,(0,0))
         pos=(150,150)
         for i in self.menu:
             menuBlit=gameFont.render(i[0],False,textColors["dark"])
             screen.blit(menuBlit,tupSum(pos,(0,self.menu.index(i)*16)))
-        if t*8%2>1:
+        if t*12%2>1:
             selBlit=loadImage('assets/guy-green/guy-green5.png')
         else:
             selBlit=loadImage('assets/guy-green/guy-green6.png')
@@ -275,4 +277,3 @@ class gameRoom(Room):
         if self.pause:
             pauseBlit=gameFont.render("PAUSED",False,textColors["light"])
             screen.blit(pauseBlit,(180,140))
-            print("PAUSED")
