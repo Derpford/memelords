@@ -65,7 +65,7 @@ while 1:
     updateFunc(mapRoom)
     drawFunc(mapRoom)
     pygame.display.flip()
-    if type(rooms.exitFlag)==types.StringType:
+    if type(rooms.exitFlag) is types.StringType:
         if rooms.exitFlag=="exit":
             roomPos=-1
             mapRoom.space.remove(playerObject.body, playerObject.shape)
@@ -73,7 +73,7 @@ while 1:
             mapRoom=rooms.menuRoom()
             rooms.exitFlag=0
 
-    if type(rooms.exitFlag)==types.IntType:
+    if type(rooms.exitFlag) is types.IntType:
         if rooms.exitFlag != 0:
             if playerObject!=None:
                 mapRoom.space.remove(playerObject.body, playerObject.shape)
