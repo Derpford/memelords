@@ -65,7 +65,6 @@ while 1:
     updateFunc(mapRoom)
     drawFunc(mapRoom)
     pygame.display.flip()
-    print(str(rooms.exitFlag)+" Exit Flag")
     if rooms.exitFlag != 0:
         if playerObject!=None:
             mapRoom.space.remove(playerObject.body, playerObject.shape)
