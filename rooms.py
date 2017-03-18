@@ -9,13 +9,18 @@ exitFlag=0
 def makeRoomList(roomSet,specialRoomSet,start,end,length,freq):
     newList=[]
     for i in range(0,length):
-        if i==0:newList.append(gameRoom(start))
-        if i==length-1:newList.append(gameRoom(end))
+        if i==0:
+            newList.append(gameRoom(start))
+            if debug:print("Start room!")
+        if i==length-1:
+            newList.append(gameRoom(end))
+            if debug:print("End room!")
         if i>0 and i<length-1:
             if i%freq==0:
                 newList.append(gameRoom(random.choice(specialRoomSet)))
             else:
                 newList.append(gameRoom(random.choice(roomSet)))
+        print(str(newList[i].roomFile))
     return newList
 
 
@@ -37,12 +42,11 @@ class loadRoom(Room):
 
     def update(self,t,dt,player):
         global exitFlag
-        global floor
-        if floor==1:
-            self.newRoomList=makeRoomList(roomLayouts1,roomSpecials1,roomStart1,roomEnd1,3,4)
-        if floor==2:
+        if floorGet()==1 and exitFlag==0:
+            self.newRoomList=makeRoomList(roomLayouts1,roomSpecials1,roomStart1,roomEnd1,10,4)
+        if floorGet()==2 and exitFlag==0:
             self.newRoomList=makeRoomList(roomLayouts1,roomSpecials1,roomStart2,roomEnd1,10,4)
-        if floor==3:
+        if floorGet()==3 and exitFlag==0:
             #End.
             self.newRoomList=[creditsRoom()]
         exitFlag=LOAD_COMPLETE

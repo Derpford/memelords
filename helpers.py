@@ -53,7 +53,7 @@ debugFlags={"room":False,
         "shot":False,
         "player":False,
         "bad":False,
-        "main":True,
+        "main":False,
         "physics":False,
         "anim":False,
         "pickup":False,
@@ -62,8 +62,16 @@ debugFlags={"room":False,
 t=0
 fps=60
 dt=1/60/fps
+# Room counter.
+roomPos=-1
 # Floor counter.
-floor=1
+floor=0
+def floorSet(num):
+    global floor
+    floor+=num
+def floorGet():
+    global floor
+    return floor
 #List of rooms.
 roomList=[]
 

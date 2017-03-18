@@ -36,12 +36,6 @@ def drawFunc(room):
 screen = pygame.display.set_mode((width,height))
 
 
-#Rooms to load into the dungeon.
-roomSpecials=['assets/rooms/shrine.tmx','assets/rooms/grave.tmx']
-roomStart='assets/rooms/start.tmx'
-roomEnd='assets/rooms/exit-floor1.tmx'
-roomLayouts=['assets/rooms/corridor.tmx','assets/rooms/corridor2.tmx','assets/rooms/corridor3.tmx','assets/rooms/chokepoint.tmx']
-roomPos=-1
 
 clock=pygame.time.Clock()
 
@@ -56,6 +50,16 @@ while 1:
     updateFunc(mapRoom)
     drawFunc(mapRoom)
     pygame.display.flip()
+    global roomPos
+    if debug and rooms.exitFlag!=0:
+        print(str(rooms.exitFlag))
+        try:print("Room Position: "+str(roomPos)+" in floor "+str(floorGet()))
+        except AttributeError:pass
+        try:print("Room .tmx File: "+str(mapRoom.roomFile))
+        except AttributeError:pass
+        print("Room list:")
+        for room in roomList: print(str(room))
+
     if type(rooms.exitFlag) is str:
         if rooms.exitFlag==QUIT_GAME:
             roomPos=-1
@@ -64,10 +68,8 @@ while 1:
             mapRoom=rooms.menuRoom()
             rooms.exitFlag=0
         if rooms.exitFlag==NEXT_FLOOR:
-            global floor
             roomPos=-1
-            floor+=1
-            print(str(floor)+" floor")
+            floorSet(1)
             if playerObject!=None and mapRoom.space!=None:
                 mapRoom.space.remove(playerObject.body, playerObject.shape)
                 playerObject.body.position=200,150
@@ -82,6 +84,7 @@ while 1:
             else:
                 mapRoom.space.add(playerObject.body, playerObject.shape)
             rooms.exitFlag=0
+            roomPos=0
 
     if type(rooms.exitFlag) is int:
         if rooms.exitFlag != 0:
@@ -93,12 +96,6 @@ while 1:
             if roomPos>=len(roomList):
                 roomPos=0
             rooms.exitFlag=0
-            if debug:
-                print("Room Position: "+str(roomPos))
-                try:print("Room .tmx File: "+str(mapRoom.roomFile))
-                except AttributeError:pass
-                print("Room list:")
-                for room in roomList: print(str(room))
             mapRoom=roomList[roomPos]
             if playerObject==None:
                 playerObject=player.Player(mapRoom.space,200,150)
