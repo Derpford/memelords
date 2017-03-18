@@ -226,12 +226,9 @@ class gameRoom(Room):
             # Step through simulation.
             self.space.step(dt)
             player.update(self)
-            if pygame.key.get_pressed()[K_q] and keyDelay==0:
-                player.hurt(1)
-                keyDelay=0.25
-            if pygame.key.get_pressed()[K_h] and keyDelay==0:
-                player.heal(1)
-                keyDelay=0.25
+            if pygame.key.get_pressed()[K_q] and self.pause and self.keyDelay==0:
+                global exitFlag
+                exitFlag="quit"
             # Iterate through baddies.
             for bad in self.bads:
                 bad.update(self,player)
