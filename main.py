@@ -19,15 +19,13 @@ def loadRoom(room):
     return rooms.gameRoom(room)
 
 def updateFunc(room):
-    global t,dt,keyDelay
+    global t,dt
     t+=dt
     global roomPos
     for event in pygame.event.get(pygame.QUIT):
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
-    keyDelay=max(0,keyDelay-dt)
-    print(str(keyDelay)+" keyDelay")
     room.update(t,dt,playerObject)
         
 def drawFunc(room):

@@ -8,7 +8,7 @@ textColors={ "dark":(41,57,65),
         "light":(186,195,117)
         }
 
-keyDelay=0 # Time until next key press can be processed. Only for one-press keys.
+keyDelayMax=0.01 # Time until next key press can be processed. Only for one-press keys.
 # Normalize a number.
 def normal(num):
     if num!=0:
