@@ -19,9 +19,14 @@ class Room():
 
 class menuRoom(Room):
     def __init__(self):
-        self.menu=[("START",self.startGame),("QUIT",pygame.quit)]
+        self.menu=[("START",self.startGame),("QUIT",self.quit)]
         self.menuPos=0
+        self.keyDelay=0
         pass
+
+    def quit(self):
+        pygame.quit()
+        sys.exit()
 
     def startGame():
         newRoom=gameRoom(roomList[0])
@@ -29,20 +34,23 @@ class menuRoom(Room):
         pass
     
     def update(self,t,dt,player):
-        global keyDelay
+        self.keyDelay=max(0,self.keyDelay-dt)
+        print(str(self.keyDelay)+" keyDelay")
         for event in pygame.event.get():
             if event.type==pygame.KEYDOWN:
-                if event.key==K_UP and keyDelay==0:
+                if event.key==K_UP and self.keyDelay==0:
                     self.menuPos-=1
                     if self.menuPos<0:
                         self.menuPos=len(self.menu)-1
-                    keyDelay=0.5
-                if event.key==K_DOWN and keyDelay==0:
+                    self.keyDelay=self.keyDelay
+                if event.key==K_DOWN and self.keyDelay==0:
                     self.menuPos+=1
                     if self.menuPos>=len(self.menu):
                         self.menuPos=0
-                    keyDelay=0.5
-        print(str(keyDelay)+" KeyDelay")
+                    self.keyDelay=self.keyDelay
+                if event.key==K_LCTRL and self.keyDelay==0:
+                    self.menu[self.menuPos][1]()
+                    self.keyDelay=self.keyDelay
 
     def draw(self,player,screen,clock,fps):
         global t,dt
@@ -52,7 +60,7 @@ class menuRoom(Room):
         for i in self.menu:
             menuBlit=gameFont.render(i[0],False,textColors["dark"])
             screen.blit(menuBlit,tupSum(pos,(0,self.menu.index(i)*16)))
-        if t%2>1:
+        if t*8%2>1:
             selBlit=loadImage('assets/guy-green/guy-green5.png')
         else:
             selBlit=loadImage('assets/guy-green/guy-green6.png')
@@ -62,6 +70,7 @@ class gameRoom(Room):
     def __init__(self,tile):
         self.pause=False
         self.roomFile=tile
+        self.keyDelay=0
         self.grid=pytmx.load_pygame(tile)
         self.space=pymunk.Space()
         self.space.gravity = 0,0
@@ -205,12 +214,13 @@ class gameRoom(Room):
 
     # Update the room.
     def update(self,t,dt,player):
+        self.keyDelay=max(0,self.keyDelay-dt)
         t+=dt
         for event in pygame.event.get():
             if debug or debugFlags["input"]: print("Got event: "+str(event.type))
-            if event.type==pygame.KEYDOWN and event.key==K_ESCAPE:
-                print("PAUSING")
+            if event.type==pygame.KEYDOWN and event.key==K_ESCAPE and self.keyDelay==0:
                 self.pause = not self.pause
+                self.keyDelay=keyDelayMax
         if not self.pause:
             # Step through simulation.
             self.space.step(dt)
