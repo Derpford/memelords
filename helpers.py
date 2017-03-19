@@ -80,13 +80,13 @@ roomList=[]
 
 #Rooms to load into the dungeon.
 # Floor 1.
-roomSpecials1=['assets/rooms/shrine.tmx','assets/rooms/grave.tmx']
+roomSpecials1=['assets/rooms/shrine.tmx','assets/rooms/chokepoint.tmx','assets/rooms/grave.tmx']
 roomStart1='assets/rooms/start.tmx'
 roomEnd1='assets/rooms/exit-floor1.tmx'
-roomLayouts1=['assets/rooms/corridor.tmx','assets/rooms/corridor2.tmx','assets/rooms/corridor3.tmx','assets/rooms/chokepoint.tmx']
+roomLayouts1=['assets/rooms/corridor.tmx','assets/rooms/corridor2.tmx','assets/rooms/corridor3.tmx','assets/rooms/corridor4.tmx']
 # Floor 2
 roomStart2='assets/rooms/start-floor2.tmx'
-roomLayouts2=['assets/rooms/tunnel.tmx','assets/rooms/tunnel2.tmx','assets/rooms/tunnel3.tmx','assets/rooms/tunnel4.tmx']
+roomLayouts2=['assets/rooms/tunnel.tmx','assets/rooms/tunnel2.tmx','assets/rooms/tunnel3.tmx','assets/rooms/tunnel4.tmx','assets/rooms/tunnel5.tmx']
 
 # Quit check constant.
 QUIT_GAME="quit"
