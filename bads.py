@@ -193,7 +193,6 @@ class Knight(Bad):
                 self.dx=-math.cos(angle)*self.speed*self.dt*self.xFactor
                 self.dy=-math.sin(angle)*self.speed*self.dt*self.yFactor
                 self.body.apply_force_at_local_point((self.dx*actors.factor,self.dy*actors.factor),(0,0))
-            self.frictionUpdate()
 
 class Skeleton(Bad):
     def __init__(self,space,x=0,y=0,dt=1/120):
@@ -237,6 +236,45 @@ class Skeleton(Bad):
                 self.weapon.shoot(space.space,self.body.position,self.face,self)
                 self.shotTimer=1
 
+class Shroom(Bad):
+    def __init__(self,space,x=0,y=0,dt=1/120):
+        Bad.__init__(self,space,x,y,dt)
+        self.name="Marishroom"
+        self.speed=80
+        self.animSpeed=4
+        self.patternTimerMax=0.2
+        self.hp=4
+        self.maxhp=4
+        self.weapon=weapons.BadAxe()
+        self.anim = [loadImage("assets/shroom/shroom1.png"),
+                loadImage("assets/shroom/shroom2.png"),
+                loadImage("assets/shroom/shroom3.png"),
+                loadImage("assets/shroom/shroom4.png"),
+                loadImage("assets/shroom/shroom5.png"),
+                loadImage("assets/shroom/shroom6.png"),
+                pygame.transform.flip(loadImage("assets/shroom/shroom4.png"),True,False),
+                pygame.transform.flip(loadImage("assets/shroom/shroom5.png"),True,False),
+                pygame.transform.flip(loadImage("assets/shroom/shroom6.png"),True,False),
+                loadImage("assets/shroom/shroom7.png"),
+                loadImage("assets/shroom/shroom8.png"),
+                loadImage("assets/shroom/shroom9.png")]
+        self.deadAnim=actors.makeDeadAnim(self.anim)
+
+    def update(self,space,player):
+        Bad.update(self,space,player)
+        if not self.dead:
+            tpos = player.body.position
+            spos = self.body.position
+            self.face=[normal(tpos[0]-spos[0]),normal(tpos[1]-spos[1])]
+            angle = math.atan2(tpos[1]-spos[1],tpos[0]-spos[0])
+            if abs(math.hypot(tpos[0]-spos[0],tpos[1]-spos[1]))<128:
+                self.dx=-math.cos(angle)*self.speed*self.dt*self.xFactor
+                self.dy=-math.sin(angle)*self.speed*self.dt*self.yFactor
+                self.body.apply_force_at_local_point((self.dx*actors.factor,self.dy*actors.factor),(0,0))
+            else:
+                self.dx=math.cos(angle)*self.speed*self.dt*self.xFactor
+                self.dy=math.sin(angle)*self.speed*self.dt*self.yFactor
+                self.body.apply_force_at_local_point((self.dx*actors.factor,self.dy*actors.factor),(0,0))
 
 #List of bad guy classes.
 badList={"hood":Hood,"knight":Knight,"skel":Skeleton,}
