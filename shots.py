@@ -85,6 +85,7 @@ class LongShot(Shot)
     def __init__(self,space,x,y,fx,fy,speed=160,damage=1,dt=1/120):
         Shot.__init__(self,space,x,y,fx,fy,speed,damage,dt)
         self.timer=0.90
+        self.changetime=0.45
         self.anim=[ loadImage('assets/shots/spinnerdouble1.png'),
                     loadImage('assets/shots/spinnerdouble2.png'),
                     loadImage('assets/shots/spinnerdouble3.png'),
@@ -97,6 +98,16 @@ class LongShot(Shot)
             self.anim2=[ loadImage('assets/shots/beam1.png'),
                     loadImage('assets/shots/beam2.png'),
                     loadImage('assets/shots/beam3.png'),]
+    def update(self):
+        Shot.update(self)
+        if self.timer<self.changetime:
+            self.anim=self.anim2
+            self.damage*=2
+
+class BadLongShot(LongShot)
+    def __init__(self,space,x,y,fx,fy,speed=120,damage=1,dt=1/120):
+        LongShot.__init__(self,space,x,y,fx,fy,speed,damage,dt)
+        self.shape.collision_type=collisionTypes["badshot"]
 
 class BadSpreadShot(SpreadShot):
     def __init__(self,space,x,y,fx,fy,speed=120,damage=1,dt=1/120):
