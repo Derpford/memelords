@@ -57,6 +57,12 @@ class Spear(Weapon):
         self.shot=shots.LongShot
         self.anim=loadImage('assets/weapons/spear.png')
 
+class BadSpear(Spear):
+    name="BadSpear"
+    def __init__(self):
+        Weapon.__init__(self)
+        self.shot=shots.BadLongShot
+
 class Axe(Weapon):
     name="Axe"
     def __init__(self):

@@ -246,7 +246,7 @@ class Shroom(Bad):
         self.patternTimerMax=0.2
         self.hp=4
         self.maxhp=4
-        self.weapon=weapons.BadAxe()
+        self.weapon=weapons.BadSpear()
         self.anim = [loadImage("assets/shroom/shroom1.png"),
                 loadImage("assets/shroom/shroom2.png"),
                 loadImage("assets/shroom/shroom3.png"),
@@ -268,14 +268,26 @@ class Shroom(Bad):
             spos = self.body.position
             self.face=[normal(tpos[0]-spos[0]),normal(tpos[1]-spos[1])]
             angle = math.atan2(tpos[1]-spos[1],tpos[0]-spos[0])
-            if abs(math.hypot(tpos[0]-spos[0],tpos[1]-spos[1]))<128:
+            dist=abs(math.hypot(tpos[0]-spos[0],tpos[1]-spos[1]))
+            if dist<140:
                 self.dx=-math.cos(angle)*self.speed*self.dt*self.xFactor
                 self.dy=-math.sin(angle)*self.speed*self.dt*self.yFactor
                 self.body.apply_force_at_local_point((self.dx*actors.factor,self.dy*actors.factor),(0,0))
-            else:
+            elif dist>300:
                 self.dx=math.cos(angle)*self.speed*self.dt*self.xFactor
                 self.dy=math.sin(angle)*self.speed*self.dt*self.yFactor
                 self.body.apply_force_at_local_point((self.dx*actors.factor,self.dy*actors.factor),(0,0))
+            if self.shotTimer<=0:
+                self.shottimer=1
+                tx,ty = player.body.position
+                fx,fy = tx-self.body.position.x,ty-self.body.position.y
+                if abs(fx)<abs(fy):
+                    fx=0
+                if abs(fx)>abs(fy):
+                    fy=0
+                if fx!=0:fx=normal(fx)
+                if fy!=0:fy=normal(fy)
+                self.weapon.shoot(space.space,self.body.position,(fx,fy),self)
 
 #List of bad guy classes.
-badList={"hood":Hood,"knight":Knight,"skel":Skeleton,}
+badList={"hood":Hood,"knight":Knight,"skel":Skeleton,"shroom":Shroom}
