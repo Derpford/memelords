@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="25" height="13" tilewidth="16" tileheight="16" nextobjectid="5">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="25" height="13" tilewidth="16" tileheight="16" nextobjectid="7">
  <tileset firstgid="1" source="baseblueold.tsx"/>
  <tileset firstgid="17" source="bads.tsx"/>
  <layer name="tiles" width="25" height="13">
@@ -19,6 +19,22 @@
 2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2
 </data>
  </layer>
+ <objectgroup name="exits">
+  <object id="5" type="exit" x="0" y="16">
+   <properties>
+    <property name="exit" type="int" value="-1"/>
+    <property name="xflip" type="int" value="1"/>
+   </properties>
+   <polyline points="0,0 0,176"/>
+  </object>
+  <object id="6" type="exit" x="400" y="16">
+   <properties>
+    <property name="exit" type="int" value="1"/>
+    <property name="xflip" type="int" value="1"/>
+   </properties>
+   <polyline points="0,0 0,176"/>
+  </object>
+ </objectgroup>
  <objectgroup name="bads">
   <object id="1" type="enemy" gid="17" x="128" y="112" width="16" height="16">
    <properties>
