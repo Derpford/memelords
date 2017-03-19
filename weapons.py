@@ -25,12 +25,17 @@ class Weapon():
 
     def shoot(self,space,pos,face,parent):
         # Basic shot.
+        if debug:print("Shot "+str(self.shot)+" with damage "+str(self.damage))
         if len(parent.shotList)<self.maxShot:
             self.face=face[:]
-            newShot=self.shot(space,pos.x+16*self.face[0],pos.y+16*self.face[1],self.face[0],self.face[1])
+            newShot=self.shot(space,pos.x+16*self.face[0],pos.y+16*self.face[1],self.face[0],self.face[1],damage=self.damage)
             parent.shotList.append(newShot)
             return True
         else: return False
+
+    def powerUp(self,amt):
+        self.damage+=amt
+        print("Powered up "+str(amt)+", new damage "+str(self.damage))
 
 class BadWeapon(Weapon):
     def __init__(self):

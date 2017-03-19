@@ -16,7 +16,7 @@ class Pickup(actors.Actor):
         self.name="Jelly Donut"
         
     def pickup(self,other):
-        if debugFlags["actor"]:
+        if debugFlags["actor"] or debugFlags["pickup"]:
             print("Pickup grabbed")
         if type(other.heal)==types.MethodType:
             other.heal(1)
@@ -31,7 +31,7 @@ class Money(Pickup):
         self.anim=[loadImage('assets/sapir1.png'),loadImage('assets/sapir2.png')]
     
     def pickup(self,other):
-        if debugFlags["actor"]:
+        if debugFlags["actor"] or debugFlags["pickup"]:
             print("Pickup grabbed")
         if type(other.addMoney)==types.MethodType:
             other.addMoney(1)
@@ -44,32 +44,36 @@ class WeaponPickup(Pickup):
     def __init__(self,space,x=0,y=0,dt=1/120):
         Pickup.__init__(self,space,x,y,dt)
         self.anim=[loadImage('assets/rice.png')]
-        self.weaponType=weapons.Weapon
+        self.shape.weaponType=weapons.Weapon
 
     def pickup(self,other):
-        if debugFlags["actor"]:
-            print("Weapon grabbed")
-        if other.weapon is weapons.Weapon:
-            if other.weapon is self.weaponType:
-                other.weapon.damage+=1
+        if debugFlags["actor"] or debugFlags["pickup"]:
+            print("Weapon grabbed, "+str(self.shape.weaponType))
+        if isinstance(other.getWeapon(),weapons.Weapon):
+            if isinstance(other.getWeapon(),self.shape.weaponType):
+                if debugFlags["pickup"]:
+                    print("Same type, power up 1")
+                other.getWeapon().powerUp(1)
             else:
-                other.weapon=self.weaponType()
+                if debugFlags["pickup"]:
+                    print("Different type, switch weapon")
+                other.setWeapon(self.shape.weaponType)
 
 class SwordPickup(WeaponPickup):
     def __init__(self,space,x=0,y=0,dt=1/120):
-        WeaponPickup.__init(self,space,x,y,dt)
-        self.weaponType=weapons.Sword
+        WeaponPickup.__init__(self,space,x,y,dt)
+        self.shape.weaponType=weapons.Sword
         self.anim=[loadImage('assets/weapons/sword.png')]
 
 class SpearPickup(WeaponPickup):
     def __init__(self,space,x=0,y=0,dt=1/120):
-        WeaponPickup.__init(self,space,x,y,dt)
-        self.weaponType=weapons.Spear
+        WeaponPickup.__init__(self,space,x,y,dt)
+        self.shape.weaponType=weapons.Weapon
         self.anim=[loadImage('assets/weapons/spear.png')]
 
 class AxePickup(WeaponPickup):
     def __init__(self,space,x=0,y=0,dt=1/120):
-        WeaponPickup.__init(self,space,x,y,dt)
-        self.weaponType=weapons.Axe
+        WeaponPickup.__init__(self,space,x,y,dt)
+        self.shape.weaponType=weapons.Weapon
         self.anim=[loadImage('assets/weapons/axe.png')]
 
