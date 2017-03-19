@@ -5,11 +5,11 @@ from pygame.locals import *
 debug=debugFlags["weapon"]
 
 class Weapon():
+    name="Generic Weapon"
     def __init__(self):
         self.damage=1
         self.maxShot=1
         self.speed=160
-        self.name="Generic Weapon"
         self.anim=loadImage('assets/weapons/sword.png')
         self.face=[0,0]
         self.shot=shots.Shot
@@ -44,11 +44,13 @@ class BadWeapon(Weapon):
         self.shot=shots.BadShot
 
 class Sword(Weapon):
+    name="Sword"
     def __init__(self):
         Weapon.__init__(self)
         self.maxShot=2
 
 class Spear(Weapon):
+    name="Spear"
     def __init__(self):
         Weapon.__init__(self)
         self.maxShot=1
@@ -56,6 +58,7 @@ class Spear(Weapon):
         self.anim=loadImage('assets/weapons/spear.png')
 
 class Axe(Weapon):
+    name="Axe"
     def __init__(self):
         Weapon.__init__(self)
         self.name="Axe"
@@ -73,11 +76,11 @@ class Axe(Weapon):
             angleR=angle-math.pi*0.125
             faceLeft=math.cos(angleL),math.sin(angleL)
             faceRight=math.cos(angleR),math.sin(angleR)
-            newShot=self.shot(space,pos.x+16*self.face[0],pos.y+16*self.face[1],self.face[0],self.face[1])
+            newShot=self.shot(space,pos.x+16*self.face[0],pos.y+16*self.face[1],self.face[0],self.face[1],damage=self.damage)
             parent.shotList.append(newShot)
-            spreadShot=self.shot2(space,pos.x+16*self.face[0],pos.y+16*self.face[1],faceLeft[0],faceLeft[1])
+            spreadShot=self.shot2(space,pos.x+16*self.face[0],pos.y+16*self.face[1],faceLeft[0],faceLeft[1],damage=self.damage)
             parent.shotList.append(spreadShot)
-            spreadShot=self.shot2(space,pos.x+16*self.face[0],pos.y+16*self.face[1],faceRight[0],faceRight[1])
+            spreadShot=self.shot2(space,pos.x+16*self.face[0],pos.y+16*self.face[1],faceRight[0],faceRight[1],damage=self.damage)
             parent.shotList.append(spreadShot)
             return True
         else: return False
@@ -104,11 +107,11 @@ class BadAxe(Axe):
             angleR=angle-math.pi*0.125
             faceLeft=math.cos(angleL),math.sin(angleL)
             faceRight=math.cos(angleR),math.sin(angleR)
-            newShot=shots.BadSpreadShot(space,pos.x+16*self.face[0],pos.y+16*self.face[1],self.face[0],self.face[1])
+            newShot=shots.BadSpreadShot(space,pos.x+16*self.face[0],pos.y+16*self.face[1],self.face[0],self.face[1],damage=self.damage)
             parent.shotList.append(newShot)
-            spreadShot=shots.BadSubShot(space,pos.x+16*self.face[0],pos.y+16*self.face[1],faceLeft[0],faceLeft[1])
+            spreadShot=shots.BadSubShot(space,pos.x+16*self.face[0],pos.y+16*self.face[1],faceLeft[0],faceLeft[1],damage=self.damage)
             parent.shotList.append(spreadShot)
-            spreadShot=shots.BadSubShot(space,pos.x+16*self.face[0],pos.y+16*self.face[1],faceRight[0],faceRight[1])
+            spreadShot=shots.BadSubShot(space,pos.x+16*self.face[0],pos.y+16*self.face[1],faceRight[0],faceRight[1],damage=self.damage)
             parent.shotList.append(spreadShot)
             return True
         else: return False
