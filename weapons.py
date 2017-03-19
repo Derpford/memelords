@@ -48,6 +48,7 @@ class Spear(Weapon):
         Weapon.__init__(self)
         self.maxShot=1
         self.shot=shots.LongShot
+        self.anim=loadImage('assets/weapons/spear.png')
 
 class Axe(Weapon):
     def __init__(self):
