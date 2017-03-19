@@ -243,7 +243,10 @@ class Shroom(Bad):
         Bad.__init__(self,space,x,y,dt)
         self.drops=[(pickups.SpearPickup,80),(pickups.Money,64),(pickups.Pickup,255)]
         self.name="Marishroom"
-        self.speed=80
+        self.speed=160
+        self.chaseDistance=400
+        self.runDistance=120
+        self.panicDistance=80
         self.animSpeed=4
         self.patternTimerMax=0.2
         self.hp=4
@@ -268,24 +271,31 @@ class Shroom(Bad):
         if not self.dead:
             tpos = player.body.position
             spos = self.body.position
+            
             self.face=[normal(tpos[0]-spos[0]),normal(tpos[1]-spos[1])]
             angle = math.atan2(tpos[1]-spos[1],tpos[0]-spos[0])
             dist=abs(math.hypot(tpos[0]-spos[0],tpos[1]-spos[1]))
-            if dist<140:
+            if dist<self.panicDistance:
+                distX=random.randrange(-1,1)*random.randrange(self.chaseDistance,self.chaseDistance+self.panicDistance)
+                distY=random.randrange(-1,1)*random.randrange(self.chaseDistance,self.chaseDistance+self.panicDistance)
+            else:
+                distX=tpos[0]-spos[0]
+                distY=tpos[1]-spos[1]
+            if dist<self.runDistance and dist>self.panicDistance:
                 self.dx=-math.cos(angle)*self.speed*self.dt*self.xFactor
                 self.dy=-math.sin(angle)*self.speed*self.dt*self.yFactor
                 self.body.apply_force_at_local_point((self.dx*actors.factor,self.dy*actors.factor),(0,0))
-            elif dist>300:
-                self.dx=math.cos(angle)*self.speed*self.dt*self.xFactor
-                self.dy=math.sin(angle)*self.speed*self.dt*self.yFactor
+            elif dist>self.chaseDistance or dist<self.panicDistance:
+                self.dx=normal(distX)*self.speed*self.dt*self.xFactor
+                self.dy=normal(distY)*self.speed*self.dt*self.yFactor
                 self.body.apply_force_at_local_point((self.dx*actors.factor,self.dy*actors.factor),(0,0))
             if self.shotTimer<=0:
-                self.shotTimer=1
+                self.shotTimer=3
                 tx,ty = player.body.position
                 fx,fy = tx-self.body.position.x,ty-self.body.position.y
-                if abs(fx)<abs(fy):
+                if abs(fx)+32<abs(fy):
                     fx=0
-                if abs(fx)>abs(fy):
+                if abs(fx)>abs(fy)+32:
                     fy=0
                 if fx!=0:fx=normal(fx)
                 if fy!=0:fy=normal(fy)
