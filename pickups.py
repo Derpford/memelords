@@ -1,5 +1,5 @@
 import math, random, types, pymunk
-import actors,sound
+import actors,sound,weapons
 from helpers import *
 from pygame.locals import *
 debug=debugFlags["pickup"]
@@ -39,3 +39,37 @@ class Money(Pickup):
     def draw(self,screen):
         pos=self.body.position.x-4,self.body.position.y-4
         actors.drawAnimation(screen,self.anim,pos,16,self.t)
+
+class WeaponPickup(Pickup):
+    def __init__(self,space,x=0,y=0,dt=1/120):
+        Pickup.__init__(self,space,x,y,dt)
+        self.anim=[loadImage('assets/rice.png')]
+        self.weaponType=weapons.Weapon
+
+    def pickup(self,other):
+        if debugFlags["actor"]:
+            print("Weapon grabbed")
+        if other.weapon is weapons.Weapon:
+            if other.weapon is self.weaponType:
+                other.weapon.damage+=1
+            else:
+                other.weapon=self.weaponType()
+
+class SwordPickup(WeaponPickup):
+    def __init__(self,space,x=0,y=0,dt=1/120):
+        WeaponPickup.__init(self,space,x,y,dt)
+        self.weaponType=weapons.Sword
+        self.anim=[loadImage('assets/weapons/sword.png')]
+
+class SpearPickup(WeaponPickup):
+    def __init__(self,space,x=0,y=0,dt=1/120):
+        WeaponPickup.__init(self,space,x,y,dt)
+        self.weaponType=weapons.Spear
+        self.anim=[loadImage('assets/weapons/spear.png')]
+
+class AxePickup(WeaponPickup):
+    def __init__(self,space,x=0,y=0,dt=1/120):
+        WeaponPickup.__init(self,space,x,y,dt)
+        self.weaponType=weapons.Axe
+        self.anim=[loadImage('assets/weapons/axe.png')]
+

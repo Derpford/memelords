@@ -198,6 +198,7 @@ class Skeleton(Bad):
     def __init__(self,space,x=0,y=0,dt=1/120):
         Bad.__init__(self,space,x,y,dt)
         self.name="Skeltan"
+        self.drops=[(pickups.AxePickup,80),(pickups.Money,64),(pickups.Pickup,255)]
         self.speed=100
         self.animSpeed=4
         self.patternTimerMax=0.2
