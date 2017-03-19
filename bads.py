@@ -11,11 +11,11 @@ def chooseDrops(drops,space):
             roll=random.randrange(0,255)
             if debugFlags["pickup"]:
                 print("Dropping item!")
-                print(str(roll)+">"+str(chance))
-            if roll > chance and newItem==None:
+                print(str(roll)+"<"+str(chance))
+            if roll < chance and newItem==None:
                 if debugFlags["pickup"]:print("Dropping a "+str(item))
                 newItem=item
-        return newItem
+                return newItem
 
 class Bad(actors.Actor):
     def __init__(self,space,x=0,y=0,dt=1/120):
