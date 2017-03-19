@@ -72,6 +72,9 @@ def floorAdd(num):
 def floorGet():
     global floor
     return floor
+def floorSet(num):
+    global floor
+    floor=num
 #List of rooms.
 roomList=[]
 

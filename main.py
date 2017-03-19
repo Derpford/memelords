@@ -63,6 +63,7 @@ while 1:
     if type(rooms.exitFlag) is str:
         if rooms.exitFlag==QUIT_GAME:
             roomPos=-1
+            floorSet(-1)
             mapRoom.space.remove(playerObject.body, playerObject.shape)
             playerObject=None
             mapRoom=rooms.menuRoom()
