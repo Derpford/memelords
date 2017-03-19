@@ -159,6 +159,7 @@ class Hood(Bad):
 class Knight(Bad):
     def __init__(self,space,x=0,y=0,dt=1/120):
         Bad.__init__(self,space,x,y,dt)
+        self.drops=[(pickups.SwordPickup,80),(pickups.Money,64),(pickups.Pickup,255)]
         self.name="Knight"
         self.speed=80
         self.animSpeed=4
@@ -240,6 +241,7 @@ class Skeleton(Bad):
 class Shroom(Bad):
     def __init__(self,space,x=0,y=0,dt=1/120):
         Bad.__init__(self,space,x,y,dt)
+        self.drops=[(pickups.SpearPickup,80),(pickups.Money,64),(pickups.Pickup,255)]
         self.name="Marishroom"
         self.speed=80
         self.animSpeed=4
