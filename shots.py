@@ -80,6 +80,24 @@ class SubShot(Shot):
                     loadImage('assets/shots/beam2.png'),
                     loadImage('assets/shots/beam3.png'),]
 
+# Spear shot.
+class LongShot(Shot)
+    def __init__(self,space,x,y,fx,fy,speed=160,damage=1,dt=1/120):
+        Shot.__init__(self,space,x,y,fx,fy,speed,damage,dt)
+        self.timer=0.90
+        self.anim=[ loadImage('assets/shots/spinnerdouble1.png'),
+                    loadImage('assets/shots/spinnerdouble2.png'),
+                    loadImage('assets/shots/spinnerdouble3.png'),
+                    loadImage('assets/shots/spinnerdouble4.png'),]
+        if abs(fy)>abs(fx):
+            self.anim2=[ pygame.transform.rotate(loadImage('assets/shots/beam1.png'),90),
+                    pygame.transform.rotate(loadImage('assets/shots/beam2.png'),90),
+                    pygame.transform.rotate(loadImage('assets/shots/beam3.png'),90),]
+        else:
+            self.anim2=[ loadImage('assets/shots/beam1.png'),
+                    loadImage('assets/shots/beam2.png'),
+                    loadImage('assets/shots/beam3.png'),]
+
 class BadSpreadShot(SpreadShot):
     def __init__(self,space,x,y,fx,fy,speed=120,damage=1,dt=1/120):
         SpreadShot.__init__(self,space,x,y,fx,fy,speed,damage,dt)
