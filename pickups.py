@@ -50,7 +50,7 @@ class WeaponPickup(Pickup):
         if debugFlags["actor"] or debugFlags["pickup"]:
             print("Weapon grabbed, "+str(self.shape.weaponType))
         if isinstance(other.getWeapon(),weapons.Weapon):
-            if isinstance(other.getWeapon(),self.shape.weaponType):
+            if other.getWeapon().name==self.shape.weaponType.name:
                 if debugFlags["pickup"]:
                     print("Same type, power up 1")
                 other.getWeapon().powerUp(1)
@@ -68,12 +68,12 @@ class SwordPickup(WeaponPickup):
 class SpearPickup(WeaponPickup):
     def __init__(self,space,x=0,y=0,dt=1/120):
         WeaponPickup.__init__(self,space,x,y,dt)
-        self.shape.weaponType=weapons.Weapon
+        self.shape.weaponType=weapons.Spear
         self.anim=[loadImage('assets/weapons/spear.png')]
 
 class AxePickup(WeaponPickup):
     def __init__(self,space,x=0,y=0,dt=1/120):
         WeaponPickup.__init__(self,space,x,y,dt)
-        self.shape.weaponType=weapons.Weapon
+        self.shape.weaponType=weapons.Axe
         self.anim=[loadImage('assets/weapons/axe.png')]
 
