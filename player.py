@@ -38,9 +38,17 @@ class Player(actors.Actor):
         self.dead=False
         self.shotList=[]
         self.weapon=weapons.Sword()
+        self.shape.getWeapon=self.getWeapon
+        self.shape.setWeapon=self.setWeapon
         self.weaponAnim=0
         self.money=0
         self.shape.addMoney=self.addMoney
+
+    def getWeapon(self):
+        return self.weapon
+
+    def setWeapon(self,weapon):
+        self.weapon=weapon()
 
     def addMoney(self,amount):
         self.money+=amount
@@ -143,7 +151,8 @@ class Player(actors.Actor):
                 mapGrid.space.remove(shot.shape)
         if self.shape.newRoomFlag:
             for shot in self.shotList:
-                mapGrid.space.remove(shot.body, shot.shape)
+                if shot.body in mapGrid.space.bodies:
+                    mapGrid.space.remove(shot.body, shot.shape)
             self.shotList=[]
             self.shape.newRoomFlag=False
         if not self.dead:
