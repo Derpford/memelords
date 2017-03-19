@@ -147,8 +147,9 @@ class Player(actors.Actor):
                 print("Handling shot, removeFlag: "+str(shot.shape.removeFlag))
                 print("shot position: "+str(shot.body.position))
             if shot.shape.removeFlag == True:
-                mapGrid.space.remove(shot.body)
-                mapGrid.space.remove(shot.shape)
+                if shot.body in mapGrid.space.bodies:
+                    mapGrid.space.remove(shot.body)
+                    mapGrid.space.remove(shot.shape)
         if self.shape.newRoomFlag:
             for shot in self.shotList:
                 if shot.body in mapGrid.space.bodies:
