@@ -278,7 +278,7 @@ class Shroom(Bad):
                 self.dy=math.sin(angle)*self.speed*self.dt*self.yFactor
                 self.body.apply_force_at_local_point((self.dx*actors.factor,self.dy*actors.factor),(0,0))
             if self.shotTimer<=0:
-                self.shottimer=1
+                self.shotTimer=1
                 tx,ty = player.body.position
                 fx,fy = tx-self.body.position.x,ty-self.body.position.y
                 if abs(fx)<abs(fy):
