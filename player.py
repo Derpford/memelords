@@ -37,7 +37,7 @@ class Player(actors.Actor):
         self.maxhp=6
         self.dead=False
         self.shotList=[]
-        self.weapon=weapons.Axe()
+        self.weapon=weapons.Sword()
         self.weaponAnim=0
         self.money=0
         self.shape.addMoney=self.addMoney
