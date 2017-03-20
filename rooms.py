@@ -28,12 +28,86 @@ class Room():
     def __init__():
         #Initialize things.
         raise NotImplementedError
-    def update():
+    def update(self,t,dt,player):
         #Update things.
         raise NotImplementedError
-    def draw():
+    def draw(self,player,screen,clock,fps):
         #Draw things.
         raise NotImplementedError
+
+class creditsRoom(Room):
+    def __init__(self):
+        self.usequence=[]
+        self.textpos=100,150
+        self.dsequence=[ 
+                (0,lambda screen:screen.blit(self.ThankYou(textColors["meddark"]),self.textpos)),
+                (0.5,lambda screen:screen.blit(self.ThankYou(textColors["medlight"]),self.textpos)),
+                (1,lambda screen:screen.blit(self.ThankYou(textColors["light"]),self.textpos)),
+                (2,lambda screen:screen.blit(self.ThankYou(textColors["medlight"]),self.textpos)),
+                (2.5,lambda screen:screen.blit(self.ThankYou(textColors["meddark"]),self.textpos)),
+                (3,lambda screen:screen.blit(self.ThankYou(textColors["dark"]),self.textpos)),
+                (3.5,lambda screen:screen.blit(self.LoonyThanks(textColors["meddark"]),self.textpos)),
+                (4,lambda screen:screen.blit(self.LoonyThanks(textColors["medlight"]),self.textpos)),
+                (4.5,lambda screen:screen.blit(self.LoonyThanks(textColors["light"]),self.textpos)),
+                (6.5,lambda screen:screen.blit(self.LoonyThanks(textColors["medlight"],textColors["light"]),self.textpos)),
+                (7,lambda screen:screen.blit(self.LoonyThanks(textColors["meddark"],textColors["light"]),self.textpos)),
+                (7.5,lambda screen:screen.blit(self.LoonyThanks(textColors["dark"],textColors["light"]),self.textpos)),
+                (8,lambda screen:screen.blit(self.InfiniteThanks(textColors["meddark"],textColors["light"]),self.textpos)),
+                (8.5,lambda screen:screen.blit(self.InfiniteThanks(textColors["medlight"],textColors["light"]),self.textpos)),
+                (9,lambda screen:screen.blit(self.InfiniteThanks(textColors["light"],textColors["light"]),self.textpos)),
+                (11,lambda screen:screen.blit(self.InfiniteThanks(textColors["medlight"]),self.textpos)),
+                (11.5,lambda screen:screen.blit(self.InfiniteThanks(textColors["meddark"]),self.textpos)),
+                (12,lambda screen:screen.blit(self.InfiniteThanks(textColors["dark"]),self.textpos)),
+                (12.5,lambda screen:screen.blit(self.EndText(textColors["meddark"]),self.textpos)),
+                (13,lambda screen:screen.blit(self.EndText(textColors["medlight"]),self.textpos)),
+                (13.5,lambda screen:screen.blit(self.EndText(textColors["light"]),self.textpos)),
+                ]
+        self.ucurrent=None
+        self.dcurrent=None
+        self.t=0
+    
+    def ThankYou(self,color,color2=None):
+        return textMultiLine(gameFont,"Thanks for playing!\nTotal money: "+str(self.money),color,textColors["dark"],color2)
+
+    def LoonyThanks(self,color,color2=None):
+        return textMultiLine(gameFont,"Special thanks to\n Lunacy--Coding Advice",color,textColors["dark"],color2)
+
+    def InfiniteThanks(self,color,color2=None):
+        return textMultiLine(gameFont,"Special thanks to\n InfinityJam",color,textColors["dark"],color2)
+
+    def EndText(self,color,color2=None):
+        return textMultiLine(gameFont,"Press any key\nto go back to\n  the  menu",color,textColors["dark"],color2)
+
+    def update(self,t,dt,player):
+        print(t)
+        self.t=t
+        if player!=None:
+            self.money=player.money
+        else:
+            self.money=0
+        global exitFlag
+        self.ucurrent=None
+        for i in self.usequence:
+            if i[0]<=t:
+                self.ucurrent=i[1]
+                print(str(i))
+        if self.ucurrent!=None:
+            self.ucurrent()
+        for event in pygame.event.get():
+            if event.type==pygame.KEYDOWN:
+                exitFlag=QUIT_GAME
+
+    def draw(self,player,screen,clock,fps):
+        screen.fill(textColors["dark"])
+        self.dcurrent=None
+        for i in self.dsequence:
+            if self.t>=i[0]:
+                self.dcurrent=i[1]
+        if self.dcurrent!=None:
+            self.dcurrent(screen)
+            print(str(self.dcurrent))
+        pass
+
 
 class loadRoom(Room):
     def __init__(self):
@@ -93,6 +167,10 @@ class menuRoom(Room):
                 if event.key==K_LCTRL and self.keyDelay==0:
                     self.menu[self.menuPos][1]()
                     self.keyDelay=self.keyDelay
+                if event.key==K_c and self.keyDelay==0:
+                    global exitFlag
+                    floorSet(2)
+                    exitFlag=NEXT_FLOOR
 
     def draw(self,player,screen,clock,fps):
         global t,dt
@@ -260,7 +338,6 @@ class gameRoom(Room):
     # Update the room.
     def update(self,t,dt,player):
         self.keyDelay=max(0,self.keyDelay-dt)
-        t+=dt
         for event in pygame.event.get():
             if event.type==pygame.KEYDOWN:
                 if debug or debugFlags["input"]: print("Got event: "+str(event.type)+","+str(event.key))
