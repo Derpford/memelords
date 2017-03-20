@@ -167,10 +167,7 @@ class menuRoom(Room):
                 if event.key==K_LCTRL and self.keyDelay==0:
                     self.menu[self.menuPos][1]()
                     self.keyDelay=self.keyDelay
-                if event.key==K_c and self.keyDelay==0:
-                    global exitFlag
-                    floorSet(2)
-                    exitFlag=NEXT_FLOOR
+                    sound.sounds["shot"].play()
 
     def draw(self,player,screen,clock,fps):
         global t,dt
@@ -310,6 +307,7 @@ class gameRoom(Room):
             item=arbiter.shapes[0]
             other=arbiter.shapes[1]
             item.pickup(other)
+            sound.sounds["pick"].play()
             item.removeFlag=True
             return False
 

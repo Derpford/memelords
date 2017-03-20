@@ -11,6 +11,7 @@ sounds={"die":pygame.mixer.Sound('assets/sounds/die.ogg'),
         "shot":pygame.mixer.Sound('assets/sounds/shot.ogg'),
         "ping":pygame.mixer.Sound('assets/sounds/ping.ogg'),
         "boop":pygame.mixer.Sound('assets/sounds/boop.ogg'),
+        "pick":pygame.mixer.Sound('assets/sounds/pickup.ogg'),
         }
 # Special channels.
 shotChannel=pygame.mixer.Channel(1)
