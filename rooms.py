@@ -52,15 +52,20 @@ class creditsRoom(Room):
                 (6.5,lambda screen:screen.blit(self.LoonyThanks(textColors["medlight"],textColors["light"]),self.textpos)),
                 (7,lambda screen:screen.blit(self.LoonyThanks(textColors["meddark"],textColors["light"]),self.textpos)),
                 (7.5,lambda screen:screen.blit(self.LoonyThanks(textColors["dark"],textColors["light"]),self.textpos)),
-                (8,lambda screen:screen.blit(self.InfiniteThanks(textColors["meddark"],textColors["light"]),self.textpos)),
-                (8.5,lambda screen:screen.blit(self.InfiniteThanks(textColors["medlight"],textColors["light"]),self.textpos)),
-                (9,lambda screen:screen.blit(self.InfiniteThanks(textColors["light"],textColors["light"]),self.textpos)),
-                (11,lambda screen:screen.blit(self.InfiniteThanks(textColors["medlight"]),self.textpos)),
-                (11.5,lambda screen:screen.blit(self.InfiniteThanks(textColors["meddark"]),self.textpos)),
-                (12,lambda screen:screen.blit(self.InfiniteThanks(textColors["dark"]),self.textpos)),
-                (12.5,lambda screen:screen.blit(self.EndText(textColors["meddark"]),self.textpos)),
-                (13,lambda screen:screen.blit(self.EndText(textColors["medlight"]),self.textpos)),
-                (13.5,lambda screen:screen.blit(self.EndText(textColors["light"]),self.textpos)),
+                (8,lambda screen:screen.blit(self.OpenThanks(textColors["meddark"],textColors["light"]),self.textpos)),
+                (8.5,lambda screen:screen.blit(self.OpenThanks(textColors["medlight"],textColors["light"]),self.textpos)),
+                (9,lambda screen:screen.blit(self.OpenThanks(textColors["light"],textColors["light"]),self.textpos)),
+                (11,lambda screen:screen.blit(self.OpenThanks(textColors["meddark"],textColors["light"]),self.textpos)),
+                (11.5,lambda screen:screen.blit(self.OpenThanks(textColors["dark"],textColors["light"]),self.textpos)),
+                (12,lambda screen:screen.blit(self.InfiniteThanks(textColors["meddark"],textColors["light"]),self.textpos)),
+                (12.5,lambda screen:screen.blit(self.InfiniteThanks(textColors["medlight"],textColors["light"]),self.textpos)),
+                (13,lambda screen:screen.blit(self.InfiniteThanks(textColors["light"],textColors["light"]),self.textpos)),
+                (15,lambda screen:screen.blit(self.InfiniteThanks(textColors["medlight"]),self.textpos)),
+                (15.5,lambda screen:screen.blit(self.InfiniteThanks(textColors["meddark"]),self.textpos)),
+                (16,lambda screen:screen.blit(self.InfiniteThanks(textColors["dark"]),self.textpos)),
+                (16.5,lambda screen:screen.blit(self.EndText(textColors["meddark"]),self.textpos)),
+                (17,lambda screen:screen.blit(self.EndText(textColors["medlight"]),self.textpos)),
+                (17.5,lambda screen:screen.blit(self.EndText(textColors["light"]),self.textpos)),
                 ]
         self.ucurrent=None
         self.dcurrent=None
@@ -75,11 +80,14 @@ class creditsRoom(Room):
     def InfiniteThanks(self,color,color2=None):
         return textMultiLine(gameFont,"Special thanks to\n InfinityJam",color,textColors["dark"],color2)
 
+    def OpenThanks(self,color,color2=None):
+        return textMultiLine(gameFont,"Special thanks to\n OpenGameArt.org",color,textColors["dark"],color2)
+
     def EndText(self,color,color2=None):
         return textMultiLine(gameFont,"Press any key\nto go back to\n  the  menu",color,textColors["dark"],color2)
 
     def update(self,t,dt,player):
-        self.t+=dt
+        self.t+=dt*24
         if player!=None:
             self.money=player.money
         else:
@@ -89,7 +97,6 @@ class creditsRoom(Room):
         for i in self.usequence:
             if i[0]<=t:
                 self.ucurrent=i[1]
-                print(str(i))
         if self.ucurrent!=None:
             self.ucurrent()
         for event in pygame.event.get():
@@ -104,7 +111,6 @@ class creditsRoom(Room):
                 self.dcurrent=i[1]
         if self.dcurrent!=None:
             self.dcurrent(screen)
-            print(str(self.dcurrent))
         pass
 
 
