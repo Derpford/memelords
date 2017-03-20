@@ -82,11 +82,12 @@ class SubShot(Shot):
 
 # Spear shot.
 class LongShot(Shot):
-    def __init__(self,space,x,y,fx,fy,speed=160,damage=1,dt=1/120):
+    def __init__(self,space,x,y,fx,fy,speed=160,damage=1,dt=1/120,multi=2):
         Shot.__init__(self,space,x,y,fx,fy,speed,damage,dt)
         self.timer=1.5
         self.changetime=self.timer-0.45
         self.changed=False
+        self.multi=multi
         self.anim=[ loadImage('assets/shots/spinnerdouble1.png'),
                     loadImage('assets/shots/spinnerdouble2.png'),
                     loadImage('assets/shots/spinnerdouble3.png'),
@@ -100,7 +101,7 @@ class LongShot(Shot):
         Shot.update(self)
         if self.timer<self.changetime and not self.changed:
             self.anim=self.anim2
-            self.shape.damage*=2
+            self.shape.damage*=multi
             self.changed=True
 
 class BadLongShot(LongShot):

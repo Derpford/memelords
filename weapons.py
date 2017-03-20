@@ -8,6 +8,7 @@ class Weapon():
     name="Generic Weapon"
     def __init__(self):
         self.damage=1
+        self.power=1
         self.maxShot=1
         self.speed=160
         self.anim=loadImage('assets/weapons/sword.png')
@@ -34,7 +35,7 @@ class Weapon():
         else: return False
 
     def powerUp(self,amt):
-        self.damage+=amt
+        self.power+=amt
         print("Powered up "+str(amt)+", new damage "+str(self.damage))
 
 class BadWeapon(Weapon):
@@ -49,13 +50,28 @@ class Sword(Weapon):
         Weapon.__init__(self)
         self.maxShot=2
 
+    def shoot(self,space,pos,face,parent):
+        self.maxShot=self.power
+        Weapon.shoot(self,space,pos,face,parent)
+
 class Spear(Weapon):
     name="Spear"
     def __init__(self):
         Weapon.__init__(self)
         self.maxShot=1
+        self.power=1
         self.shot=shots.LongShot
         self.anim=loadImage('assets/weapons/spear.png')
+
+    def shoot(self,space,pos,face,parent):
+        if debug:print("Shot "+str(self.shot)+" with damage "+str(self.damage))
+        if len(parent.shotList)<self.maxShot:
+            self.face=face[:]
+            newShot=self.shot(space,pos.x+16*self.face[0],pos.y+16*self.face[1],self.face[0],self.face[1],
+                    damage=self.damage,multi=self.power+1)
+            parent.shotList.append(newShot)
+            return True
+        else: return False
 
 class BadSpear(Spear):
     name="BadSpear"
@@ -69,12 +85,14 @@ class Axe(Weapon):
         Weapon.__init__(self)
         self.name="Axe"
         self.maxShot=1
+        self.power=1
         self.anim=loadImage('assets/weapons/axe.png')
         self.shot=shots.SpreadShot
         self.shot2=shots.SubShot
 
     def shoot(self,space,pos,face,parent):
         # Spread shot.
+        self.damage=self.power
         if len(parent.shotList)<self.maxShot:
             self.face=face[:]
             angle=math.atan2(self.face[1],self.face[0])
