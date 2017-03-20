@@ -101,13 +101,14 @@ class LongShot(Shot):
         Shot.update(self)
         if self.timer<self.changetime and not self.changed:
             self.anim=self.anim2
-            self.shape.damage*=multi
+            self.shape.damage*=self.multi
             self.changed=True
 
 class BadLongShot(LongShot):
     def __init__(self,space,x,y,fx,fy,speed=120,damage=1,dt=1/120):
         LongShot.__init__(self,space,x,y,fx,fy,speed,damage,dt)
         self.shape.collision_type=collisionTypes["badshot"]
+        self.multi=2
 
 class BadSpreadShot(SpreadShot):
     def __init__(self,space,x,y,fx,fy,speed=120,damage=1,dt=1/120):
