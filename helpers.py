@@ -5,8 +5,33 @@ pygame.font.init()
 font=pygame.font.Font(None,16)
 gameFont=pygame.font.Font('assets/fonts/Px437_ToshibaLCD_8x8.ttf',8)
 textColors={ "dark":(41,57,65),
-        "light":(186,195,117)
+        "light":(186,195,117),
+        "medlight":(133,149,80),
+        "meddark":(72,93,72),
         }
+
+def textMultiLine(font,text,color,bg=textColors["dark"],color2=None):
+    textList=text.split('\n')
+    # Determine height and width of surface to draw to.
+    sizex,sizey=0,0
+    for line in textList:
+        sx,sy=font.size(line)
+        if sx>sizex:sizex=sx #Widest line.
+        sizey+=sy#Number of lines.
+    finalSurface=pygame.Surface((sizex,sizey))
+    finalSurface.fill(bg)
+    # Now render the strings.
+    lineY=0
+    for line in textList:
+        sx,sy=font.size(line)
+        if lineY==0 and color2!=None:
+            blit=font.render(line,False,color2)
+        else:
+            blit=font.render(line,False,color)
+        finalSurface.blit(blit,(0,lineY))
+        lineY+=sy
+    return finalSurface
+
 
 keyDelayMax=0.01 # Time until next key press can be processed. Only for one-press keys.
 # Pseudo-Normalize a number.
