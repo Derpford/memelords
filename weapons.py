@@ -52,7 +52,7 @@ class Sword(Weapon):
 
     def shoot(self,space,pos,face,parent):
         self.maxShot=self.power+1
-        Weapon.shoot(self,space,pos,face,parent)
+        return Weapon.shoot(self,space,pos,face,parent)
 
 class Spear(Weapon):
     name="Spear"
@@ -78,6 +78,8 @@ class BadSpear(Spear):
     def __init__(self):
         Weapon.__init__(self)
         self.shot=shots.BadLongShot
+    def shoot(self,space,pos,face,parent):
+        return Weapon.shoot(self,space,pos,face,parent)
 
 class Axe(Weapon):
     name="Axe"
