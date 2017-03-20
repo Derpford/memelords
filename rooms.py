@@ -79,8 +79,7 @@ class creditsRoom(Room):
         return textMultiLine(gameFont,"Press any key\nto go back to\n  the  menu",color,textColors["dark"],color2)
 
     def update(self,t,dt,player):
-        print(t)
-        self.t=t
+        self.t+=dt
         if player!=None:
             self.money=player.money
         else:
