@@ -51,7 +51,7 @@ class Sword(Weapon):
         self.maxShot=2
 
     def shoot(self,space,pos,face,parent):
-        self.maxShot=self.power
+        self.maxShot=self.power+1
         Weapon.shoot(self,space,pos,face,parent)
 
 class Spear(Weapon):
