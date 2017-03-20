@@ -64,7 +64,8 @@ while 1:
         if rooms.exitFlag==QUIT_GAME:
             roomPos=-1
             floorSet(0)
-            mapRoom.space.remove(playerObject.body, playerObject.shape)
+            if hasattr(mapRoom,'space'):
+                mapRoom.space.remove(playerObject.body, playerObject.shape)
             playerObject=None
             mapRoom=rooms.menuRoom()
             rooms.exitFlag=0
@@ -81,9 +82,11 @@ while 1:
             roomList=mapRoom.newRoomList
             mapRoom=roomList[0]
             if playerObject==None:
-                playerObject=player.Player(mapRoom.space,200,150)
+                if hasattr(mapRoom,'space'):
+                    playerObject=player.Player(mapRoom.space,200,150)
             else:
-                mapRoom.space.add(playerObject.body, playerObject.shape)
+                if hasattr(mapRoom,'space'):
+                    mapRoom.space.add(playerObject.body, playerObject.shape)
             rooms.exitFlag=0
             roomPos=0
 
