@@ -30,10 +30,12 @@ def updateFunc(room):
         
 def drawFunc(room):
     room.draw(playerObject,screen,clock,fps)
+    realscreen.blit(pygame.transform.scale(screen,(2*width,2*height)),(0,0))
 
 #Screen settings.
 #screen = pygame.display.set_mode((width,height),FULLSCREEN)
-screen = pygame.display.set_mode((width,height))
+screen=pygame.Surface((width,height))
+realscreen = pygame.display.set_mode((2*width,2*height))
 
 
 
