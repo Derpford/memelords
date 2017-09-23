@@ -44,6 +44,13 @@ class BadWeapon(Weapon):
         self.speed=120
         self.shot=shots.BadShot
 
+class BadWeaponRapid(Weapon):
+    def __init__(self):
+        BadWeapon.__init__(self)
+        self.maxShot=2
+        self.shot=shots.BadSubShot
+
+
 class Sword(Weapon):
     name="Sword"
     def __init__(self):

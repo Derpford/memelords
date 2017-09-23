@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="25" height="13" tilewidth="16" tileheight="16" nextobjectid="9">
+<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="25" height="13" tilewidth="16" tileheight="16" nextobjectid="12">
  <tileset firstgid="1" source="baseblueold.tsx"/>
  <tileset firstgid="17" source="bads.tsx"/>
  <layer name="tiles" width="25" height="13">
@@ -25,11 +25,7 @@
     <property name="bad" value="knight"/>
    </properties>
   </object>
-  <object id="6" type="enemy" gid="18" x="320" y="112" width="16" height="16">
-   <properties>
-    <property name="bad" value="skel"/>
-   </properties>
-  </object>
+  <object id="9" gid="22" x="320" y="112" width="16" height="16"/>
  </objectgroup>
  <objectgroup name="exits">
   <object id="7" type="exit" x="0" y="16">

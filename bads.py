@@ -4,6 +4,9 @@ from helpers import *
 from pygame.locals import *
 debug=debugFlags["bad"]
 
+#List of bad guy classes.
+badList={}
+
 def chooseDrops(drops,space):
         newItem=None
         for drop in drops:
@@ -155,6 +158,9 @@ class Hood(Bad):
                 self.shotTimer=1
                 if debug:
                     print("Firing a shot at "+str(self.body.position)+" toward "+str(self.pattern[self.patternStep-1]))
+# Register Hood as a baddie.
+badList["hood"]=Hood
+
 
 class Knight(Bad):
     def __init__(self,space,x=0,y=0,dt=1/120):
@@ -194,6 +200,7 @@ class Knight(Bad):
                 self.dx=-math.cos(angle)*self.speed*self.dt*self.xFactor
                 self.dy=-math.sin(angle)*self.speed*self.dt*self.yFactor
                 self.body.apply_force_at_local_point((self.dx*actors.factor,self.dy*actors.factor),(0,0))
+badList["knight"]=Knight
 
 class Skeleton(Bad):
     def __init__(self,space,x=0,y=0,dt=1/120):
@@ -205,7 +212,7 @@ class Skeleton(Bad):
         self.patternTimerMax=0.2
         self.hp=4
         self.maxhp=4
-        self.weapon=weapons.BadAxe()
+        self.weapon=weapons.BadWeaponRapid()
         self.anim = [loadImage("assets/skel/skel1.png"),
                 loadImage("assets/skel/skel2.png"),
                 loadImage("assets/skel/skel3.png"),
@@ -233,10 +240,55 @@ class Skeleton(Bad):
             if fy!=0:fy=normal(fy)
             self.face=fx,fy
             self.pattern=[(fx,fy),(-fx,-fy),(2*fx,2*fy),(0,0),(0,0)]
+        if not self.dead and self.patternStep>=3:
+            if self.shotTimer<=0:
+                self.weapon.shoot(space.space,self.body.position,self.face,self)
+                self.shotTimer=0.25
+badList["skel"]=Skeleton
+
+class GoldSkeleton(Bad):
+    def __init__(self,space,x=0,y=0,dt=1/120):
+        Bad.__init__(self,space,x,y,dt)
+        self.name="Gilded Skel-Sama"
+        self.drops=[(pickups.AxePickup,120),(pickups.Money,64),(pickups.Pickup,255)]
+        self.speed=100
+        self.animSpeed=4
+        self.patternTimerMax=0.2
+        self.hp=4
+        self.maxhp=4
+        self.weapon=weapons.BadAxe()
+        self.anim = [loadImage("assets/skel/goldskel1.png"),
+                loadImage("assets/skel/goldskel2.png"),
+                loadImage("assets/skel/goldskel3.png"),
+                loadImage("assets/skel/goldskel4.png"),
+                loadImage("assets/skel/goldskel5.png"),
+                loadImage("assets/skel/goldskel6.png"),
+                pygame.transform.flip(loadImage("assets/skel/goldskel4.png"),True,False),
+                pygame.transform.flip(loadImage("assets/skel/goldskel5.png"),True,False),
+                pygame.transform.flip(loadImage("assets/skel/goldskel6.png"),True,False),
+                loadImage("assets/skel/goldskel7.png"),
+                loadImage("assets/skel/goldskel8.png"),
+                loadImage("assets/skel/goldskel9.png")]
+        self.deadAnim=actors.makeDeadAnim(self.anim)
+
+    def update(self,space,player):
+        Bad.update(self,space,player)
+        if not self.dead and self.pattern[self.patternStep]==(0,0):
+            tx,ty = player.body.position
+            fx,fy = tx-self.body.position.x,ty-self.body.position.y
+            if abs(fx)<abs(fy):
+                fx=0
+            if abs(fx)>abs(fy):
+                fy=0
+            if fx!=0:fx=normal(fx)
+            if fy!=0:fy=normal(fy)
+            self.face=fx,fy
+            self.pattern=[(fx,fy),(-fx,-fy),(2*fx,2*fy),(0,0),(0,0)]
         if not self.dead and self.patternStep==3:
             if self.shotTimer<=0:
                 self.weapon.shoot(space.space,self.body.position,self.face,self)
                 self.shotTimer=1
+badList["goldskel"]=GoldSkeleton
 
 class Shroom(Bad):
     def __init__(self,space,x=0,y=0,dt=1/120):
@@ -300,6 +352,5 @@ class Shroom(Bad):
                 if fx!=0:fx=normal(fx)
                 if fy!=0:fy=normal(fy)
                 self.weapon.shoot(space.space,self.body.position,(fx,fy),self)
+badList["shroom"]=Shroom
 
-#List of bad guy classes.
-badList={"hood":Hood,"knight":Knight,"skel":Skeleton,"shroom":Shroom}
