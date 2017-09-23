@@ -6,13 +6,15 @@ import actors,pickups
 
 hudSurface=None
 barSprites=None
+powerBarSprites=None
 heartSprites=None
 
 # Hud surface and sprites.
 def hudInit():
-    global heartSprites, barSprites, hudSurface
+    global heartSprites, barSprites, powerBarSprites, hudSurface
     heartSprites = [loadImage('assets/hud/heart1.png'),loadImage('assets/hud/heart2.png'),loadImage('assets/hud/heart2.png')]
     barSprites =[loadImage('assets/hud/bar1.png'),loadImage('assets/hud/bar2.png')] 
+    powerBarSprites =[loadImage('assets/hud/powbar1.png'),loadImage('assets/hud/powbar2.png')] 
     hudSurface = pygame.Surface((400,96))
     hudSprites = loadImage('assets/hud/bg.png')
     hudTopSprite = pygame.Surface((384,8))
@@ -41,8 +43,10 @@ def hudInit():
     hpBlit=gameFont.render("Health",False,textColors["dark"])
     weaponBlit=gameFont.render("Weapon",False,textColors["dark"])
     moneyBlit=gameFont.render("Money",False,textColors["dark"])
+    powerBlit=gameFont.render("Power",False,textColors["dark"])
     hudSurface.blit(hpBlit,(16,12))
     hudSurface.blit(weaponBlit,(16,48))
+    hudSurface.blit(powerBlit,(48,64))
     hudSurface.blit(moneyBlit,(128,12))
 
     return hudSurface
@@ -58,6 +62,9 @@ def drawHud(screen,surf,pos,player):
             screen.blit(barSprites[0],tupSum(pos,(16+i*4,24)))
     # Weapon.
     player.weapon.draw(screen,tupSum(pos,(16,64)),0)
+    # Power.
+    screen.blit(powerBarSprites[1],tupSum(pos,(48,76)))
+    screen.blit(powerBarSprites[0],tupSum(pos,(48,76)),pygame.Rect(0,0,48*(player.weapon.charge/player.weapon.maxCharge),16))
     # Money.
     moneyBlit=gameFont.render(str(player.money),False,textColors["dark"])
     anim=[loadImage('assets/sapir1.png'),loadImage('assets/sapir2.png')]

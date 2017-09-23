@@ -50,14 +50,9 @@ class WeaponPickup(Pickup):
         if debugFlags["actor"] or debugFlags["pickup"]:
             print("Weapon grabbed, "+str(self.shape.weaponType))
         if isinstance(other.getWeapon(),weapons.Weapon):
-            if other.getWeapon().name==self.shape.weaponType.name:
-                if debugFlags["pickup"]:
-                    print("Same type, power up 1")
-                other.getWeapon().powerUp(1)
-            else:
-                if debugFlags["pickup"]:
-                    print("Different type, switch weapon")
-                other.setWeapon(self.shape.weaponType)
+           if debugFlags["pickup"]:
+               print("New weapon, replaces old one")
+           other.setWeapon(self.shape.weaponType)
 
 class SwordPickup(WeaponPickup):
     def __init__(self,space,x=0,y=0,dt=1/120):

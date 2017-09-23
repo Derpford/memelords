@@ -299,7 +299,8 @@ class gameRoom(Room):
             if shot.collision_type==collisionTypes["shot"] or shot.collision_type==collisionTypes["badshot"]:
                 shot.removeFlag=True
             if other.collision_type==collisionTypes["shot"] or other.collision_type==collisionTypes["badshot"]:
-                other.removeFlag=True
+                if other.collision_type!=collisionTypes["player"]:
+                    other.removeFlag=True
             return False
         def hitWall(arbiter,space,data):
             shot=arbiter.shapes[0]
