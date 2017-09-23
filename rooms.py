@@ -360,7 +360,7 @@ class gameRoom(Room):
             for bad in self.bads:
                 bad.update(self,player)
             for item in self.drops:
-                if item.shape.removeFlag:
+                if item.shape.removeFlag and item.shape.collision_type !=collisionTypes["player"]:
                     self.space.remove(item.shape)
                     self.space.remove(item.body)
                     self.drops.remove(item)
