@@ -37,7 +37,7 @@ class Player(actors.Actor):
         self.maxhp=6
         self.dead=False
         self.shotList=[]
-        self.weapon=weapons.Sword()
+        self.weapon=weapons.Dagger()
         self.shape.getWeapon=self.getWeapon
         self.shape.setWeapon=self.setWeapon
         self.weaponAnim=0
@@ -146,7 +146,7 @@ class Player(actors.Actor):
             if debug:
                 print("Handling shot, removeFlag: "+str(shot.shape.removeFlag))
                 print("shot position: "+str(shot.body.position))
-            if shot.shape.removeFlag == True:
+            if shot.shape.removeFlag == True and shot is not self and not isInstance(shot,Bad):
                 if shot.body in mapGrid.space.bodies:
                     mapGrid.space.remove(shot.body)
                     mapGrid.space.remove(shot.shape)

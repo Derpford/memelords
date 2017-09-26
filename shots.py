@@ -71,14 +71,17 @@ class SubShot(Shot):
     def __init__(self,space,x,y,fx,fy,speed=160,damage=1,dt=1/120):
         Shot.__init__(self,space,x,y,fx,fy,speed,damage,dt)
         self.timer=0.40
-        if abs(fy)>abs(fx):
-            self.anim=[ pygame.transform.rotate(loadImage('assets/shots/beam1.png'),90),
-                    pygame.transform.rotate(loadImage('assets/shots/beam2.png'),90),
-                    pygame.transform.rotate(loadImage('assets/shots/beam3.png'),90),]
-        else:
-            self.anim=[ loadImage('assets/shots/beam1.png'),
-                    loadImage('assets/shots/beam2.png'),
-                    loadImage('assets/shots/beam3.png'),]
+        self.anim=[pygame.transform.rotate(loadImage('assets/shots/beam1.png'),math.atan2(self.face[0],self.face[1])),
+                    pygame.transform.rotate(loadImage('assets/shots/beam2.png'),math.atan2(self.face[0],self.face[1])),
+                    pygame.transform.rotate(loadImage('assets/shots/beam3.png'),math.atan2(self.face[0],self.face[1]))]
+        #if abs(fy)>abs(fx):
+        #    self.anim=[ pygame.transform.rotate(loadImage('assets/shots/beam1.png'),90),
+        #            pygame.transform.rotate(loadImage('assets/shots/beam2.png'),90),
+        #            pygame.transform.rotate(loadImage('assets/shots/beam3.png'),90),]
+        #else:
+        #    self.anim=[ loadImage('assets/shots/beam1.png'),
+        #            loadImage('assets/shots/beam2.png'),
+        #            loadImage('assets/shots/beam3.png'),]
 
 # Spear shot.
 class LongShot(Shot):

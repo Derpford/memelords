@@ -41,7 +41,7 @@ class Weapon():
 
     def powerUp(self,amt):
         self.power+=amt
-        print("Powered up "+str(amt)+", new damage "+str(self.damage))
+        if debug:print("Powered up "+str(amt)+", new damage "+str(self.damage))
 
 class BadWeapon(Weapon):
     def __init__(self):
@@ -137,6 +137,7 @@ class Axe(Weapon):
             return True
         else: return False
 
+    # Custom render code because the axe looks weird otherwise.
     def draw(self,surf,pos,weaponAnim):
         if debugFlags["anim"]:
             print(str(math.floor(pos[0]+self.face[0]*weaponAnim*16))+","+str(math.floor(pos[1]+self.face[1]*weaponAnim*16))+" anim pos for "+str(self.anim))
@@ -152,4 +153,39 @@ class BadAxe(Axe):
         self.power=1
         self.shot=shots.SpreadShot
         self.shot2=shots.SubShot
+
+class Dagger(Weapon):
+    name="Dagger"
+    def __init__(self):
+        Weapon.__init__(self)
+        self.name="Dagger"
+        self.maxShot=1
+        self.charge=96
+        self.maxCharge=96
+        self.power=3
+        self.anim=loadImage('assets/weapons/twindagger.png')
+        self.shot=shots.SubShot
+
+    def shoot(self,space,pos,face,parent):
+        # Spread shot.
+        self.damage=self.power
+        if len(parent.shotList)<self.maxShot:
+            self.face=face[:]
+            for i in range(0,self.power):
+                # Get a pair of angles for the split shots.
+                angle=math.atan2(self.face[1],self.face[0])
+                angleL=angle+math.pi*0.125*random.randrange(1,self.power+1)
+                angleR=angle-math.pi*0.125*random.randrange(1,self.power+1)
+                faceLeft=math.cos(angleL),math.sin(angleL)
+                faceRight=math.cos(angleR),math.sin(angleR)
+                # Subshots.
+                spreadShotLeft=self.shot(space,pos.x+16*self.face[0],pos.y+16*self.face[1],faceLeft[0],faceLeft[1],damage=1)
+                parent.shotList.append(spreadShotLeft)
+                spreadShotRight=self.shot(space,pos.x+16*self.face[0],pos.y+16*self.face[1],faceRight[0],faceRight[1],damage=1)
+                parent.shotList.append(spreadShotRight)
+            if self.charge > 0:
+                self.charge -=1
+                self.power = math.ceil(self.charge/self.maxCharge*3)
+            return True
+        else: return False
 
