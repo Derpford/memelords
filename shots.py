@@ -71,9 +71,12 @@ class SubShot(Shot):
     def __init__(self,space,x,y,fx,fy,speed=160,damage=1,dt=1/120):
         Shot.__init__(self,space,x,y,fx,fy,speed,damage,dt)
         self.timer=0.40
-        self.anim=[pygame.transform.rotate(loadImage('assets/shots/beam1.png'),math.atan2(self.face[0],self.face[1])),
-                    pygame.transform.rotate(loadImage('assets/shots/beam2.png'),math.atan2(self.face[0],self.face[1])),
-                    pygame.transform.rotate(loadImage('assets/shots/beam3.png'),math.atan2(self.face[0],self.face[1]))]
+        rotation=math.atan2(self.face[0],self.face[1])
+        rotation=rotation*180/math.pi
+        rotation+=90 #Kludge until I rotate the sprite itself
+        self.anim=[pygame.transform.rotate(loadImage('assets/shots/beam1.png'),rotation),
+                    pygame.transform.rotate(loadImage('assets/shots/beam2.png'),rotation),
+                    pygame.transform.rotate(loadImage('assets/shots/beam3.png'),rotation)]
         #if abs(fy)>abs(fx):
         #    self.anim=[ pygame.transform.rotate(loadImage('assets/shots/beam1.png'),90),
         #            pygame.transform.rotate(loadImage('assets/shots/beam2.png'),90),
