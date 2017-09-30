@@ -283,7 +283,7 @@ class gameRoom(Room):
             if debugFlags["physics"]:print("Collision between "+str(shot.collision_type)+" and "+str(other.collision_type))
             if type(other.hurt)==types.MethodType:
                 other.hurt(shot.damage)
-            shot.removeFlag=True
+            if shot.removeFlag != None:shot.removeFlag=True
             return True
         def hitShot(arbiter,space,data):
             other=arbiter.shapes[1]
@@ -297,14 +297,13 @@ class gameRoom(Room):
                     dy=800*actors.factor*normal(body.position.y-shot.body.position.y)
                     body.apply_impulse_at_world_point((dx,dy),shot.body.position)
             if shot.collision_type==collisionTypes["shot"] or shot.collision_type==collisionTypes["badshot"]:
-                shot.removeFlag=True
+                if shot.removeFlag != None:shot.removeFlag=True
             if other.collision_type==collisionTypes["shot"] or other.collision_type==collisionTypes["badshot"]:
-                if other.collision_type!=collisionTypes["player"]:
-                    other.removeFlag=True
+                if other.removeFlag != None:other.removeFlag=True
             return False
         def hitWall(arbiter,space,data):
             shot=arbiter.shapes[0]
-            shot.removeFlag=True
+            if shot.removeFlag != None:shot.removeFlag=True
             sound.sounds["hurt"].play()
             return False
         def hitFriend(arbiter,space,data):
@@ -314,7 +313,7 @@ class gameRoom(Room):
             other=arbiter.shapes[1]
             item.pickup(other)
             sound.sounds["pick"].play()
-            item.removeFlag=True
+            if item.removeFlag != None:item.removeFlag=True
             return False
 
         self.space.add_collision_handler(collisionTypes["pickup"],collisionTypes["player"]).begin=hitPickup
@@ -360,7 +359,7 @@ class gameRoom(Room):
             for bad in self.bads:
                 bad.update(self,player)
             for item in self.drops:
-                if item.shape.removeFlag and item.shape.collision_type !=collisionTypes["player"]:
+                if item.shape.removeFlag: #and item.shape.collision_type !=collisionTypes["player"]:
                     self.space.remove(item.shape)
                     self.space.remove(item.body)
                     self.drops.remove(item)

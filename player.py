@@ -146,7 +146,7 @@ class Player(actors.Actor):
             if debug:
                 print("Handling shot, removeFlag: "+str(shot.shape.removeFlag))
                 print("shot position: "+str(shot.body.position))
-            if shot.shape.removeFlag == True and shot is not self and not isInstance(shot,Bad):
+            if shot.shape.removeFlag == True: #and shot is not self and not isInstance(shot,Bad):
                 if shot.body in mapGrid.space.bodies:
                     mapGrid.space.remove(shot.body)
                     mapGrid.space.remove(shot.shape)
