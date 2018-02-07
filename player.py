@@ -164,3 +164,5 @@ class Player(actors.Actor):
                 newShot=self.weapon.shoot(mapGrid.space,self.body.position,self.face,self)
                 if newShot:self.weaponAnim=1
 
+# Register the player as an actor.
+actors.registerActor(Player,"player")

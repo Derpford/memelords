@@ -3,6 +3,15 @@ from helpers import *
 from pygame.locals import *
 debug=debugFlags["actor"]
 
+# List of actors.
+actorDict = {}
+
+def registerActor(actor,name,category=actorDict):
+    # Add an actor to a list.
+    category[name]=actor
+    print("Registered "+name+" actor.")
+
+
 # Movement force factor.
 factor=1000000
 def drawAnimation(screen,frames,pos,speed,t):

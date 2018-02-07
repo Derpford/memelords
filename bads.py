@@ -159,7 +159,7 @@ class Hood(Bad):
                 if debug:
                     print("Firing a shot at "+str(self.body.position)+" toward "+str(self.pattern[self.patternStep-1]))
 # Register Hood as a baddie.
-badList["hood"]=Hood
+#badList["hood"]=Hood
 
 
 class Knight(Bad):
@@ -200,7 +200,7 @@ class Knight(Bad):
                 self.dx=-math.cos(angle)*self.speed*self.dt*self.xFactor
                 self.dy=-math.sin(angle)*self.speed*self.dt*self.yFactor
                 self.body.apply_force_at_local_point((self.dx*actors.factor,self.dy*actors.factor),(0,0))
-badList["knight"]=Knight
+#badList["knight"]=Knight
 
 class Skeleton(Bad):
     def __init__(self,space,x=0,y=0,dt=1/120):
@@ -244,7 +244,7 @@ class Skeleton(Bad):
             if self.shotTimer<=0:
                 self.weapon.shoot(space.space,self.body.position,self.face,self)
                 self.shotTimer=0.25
-badList["skel"]=Skeleton
+#badList["skel"]=Skeleton
 
 class GoldSkeleton(Bad):
     def __init__(self,space,x=0,y=0,dt=1/120):
@@ -288,7 +288,7 @@ class GoldSkeleton(Bad):
             if self.shotTimer<=0:
                 self.weapon.shoot(space.space,self.body.position,self.face,self)
                 self.shotTimer=1
-badList["goldskel"]=GoldSkeleton
+#badList["goldskel"]=GoldSkeleton
 
 class Shroom(Bad):
     def __init__(self,space,x=0,y=0,dt=1/120):
@@ -354,3 +354,9 @@ class Shroom(Bad):
                 self.weapon.shoot(space.space,self.body.position,(fx,fy),self)
 badList["shroom"]=Shroom
 
+# Register all the basic baddies.
+actors.registerActor(Hood,"hood")
+actors.registerActor(Knight,"knight")
+actors.registerActor(Skeleton,"skel")
+actors.registerActor(GoldSkeleton,"goldskel")
+actors.registerActor(Shroom,"shroom")
