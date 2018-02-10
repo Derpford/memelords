@@ -4,8 +4,8 @@ from helpers import *
 from pygame.locals import *
 debug=debugFlags["bad"]
 
-#List of bad guy classes.
-badList={}
+##List of bad guy classes.
+#badList={}
 
 def chooseDrops(drops,space):
         newItem=None
