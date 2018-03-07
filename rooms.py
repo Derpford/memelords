@@ -158,7 +158,7 @@ class gameRoom(Room):
         self.pause=False
         self.roomFile=tile
         self.keyDelay=0
-        self.grid=pytmx.load_pygame(tile)
+        self.grid=pytmx.TiledMap(tile)
         self.space=pymunk.Space()
         self.space.gravity = 0,0
         self.mapImg=pygame.Surface((400,204))
