@@ -30,7 +30,7 @@ class Actor(pygame.sprite.Sprite):
         self.name=None
         self.dead=False
         pygame.sprite.Sprite.__init__(self)
-        self.body=pymunk.Body(1,float('inf')) # Magic numbers!
+        self.body=pymunk.Body(1,1,float('inf')) # Magic numbers!
         self.body.position=(x,y)
         #self.shape=pymunk.Circle(self.body,8)
         self.anim = [loadImage("assets/guy-green/guy-green1.png"),
