@@ -1,4 +1,5 @@
-import pygame, math, random, pytmx, pymunk, sys, types
+import pygame, math, random, pymunk, sys, types
+import  PyTMX as pytmx
 import os
 from helpers import *
 from pygame.locals import *
@@ -445,3 +446,4 @@ class creditsRoom(Room):
         if self.dcurrent!=None:
             self.dcurrent(screen)
         pass
+
