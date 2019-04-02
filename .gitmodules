@@ -1,0 +1,6 @@
+[submodule "pymunk"]
+	path = pymunk
+	url = https://github.com/viblo/pymunk.git
+[submodule "pygame"]
+	path = pygame
+	url = https://github.com/pygame/pygame.git
