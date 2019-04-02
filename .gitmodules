@@ -7,3 +7,6 @@
 [submodule "PyTMX"]
 	path = PyTMX
 	url = https://github.com/bitcraft/PyTMX.git
+[submodule "pytmx"]
+	path = pytmx
+	url = https://github.com/bitcraft/PyTMX.git
