@@ -4,3 +4,6 @@
 [submodule "pygame"]
 	path = pygame
 	url = https://github.com/pygame/pygame.git
+[submodule "PyTMX"]
+	path = PyTMX
+	url = https://github.com/bitcraft/PyTMX.git

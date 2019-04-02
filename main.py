@@ -2,7 +2,8 @@
 from pygame.locals import *
 import pygame
 import pymunk
-import pymunk.pygame_util
+#import pymunk.pygame_util
+# Not used here?
 import sound
 pygame.init()
 #And system libs.
