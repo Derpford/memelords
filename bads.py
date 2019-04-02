@@ -352,7 +352,7 @@ class Shroom(Bad):
                 if fx!=0:fx=normal(fx)
                 if fy!=0:fy=normal(fy)
                 self.weapon.shoot(space.space,self.body.position,(fx,fy),self)
-badList["shroom"]=Shroom
+#badList["shroom"]=Shroom
 
 # Register all the basic baddies.
 actors.registerActor(Hood,"hood")
