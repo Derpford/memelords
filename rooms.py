@@ -1,5 +1,5 @@
 import pygame, math, random, pymunk, sys, types
-import  PyTMX as pytmx
+import pytmx
 import os
 from helpers import *
 from pygame.locals import *
