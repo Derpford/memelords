@@ -28,13 +28,13 @@ def hudInit():
     hudSurface.blit(hudSprites,(392,88),pygame.Rect(24,24,8,8))
     
     # Top, Bottom, Left and Right sides
-    for i in range(0,math.floor(384/16)):
+    for i in range(0,int(math.floor(384/16))):
         hudTopSprite.blit(hudSprites,(i*16,0),pygame.Rect(8,0,16,8))
-    for i in range(0,math.floor(384/16)):
+    for i in range(0,int(math.floor(384/16))):
         hudBottomSprite.blit(hudSprites,(i*16,0),pygame.Rect(8,24,16,8))
-    for i in range(0,math.floor(80/16)):
+    for i in range(0,int(math.floor(80/16))):
         hudLeftSprite.blit(hudSprites,(0,i*16),pygame.Rect(0,8,8,16))
-    for i in range(0,math.floor(80/16)):
+    for i in range(0,int(math.floor(80/16))):
         hudRightSprite.blit(hudSprites,(0,i*16),pygame.Rect(24,8,8,16))
     hudSurface.blit(hudTopSprite,(8,0))
     hudSurface.blit(hudBottomSprite,(8,88))

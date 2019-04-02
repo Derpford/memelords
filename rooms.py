@@ -158,7 +158,7 @@ class gameRoom(Room):
         self.pause=False
         self.roomFile=tile
         self.keyDelay=0
-        self.grid=pytmx.load_pygame(tile)
+        self.grid=pytmx.TiledMap(tile)
         self.space=pymunk.Space()
         self.space.gravity = 0,0
         self.mapImg=pygame.Surface((400,204))
@@ -214,7 +214,8 @@ class gameRoom(Room):
 
         #Adding the stuff in the 'tiles' layer to the screen.
         if 'tiles' in self.grid.layernames:
-            for x, y, img in self.grid.layernames['tiles'].tiles():
+            for x, y, pic in self.grid.layernames['tiles'].tiles():
+                img = loadImage(pic[0]) # PyTMX now returns a tup
                 self.mapImg.blit(img,(x*16,y*16))
 
         # Exit handler.

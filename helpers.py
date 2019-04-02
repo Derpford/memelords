@@ -43,6 +43,7 @@ def normal(num):
 # Width/Height constants.
 width=400
 height=300
+scale = 1 # Set this to change window from pix-perfect to pix-double, etc
 
 # Collision types.
 collisionTypes={

@@ -17,7 +17,7 @@ factor=1000000
 def drawAnimation(screen,frames,pos,speed,t):
     if debug or debugFlags["anim"]:
         print(str(math.floor(pos[0]))+","+str(math.floor(pos[1]))+" anim pos for "+str(math.floor(speed*t%len(frames)))+" in "+str(frames))
-    screen.blit(frames[math.floor(speed*t%len(frames))],(math.floor(pos[0]),math.floor(pos[1])))
+    screen.blit(frames[int(math.floor(speed*t%len(frames)))],(math.floor(pos[0]),math.floor(pos[1])))
 
 def makeDeadAnim(anim):
     deadAnim=[img.copy() for img in anim]
@@ -30,7 +30,7 @@ class Actor(pygame.sprite.Sprite):
         self.name=None
         self.dead=False
         pygame.sprite.Sprite.__init__(self)
-        self.body=pymunk.Body(1,math.inf) # Magic numbers!
+        self.body=pymunk.Body(1,1,float('inf')) # Magic numbers!
         self.body.position=(x,y)
         #self.shape=pymunk.Circle(self.body,8)
         self.anim = [loadImage("assets/guy-green/guy-green1.png"),
