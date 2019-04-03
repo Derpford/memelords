@@ -1,6 +1,6 @@
 import pygame, math, random, sys, types
 import pytmx.pytmx as pytmx
-import pymunk.pymunk as pymunk
+#import pymunk.pymunk as pymunk
 import os
 from helpers import *
 from pygame.locals import *
@@ -104,15 +104,19 @@ class loadRoom(Room):
 
 class menuRoom(Room):
     def __init__(self):
-        self.menu=[("START",self.startGame),("QUIT",self.quit)]
+        self.menu=[("START",self.startGame),("CREDITS",self.quit)]
         self.menuPos=0
         self.keyDelay=0
         self.menuBG=loadImage('assets/title.png')
+        self.subtitle = textMultiLine(gameFont,"Created by$n$rChris Scott",textColors["medlight"])
         pass
 
     def quit(self):
-        pygame.quit()
-        sys.exit()
+        global exitFlag
+        exitFlag=NEXT_FLOOR
+        floorAdd(2)
+        #pygame.quit()
+        #sys.exit()
 
     def startGame(self):
         global exitFlag
@@ -145,6 +149,7 @@ class menuRoom(Room):
         t+=dt
         screen.fill((0,0,0))
         screen.blit(self.menuBG,(0,0))
+        screen.blit(self.subtitle,(40,120))
         pos=(150,150)
         for i in self.menu:
             menuBlit=gameFont.render(i[0],False,textColors["dark"])
@@ -378,51 +383,51 @@ class creditsRoom(Room):
                 (0,lambda screen:screen.blit(self.ThankYou(textColors["meddark"]),self.textpos)),
                 (0.5,lambda screen:screen.blit(self.ThankYou(textColors["medlight"]),self.textpos)),
                 (1,lambda screen:screen.blit(self.ThankYou(textColors["light"]),self.textpos)),
-                (2,lambda screen:screen.blit(self.ThankYou(textColors["medlight"]),self.textpos)),
-                (2.5,lambda screen:screen.blit(self.ThankYou(textColors["meddark"]),self.textpos)),
-                (3,lambda screen:screen.blit(self.ThankYou(textColors["dark"]),self.textpos)),
-                (3.5,lambda screen:screen.blit(self.LoonyThanks(textColors["meddark"]),self.textpos)),
-                (4,lambda screen:screen.blit(self.LoonyThanks(textColors["medlight"]),self.textpos)),
-                (4.5,lambda screen:screen.blit(self.LoonyThanks(textColors["light"]),self.textpos)),
-                (6.5,lambda screen:screen.blit(self.LoonyThanks(textColors["medlight"],textColors["light"]),self.textpos)),
-                (7,lambda screen:screen.blit(self.LoonyThanks(textColors["meddark"],textColors["light"]),self.textpos)),
-                (7.5,lambda screen:screen.blit(self.LoonyThanks(textColors["dark"],textColors["light"]),self.textpos)),
-                (8,lambda screen:screen.blit(self.OpenThanks(textColors["meddark"],textColors["light"]),self.textpos)),
-                (8.5,lambda screen:screen.blit(self.OpenThanks(textColors["medlight"],textColors["light"]),self.textpos)),
-                (9,lambda screen:screen.blit(self.OpenThanks(textColors["light"],textColors["light"]),self.textpos)),
-                (11,lambda screen:screen.blit(self.OpenThanks(textColors["meddark"],textColors["light"]),self.textpos)),
-                (11.5,lambda screen:screen.blit(self.OpenThanks(textColors["dark"],textColors["light"]),self.textpos)),
-                (12,lambda screen:screen.blit(self.InfiniteThanks(textColors["meddark"],textColors["light"]),self.textpos)),
-                (12.5,lambda screen:screen.blit(self.InfiniteThanks(textColors["medlight"],textColors["light"]),self.textpos)),
-                (13,lambda screen:screen.blit(self.InfiniteThanks(textColors["light"],textColors["light"]),self.textpos)),
-                (15,lambda screen:screen.blit(self.InfiniteThanks(textColors["medlight"]),self.textpos)),
-                (15.5,lambda screen:screen.blit(self.InfiniteThanks(textColors["meddark"]),self.textpos)),
-                (16,lambda screen:screen.blit(self.InfiniteThanks(textColors["dark"]),self.textpos)),
-                (16.5,lambda screen:screen.blit(self.EndText(textColors["meddark"]),self.textpos)),
-                (17,lambda screen:screen.blit(self.EndText(textColors["medlight"]),self.textpos)),
-                (17.5,lambda screen:screen.blit(self.EndText(textColors["light"]),self.textpos)),
+                (4,lambda screen:screen.blit(self.ThankYou(textColors["medlight"]),self.textpos)),
+                (4.5,lambda screen:screen.blit(self.ThankYou(textColors["meddark"]),self.textpos)),
+                (5,lambda screen:screen.blit(self.ThankYou(textColors["dark"]),self.textpos)),
+                (5.5,lambda screen:screen.blit(self.LoonyThanks(textColors["meddark"]),self.textpos)),
+                (6,lambda screen:screen.blit(self.LoonyThanks(textColors["medlight"]),self.textpos)),
+                (6.5,lambda screen:screen.blit(self.LoonyThanks(textColors["light"]),self.textpos)),
+                (8.5,lambda screen:screen.blit(self.LoonyThanks(textColors["medlight"]),self.textpos)),
+                (9,lambda screen:screen.blit(self.LoonyThanks(textColors["meddark"]),self.textpos)),
+                (9.5,lambda screen:screen.blit(self.LoonyThanks(textColors["dark"]),self.textpos)),
+                (10,lambda screen:screen.blit(self.OpenThanks(textColors["meddark"]),self.textpos)),
+                (10.5,lambda screen:screen.blit(self.OpenThanks(textColors["medlight"]),self.textpos)),
+                (11,lambda screen:screen.blit(self.OpenThanks(textColors["light"]),self.textpos)),
+                (13,lambda screen:screen.blit(self.OpenThanks(textColors["meddark"]),self.textpos)),
+                (13.5,lambda screen:screen.blit(self.OpenThanks(textColors["dark"]),self.textpos)),
+                (14,lambda screen:screen.blit(self.InfiniteThanks(textColors["meddark"]),self.textpos)),
+                (14.5,lambda screen:screen.blit(self.InfiniteThanks(textColors["medlight"]),self.textpos)),
+                (15,lambda screen:screen.blit(self.InfiniteThanks(textColors["light"]),self.textpos)),
+                (17,lambda screen:screen.blit(self.InfiniteThanks(textColors["medlight"]),self.textpos)),
+                (17.5,lambda screen:screen.blit(self.InfiniteThanks(textColors["meddark"]),self.textpos)),
+                (18,lambda screen:screen.blit(self.InfiniteThanks(textColors["dark"]),self.textpos)),
+                (18.5,lambda screen:screen.blit(self.EndText(textColors["meddark"]),self.textpos)),
+                (19,lambda screen:screen.blit(self.EndText(textColors["medlight"]),self.textpos)),
+                (19.5,lambda screen:screen.blit(self.EndText(textColors["light"]),self.textpos)),
                 ]
         self.ucurrent=None
         self.dcurrent=None
         self.t=0
     
-    def ThankYou(self,color,color2=None):
-        return textMultiLine(gameFont,"Thanks for playing!\nTotal money: "+str(self.money),color,textColors["dark"],color2)
+    def ThankYou(self,color,bg=textColors["dark"],color2=textColors["red"]):
+        return textMultiLine(gameFont,"Thanks for playing!$nTotal money: $r$$"+str(self.money),color)#,color2,bg)
 
-    def LoonyThanks(self,color,color2=None):
-        return textMultiLine(gameFont,"Special thanks to\n Lunacy--Coding Advice",color,textColors["dark"],color2)
+    def LoonyThanks(self,color,bg=textColors["dark"],color2=None):
+        return textMultiLine(gameFont,"Special thanks to$n $rLunacy$R--Coding Advice",color)#,color2,bg)
 
-    def InfiniteThanks(self,color,color2=None):
-        return textMultiLine(gameFont,"Special thanks to\n InfinityJam",color,textColors["dark"],color2)
+    def InfiniteThanks(self,color,bg=textColors["dark"],color2=None):
+        return textMultiLine(gameFont,"Special thanks to$n $rInfinityJam",color)#,color2,bg)
 
-    def OpenThanks(self,color,color2=None):
-        return textMultiLine(gameFont,"Special thanks to\n OpenGameArt.org",color,textColors["dark"],color2)
+    def OpenThanks(self,color,bg=textColors["dark"],color2=None):
+        return textMultiLine(gameFont,"Special thanks to$n $rOpenGameArt.org",color)#,color2,bg)
 
-    def EndText(self,color,color2=None):
-        return textMultiLine(gameFont,"Press any key\nto go back to\n  the  menu",color,textColors["dark"],color2)
+    def EndText(self,color,bg=textColors["dark"],color2=None):
+        return textMultiLine(gameFont,"Press $rany key$R $nto go back to$n  the  menu",color)#,color2,bg)
 
     def update(self,t,dt,player):
-        self.t+=dt*24
+        self.t+=dt*3#*24 ???
         if player!=None:
             self.money=player.money
         else:

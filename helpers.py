@@ -1,4 +1,4 @@
-import pygame, math, random
+import pygame, math, random, re
 
 pygame.font.init()
 # Font.
@@ -8,28 +8,56 @@ textColors={ "dark":(41,57,65),
         "light":(186,195,117),
         "medlight":(133,149,80),
         "meddark":(72,93,72),
+        "red":(204,54,54),
         }
 
-def textMultiLine(font,text,color,bg=textColors["dark"],color2=None):
-    textList=text.split('\n')
-    # Determine height and width of surface to draw to.
+def textMultiLine(font,text,color,color2=textColors["red"],bg=None): # bg = textColors["dark"]
+    textList=re.split("(\$.)",text) # The text, containing formatting codes. $ is escape, $$ is $ literal.
+    unformattedTextList=re.split("\$n",text) # Split the text at $n to get text with newlines...
+    for i in range(0,len(unformattedTextList)): # And then strip out all other formatting, except $$.
+        unformattedTextList[i]=re.sub("\$[^\$]",'',unformattedTextList[i])
+        unformattedTextList[i]=re.sub("\$\$",'$',unformattedTextList[i]) # Replace $$ with $.
+    # Determine height and width of surface to draw to, using unformatted text.
     sizex,sizey=0,0
-    for line in textList:
+    for line in unformattedTextList:
         sx,sy=font.size(line)
         if sx>sizex:sizex=sx #Widest line.
         sizey+=sy#Number of lines.
-    finalSurface=pygame.Surface((sizex,sizey))
-    finalSurface.fill(bg)
+    finalSurface=pygame.Surface((sizex,sizey), pygame.SRCALPHA, 32) # We'll return this later. Setting SRCALPHA and bit depth 32 allows transparent surface.
+    if bg != None:
+        finalSurface.fill(bg)
     # Now render the strings.
     lineY=0
+    lineX=0
+    emphatic = False
     for line in textList:
         sx,sy=font.size(line)
-        if lineY==0 and color2!=None:
-            blit=font.render(line,False,color2)
+        if "$" in line: 
+            # Newline.
+            if line == "$n":
+                lineY+=sy
+                lineX=0
+            # Emphatic text.
+            elif line == "$r":
+                emphatic = True
+            elif line == "$R":
+                emphatic = False
+            # Escaped $.
+            elif "$$" in line:
+                line = re.sub("\$\$","$",line)
+                if emphatic:
+                    blit=font.render(line,False,color2)
+                else:
+                    blit=font.render(line,False,color,bg)
+                finalSurface.blit(blit,(lineX,lineY))
+                lineX+=sx
         else:
-            blit=font.render(line,False,color)
-        finalSurface.blit(blit,(0,lineY))
-        lineY+=sy
+            if emphatic:
+                blit=font.render(line,False,color2)
+            else:
+                blit=font.render(line,False,color,bg)
+            finalSurface.blit(blit,(lineX,lineY))
+            lineX+=sx
     return finalSurface
 
 
