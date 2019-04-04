@@ -9,11 +9,12 @@ textColors={ "dark":(41,57,65),
         "medlight":(133,149,80),
         "meddark":(72,93,72),
         "red":(204,54,54),
+        "darkred":(118,31,40),
         }
 
-def textMultiLine(font,text,color,color2=textColors["red"],bg=None): # bg = textColors["dark"]
-    textList=re.split("(\$.)",text) # The text, containing formatting codes. $ is escape, $$ is $ literal.
-    unformattedTextList=re.split("\$n",text) # Split the text at $n to get text with newlines...
+def textMultiLine(font,text,color,color2=textColors["red"],bg=None, bg2=textColors["darkred"]): # bg = textColors["dark"]
+    textList=re.split("([^\$]\$.)",text) # The text, containing formatting codes. $ is escape, $$ is $ literal, so we skip any $ immediately after $
+    unformattedTextList=re.split("[^\$]\$n",text) # Split the text at $n to get text with newlines...
     for i in range(0,len(unformattedTextList)): # And then strip out all other formatting, except $$.
         unformattedTextList[i]=re.sub("\$[^\$]",'',unformattedTextList[i])
         unformattedTextList[i]=re.sub("\$\$",'$',unformattedTextList[i]) # Replace $$ with $.
@@ -30,35 +31,45 @@ def textMultiLine(font,text,color,color2=textColors["red"],bg=None): # bg = text
     lineY=0
     lineX=0
     emphatic = False
+    altbg = False
     for line in textList:
         sx,sy=font.size(line)
         if "$" in line: 
             # Newline.
-            if line == "$n":
-                lineY+=sy
-                lineX=0
+            if "$$" in line:
+                line = re.sub("\$\$","$",line)
+                blit=renderLine(line,color,color2,bg,bg2,emphatic,altbg) 
+                finalSurface.blit(blit,(lineX,lineY))
+                lineX+=sx
             # Emphatic text.
             elif line == "$r":
                 emphatic = True
             elif line == "$R":
                 emphatic = False
+            # Emphatic background.
+            elif line == "$b":
+                altbg = True
+            elif line == "$B":
+                altbg = False
             # Escaped $.
-            elif "$$" in line:
-                line = re.sub("\$\$","$",line)
-                if emphatic:
-                    blit=font.render(line,False,color2)
-                else:
-                    blit=font.render(line,False,color,bg)
-                finalSurface.blit(blit,(lineX,lineY))
-                lineX+=sx
+            elif line == "$n":
+                lineY+=sy
+                lineX=0
+
         else:
-            if emphatic:
-                blit=font.render(line,False,color2)
-            else:
-                blit=font.render(line,False,color,bg)
+            blit=renderLine(line,color,color2,bg,bg2,emphatic,altbg) 
             finalSurface.blit(blit,(lineX,lineY))
             lineX+=sx
     return finalSurface
+
+def renderLine(line,color,color2,bg,bg2,emphatic,altbg):
+    lineColor = color
+    bgColor = bg
+    if emphatic:
+        lineColor = color2
+    if altbg:
+        bgColor = bg2
+    return gameFont.render(line,False,lineColor,bgColor)
 
 
 keyDelayMax=0.01 # Time until next key press can be processed. Only for one-press keys.
