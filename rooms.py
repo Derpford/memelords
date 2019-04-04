@@ -348,9 +348,9 @@ class gameRoom(Room):
     # Draw the room.
     def draw(self,player,screen,clock,fps):
         #Pymunk debug.
-        self.pymunkoptions=pymunk.pygame_util.DrawOptions(screen)
-        self.pymunkoptions.positive_y_is_up=True
-        self.pymunkoptions.DRAW_SHAPES=True
+#        self.pymunkoptions=pymunk.pygame_util.DrawOptions(screen)
+#        self.pymunkoptions.positive_y_is_up=True
+#        self.pymunkoptions.DRAW_SHAPES=True
         #BG.
         screen.fill((0,0,0))
         screen.blit(self.mapImg,(0,0))
