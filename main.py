@@ -1,9 +1,14 @@
 #Import Pygame.
 from pygame.locals import *
 import pygame
-import pymunk
+#import pymunk
 #import pymunk.pygame_util
-# Not used here?
+
+# Pymunk import workaround, provided by the Pymunk dev team
+import sys
+sys.path.insert(1, 'pymunk')
+import pymunk
+
 import sound
 pygame.init()
 #And system libs.

@@ -1,6 +1,12 @@
 import pygame, math, random, sys, types
 import pytmx.pytmx as pytmx
 #import pymunk.pymunk as pymunk
+
+# Pymunk import workaround, provided by the Pymunk dev team
+import sys
+sys.path.insert(1, 'pymunk')
+import pymunk
+
 import os
 from helpers import *
 from pygame.locals import *
@@ -415,7 +421,7 @@ class creditsRoom(Room):
         return textMultiLine(gameFont,"Thanks for playing!$nTotal money: $r$$"+str(self.money),color)#,color2,bg)
 
     def LoonyThanks(self,color,bg=textColors["dark"],color2=None):
-        return textMultiLine(gameFont,"Special thanks to$n $rLunacy$R--Coding Advice",color)#,color2,bg)
+        return textMultiLine(gameFont,"Special thanks to$n $r$bL$Bu$bn$Ba$bc$By$R--Coding Advice",color)#,color2,bg)
 
     def InfiniteThanks(self,color,bg=textColors["dark"],color2=None):
         return textMultiLine(gameFont,"Special thanks to$n $rInfinityJam",color)#,color2,bg)
