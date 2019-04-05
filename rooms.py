@@ -185,6 +185,7 @@ class gameRoom(Room):
         self.hudSurface = hud.hudInit()
         self.bads=[]
         self.drops=[]
+        self.fx=[]
         # Tiled iterators.
         #Adding the tile bounding boxes.
         if 'tiles' in self.grid.layernames:
@@ -350,6 +351,8 @@ class gameRoom(Room):
             # Iterate through baddies.
             for bad in self.bads:
                 bad.update(self,player)
+            for spark in self.fx:
+                spark.update()
             for item in self.drops:
                 if item.shape.removeFlag: #and item.shape.collision_type !=collisionTypes["player"]:
                     self.space.remove(item.shape)
@@ -373,6 +376,8 @@ class gameRoom(Room):
             bad.draw(screen)
         for item in self.drops:
             item.draw(screen)
+        for spark in self.fx:
+            spark.draw()
         #Debug info.
         fpsReal=getfps(clock,fps)
         if debug:

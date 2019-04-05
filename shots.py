@@ -3,6 +3,23 @@ import actors,sound
 from helpers import *
 debug=debugFlags["shot"]
 
+class hitSpark(actors.Actor):
+    def __init__(self,space,x,y,dt=1/120):
+        actors.Actor.__init__(self,space,x,y,dt)
+        self.anim=[ loadImage('assets/shots/hitspark1.png'),
+                    loadImage('assets/shots/hitspark2.png'),
+                    loadImage('assets/shots/hitspark3.png')]
+        self.timeUp = 1
+
+    def update(self):
+        if self.t > self.timeUp:
+            self.removeFlag = True
+
+    def draw(self,screen):
+        pos=(self.body.position.x-8,self.body.position.y-8)
+        actors.drawAnimation(screen,self.anim,pos,8,self.t)
+        
+
 class Shot(actors.Actor):
     def __init__(self,space,x,y,fx,fy,speed=160,damage=1,dt=1/120):
         actors.Actor.__init__(self,space,x,y,dt)
@@ -54,7 +71,10 @@ class Shot(actors.Actor):
         actors.drawAnimation(screen,self.anim,pos,8,self.t)
 
     def hurt(self,amount):
+        global mapRoom
         self.shape.removeFlag = True        
+        spark = hitSpark(space,self.body.position.x,self.body.position.y)
+        mapRoom.fx.append(spark)
         sound.pingChannel.play(sound.sounds["ping"])
 
 # Bad guy shot
