@@ -13,11 +13,11 @@ textColors={ "dark":(41,57,65),
         }
 
 def textMultiLine(font,text,color,color2=textColors["red"],bg=None, bg2=textColors["darkred"]): # bg = textColors["dark"]
-    textList=re.split("([^\$]\$.)",text) # The text, containing formatting codes. $ is escape, $$ is $ literal, so we skip any $ immediately after $
-    unformattedTextList=re.split("[^\$]\$n",text) # Split the text at $n to get text with newlines...
+    textList=re.split("(\$.)",text) # The text, containing formatting codes. $ is escape, $$ is $ literal, so we skip any $ immediately after $
+    unformattedTextList=re.split("\$n",text) # Split the text at $n to get text with newlines...
     for i in range(0,len(unformattedTextList)): # And then strip out all other formatting, except $$.
-        unformattedTextList[i]=re.sub("\$[^\$]",'',unformattedTextList[i])
-        unformattedTextList[i]=re.sub("\$\$",'$',unformattedTextList[i]) # Replace $$ with $.
+        unformattedTextList[i]=re.sub("\$.",'',unformattedTextList[i])
+        unformattedTextList[i]=re.sub("\$\$",'\$',unformattedTextList[i]) # Replace $$ with $.
     # Determine height and width of surface to draw to, using unformatted text.
     sizex,sizey=0,0
     for line in unformattedTextList:
@@ -36,13 +36,8 @@ def textMultiLine(font,text,color,color2=textColors["red"],bg=None, bg2=textColo
         sx,sy=font.size(line)
         if "$" in line: 
             # Newline.
-            if "$$" in line:
-                line = re.sub("\$\$","$",line)
-                blit=renderLine(line,color,color2,bg,bg2,emphatic,altbg) 
-                finalSurface.blit(blit,(lineX,lineY))
-                lineX+=sx
             # Emphatic text.
-            elif line == "$r":
+            if line == "$r":
                 emphatic = True
             elif line == "$R":
                 emphatic = False
@@ -52,6 +47,11 @@ def textMultiLine(font,text,color,color2=textColors["red"],bg=None, bg2=textColo
             elif line == "$B":
                 altbg = False
             # Escaped $.
+            elif line == "$$":
+                line = re.sub("\$\$","$",line)
+                blit=renderLine(line,color,color2,bg,bg2,emphatic,altbg) 
+                finalSurface.blit(blit,(lineX,lineY))
+                lineX+=sx
             elif line == "$n":
                 lineY+=sy
                 lineX=0
@@ -82,7 +82,7 @@ def normal(num):
 # Width/Height constants.
 width=400
 height=300
-scale = 1 # Set this to change window from pix-perfect to pix-double, etc
+scale = 2 # Set this to change window from pix-perfect to pix-double, etc
 
 # Collision types.
 collisionTypes={
