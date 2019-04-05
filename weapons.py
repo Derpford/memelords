@@ -151,8 +151,8 @@ class BadAxe(Axe):
     def __init__(self):
         Axe.__init__(self)
         self.power=1
-        self.shot=shots.SpreadShot
-        self.shot2=shots.SubShot
+        self.shot=shots.BadSpreadShot
+        self.shot2=shots.BadSubShot
 
 class Dagger(Weapon):
     name="Dagger"
