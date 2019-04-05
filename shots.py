@@ -18,6 +18,8 @@ class Shot(actors.Actor):
         self.speed=speed
         self.timer=0.70
         self.shape.removeFlag=False
+        self.hp = 1
+        self.shape.hurt=self.hurt
         sound.shotChannel.play(sound.sounds["shot"])
 
 
@@ -50,6 +52,10 @@ class Shot(actors.Actor):
     def draw(self,screen):
         pos=(self.body.position.x-3,self.body.position.y-3)
         actors.drawAnimation(screen,self.anim,pos,8,self.t)
+
+    def hurt(self,amount):
+        self.shape.removeFlag = True        
+        sound.pingChannel.play(sound.sounds["ping"])
 
 # Bad guy shot
 class BadShot(Shot):

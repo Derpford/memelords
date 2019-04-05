@@ -102,6 +102,13 @@ class loadRoom(Room):
             self.newRoomList=[creditsRoom()]
         exitFlag=LOAD_COMPLETE
 
+    def draw(self,player,screen,clock,fps):
+        screen.fill((0,0,0))
+        screen.blit(self.bg,(0,0))
+
+class fadeOutRoom(Room):
+    def __init__(self):
+        self.bg=loadImage('assets/load.png')
             
 
     def draw(self,player,screen,clock,fps):
@@ -232,9 +239,9 @@ class gameRoom(Room):
                 #print(repr(pic))
                 if img == None:
                     img = loadImage(pic[0]) # PyTMX now returns a tup
-                newTile = img.subsurface(pic[1])
+                #newTile = img.subsurface(pic[1])
                 #print(repr(img))
-                self.mapImg.blit(newTile,(x*16,y*16))
+                self.mapImg.blit(img,(x*16,y*16),pic[1])
 
         # Exit handler.
         def exitRoom(arbiter,space,data):
@@ -270,22 +277,22 @@ class gameRoom(Room):
                 other.hurt(shot.damage)
             if shot.removeFlag != None:shot.removeFlag=True
             return True
-        def hitShot(arbiter,space,data):
-            other=arbiter.shapes[1]
-            shot=arbiter.shapes[0]
-            sound.pingChannel.play(sound.sounds["ping"])
-            if debugFlags["physics"]:print("Collision between "+str(shot.collision_type)+" and "+str(other.collision_type))
-            for body in space.bodies:
-                if abs(math.hypot(body.position.x-shot.body.position.x,body.position.y-shot.body.position.y))<8:
-                    #body.apply_impulse_at_world_point(40*actors.factor,shot.body.position)
-                    dx=800*actors.factor*normal(body.position.x-shot.body.position.x)
-                    dy=800*actors.factor*normal(body.position.y-shot.body.position.y)
-                    body.apply_impulse_at_world_point((dx,dy),shot.body.position)
-            if shot.collision_type==collisionTypes["shot"] or shot.collision_type==collisionTypes["badshot"]:
-                if shot.removeFlag != None:shot.removeFlag=True
-            if other.collision_type==collisionTypes["shot"] or other.collision_type==collisionTypes["badshot"]:
-                if other.removeFlag != None:other.removeFlag=True
-            return False
+        #def hitShot(arbiter,space,data):
+        #    other=arbiter.shapes[1]
+        #    shot=arbiter.shapes[0]
+        #    sound.pingChannel.play(sound.sounds["ping"])
+        #    if debugFlags["physics"]:print("Collision between "+str(shot.collision_type)+" and "+str(other.collision_type))
+        #    for body in space.bodies:
+        #        if abs(math.hypot(body.position.x-shot.body.position.x,body.position.y-shot.body.position.y))<8:
+        #            #body.apply_impulse_at_world_point(40*actors.factor,shot.body.position)
+        #            dx=800*actors.factor*normal(body.position.x-shot.body.position.x)
+        #            dy=800*actors.factor*normal(body.position.y-shot.body.position.y)
+        #            body.apply_impulse_at_world_point((dx,dy),shot.body.position)
+        #    if shot.collision_type==collisionTypes["shot"] or shot.collision_type==collisionTypes["badshot"]:
+        #        if shot.removeFlag != None:shot.removeFlag=True
+        #    if other.collision_type==collisionTypes["shot"] or other.collision_type==collisionTypes["badshot"]:
+        #        if other.removeFlag != None:other.removeFlag=True
+        #    return False
         def hitWall(arbiter,space,data):
             shot=arbiter.shapes[0]
             if shot.removeFlag != None:shot.removeFlag=True
@@ -302,7 +309,7 @@ class gameRoom(Room):
             return False
 
         self.space.add_collision_handler(collisionTypes["pickup"],collisionTypes["player"]).begin=hitPickup
-        self.space.add_collision_handler(collisionTypes["shot"], collisionTypes["badshot"]).begin=hitShot
+        self.space.add_collision_handler(collisionTypes["shot"], collisionTypes["badshot"]).begin=hitEnemy
         #For player shots.
         self.space.add_collision_handler(collisionTypes["shot"], collisionTypes["bad"]).begin=hitEnemy
         self.space.add_collision_handler(collisionTypes["shot"], collisionTypes["wall"]).begin=hitWall
