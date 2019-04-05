@@ -114,7 +114,7 @@ class menuRoom(Room):
         self.menuPos=0
         self.keyDelay=0
         self.menuBG=loadImage('assets/title.png')
-        self.subtitle = textMultiLine(gameFont,"Created by$n$rChris Scott",textColors["medlight"])
+        self.subtitle = textMultiLine(gameFont,"Created by $n$rChris Scott",textColors["medlight"])
         pass
 
     def quit(self):
@@ -127,7 +127,7 @@ class menuRoom(Room):
     def startGame(self):
         global exitFlag
         exitFlag=NEXT_FLOOR
-        print(str(exitFlag))
+        #print(str(exitFlag))
     
     def update(self,t,dt,player):
         self.keyDelay=max(0,self.keyDelay-dt)
@@ -227,9 +227,14 @@ class gameRoom(Room):
 
         #Adding the stuff in the 'tiles' layer to the screen.
         if 'tiles' in self.grid.layernames:
+            img = None
             for x, y, pic in self.grid.layernames['tiles'].tiles():
-                img = loadImage(pic[0]) # PyTMX now returns a tup
-                self.mapImg.blit(img,(x*16,y*16))
+                #print(repr(pic))
+                if img == None:
+                    img = loadImage(pic[0]) # PyTMX now returns a tup
+                newTile = img.subsurface(pic[1])
+                #print(repr(img))
+                self.mapImg.blit(newTile,(x*16,y*16))
 
         # Exit handler.
         def exitRoom(arbiter,space,data):
