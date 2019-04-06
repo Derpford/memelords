@@ -295,7 +295,7 @@ class gameRoom(Room):
             return True
         def hitWall(arbiter,space,data):
             shot=arbiter.shapes[0]
-            shot.hit()
+            shot.hitWall()
             if shot.removeFlag != None:shot.removeFlag=True
             return False
         def hitFriend(arbiter,space,data):

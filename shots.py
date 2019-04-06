@@ -10,6 +10,7 @@ class hitSpark(actors.Actor):
                     loadImage('assets/shots/hitspark2.png'),
                     loadImage('assets/shots/hitspark3.png')]
         self.timeUp = 0.15 
+        self.animSpeed = 16
 
     def update(self,mapGrid):
         self.t += self.dt
@@ -18,7 +19,7 @@ class hitSpark(actors.Actor):
 
     def draw(self,screen):
         pos=(self.body.position.x-8,self.body.position.y-8)
-        actors.drawAnimation(screen,self.anim,pos,16,self.t)
+        actors.drawAnimation(screen,self.anim,pos,self.animSpeed,self.t)
 
 class parrySpark(hitSpark):
     def __init__(self,space,x,y,dt=1/120):
@@ -31,6 +32,18 @@ class parrySpark(hitSpark):
                     loadImage('assets/shots/parry5.png'),
                     loadImage('assets/shots/parry6.png'),
                     loadImage('assets/shots/parry7.png')]
+
+class hurtSpark(hitSpark):
+    def __init__(self,space,x,y,dt=1/120):
+        hitSpark.__init__(self,space,x,y,dt)
+        self.timeUp = 0.15
+        self.animSpeed = 32
+        self.anim=[ loadImage('assets/shots/hurtslash1.png'),
+                    loadImage('assets/shots/hurtslash2.png'),
+                    loadImage('assets/shots/hurtslash3.png'),
+                    loadImage('assets/shots/hurtslash4.png'),
+                    loadImage('assets/shots/hurtslash5.png'),
+                    loadImage('assets/shots/hurtslash6.png')]
         
 
 class Shot(actors.Actor):
@@ -52,6 +65,7 @@ class Shot(actors.Actor):
         self.hp = 1
         self.shape.hurt=self.hurt
         self.shape.hit=self.hit
+        self.shape.hitWall=self.hitWall
         sound.shotChannel.play(sound.sounds["shot"])
 
 
@@ -93,11 +107,17 @@ class Shot(actors.Actor):
 
     def hit(self):
         self.shape.removeFlag = True
-        spark = hitSpark(self.space,self.body.position.x,self.body.position.y)
+        spark = hurtSpark(self.space,self.body.position.x,self.body.position.y)
         self.room.addActor(spark)
         sound.hurtChannel.play(sound.sounds["hurt"])
         #sound.sounds["hurt"].play()
 
+    def hitWall(self):
+        self.shape.removeFlag = True
+        spark = hitSpark(self.space,self.body.position.x,self.body.position.y)
+        self.room.addActor(spark)
+        sound.hurtChannel.play(sound.sounds["hurt"])
+        
 # Bad guy shot
 class BadShot(Shot):
     def __init__(self,space,x,y,fx,fy,speed=120,damage=1,dt=1/120):
