@@ -38,6 +38,7 @@ class Shot(actors.Actor):
         actors.Actor.__init__(self,space,x,y,dt)
         self.shape=pymunk.Circle(self.body,3)
         self.shape.collision_type=collisionTypes["shot"]
+        self.shape.collided = False
         space.add(self.body,self.shape)
         self.anim=[ loadImage('assets/shots/orb1.png'),
                     loadImage('assets/shots/orb2.png'),

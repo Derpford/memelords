@@ -276,27 +276,23 @@ class gameRoom(Room):
             other=arbiter.shapes[1]
             shot=arbiter.shapes[0]
             if debugFlags["physics"]:print("Collision between "+str(shot.collision_type)+" and "+str(other.collision_type))
-            if type(other.hurt)==types.MethodType:
-                other.hurt(shot.damage)
-            shot.hit()
-            if shot.removeFlag != None:shot.removeFlag=True
+            if not shot.collided:
+                if type(other.hurt)==types.MethodType:
+                    other.hurt(shot.damage)
+                shot.hit()
+                if shot.removeFlag != None:shot.removeFlag=True
+                shot.collided = True
             return True
-        #def hitShot(arbiter,space,data):
-        #    other=arbiter.shapes[1]
-        #    shot=arbiter.shapes[0]
-        #    sound.pingChannel.play(sound.sounds["ping"])
-        #    if debugFlags["physics"]:print("Collision between "+str(shot.collision_type)+" and "+str(other.collision_type))
-        #    for body in space.bodies:
-        #        if abs(math.hypot(body.position.x-shot.body.position.x,body.position.y-shot.body.position.y))<8:
-        #            #body.apply_impulse_at_world_point(40*actors.factor,shot.body.position)
-        #            dx=800*actors.factor*normal(body.position.x-shot.body.position.x)
-        #            dy=800*actors.factor*normal(body.position.y-shot.body.position.y)
-        #            body.apply_impulse_at_world_point((dx,dy),shot.body.position)
-        #    if shot.collision_type==collisionTypes["shot"] or shot.collision_type==collisionTypes["badshot"]:
-        #        if shot.removeFlag != None:shot.removeFlag=True
-        #    if other.collision_type==collisionTypes["shot"] or other.collision_type==collisionTypes["badshot"]:
-        #        if other.removeFlag != None:other.removeFlag=True
-        #    return False
+        def hitShot(arbiter,space,data):
+            other=arbiter.shapes[1]
+            shot=arbiter.shapes[0]
+            if debugFlags["physics"]:print("Collision between "+str(shot.collision_type)+" and "+str(other.collision_type))
+            if not shot.collided:
+                if type(other.hurt)==types.MethodType:
+                    other.hurt(shot.damage)
+                if shot.removeFlag != None:shot.removeFlag=True
+                shot.collided = True
+            return True
         def hitWall(arbiter,space,data):
             shot=arbiter.shapes[0]
             shot.hit()
@@ -313,7 +309,7 @@ class gameRoom(Room):
             return False
 
         self.space.add_collision_handler(collisionTypes["pickup"],collisionTypes["player"]).begin=hitPickup
-        self.space.add_collision_handler(collisionTypes["shot"], collisionTypes["badshot"]).begin=hitEnemy
+        self.space.add_collision_handler(collisionTypes["shot"], collisionTypes["badshot"]).begin=hitShot
         #For player shots.
         self.space.add_collision_handler(collisionTypes["shot"], collisionTypes["bad"]).begin=hitEnemy
         self.space.add_collision_handler(collisionTypes["shot"], collisionTypes["wall"]).begin=hitWall
