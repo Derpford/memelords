@@ -4,15 +4,16 @@ import actors,weapons,sound
 debug=debugFlags["player"]
 
 class Player(actors.Actor):
-    def __init__(self,space, x=0, y=0, dt=1/120):
+    def __init__(self,space, x, y, room,dt=1/120):
         actors.Actor.__init__(self,space,x,y,dt)
         #Physics
         self.shape=pymunk.Circle(self.body,8)
         self.shape.newRoomFlag=False
-        space.add(self.body,self.shape)
+        #space.add(self.body,self.shape)
         self.shape.collision_type = collisionTypes["player"]
         self.shape.hurt=self.hurt
         self.shape.heal=self.heal
+        self.room = room
         #Animation
         self.anim = [loadImage("assets/guy-green/guy-green1.png"),
                 loadImage("assets/guy-green/guy-green2.png"),
@@ -38,6 +39,7 @@ class Player(actors.Actor):
         self.dead=False
         self.shotList=[]
         self.weapon=weapons.Dagger()
+        self.weapon.room = self.room
         self.shape.getWeapon=self.getWeapon
         self.shape.setWeapon=self.setWeapon
         self.weaponAnim=0
@@ -49,6 +51,7 @@ class Player(actors.Actor):
 
     def setWeapon(self,weapon):
         self.weapon=weapon()
+        self.weapon.room = self.room
 
     def addMoney(self,amount):
         self.money+=amount

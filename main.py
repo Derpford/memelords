@@ -50,6 +50,7 @@ clock=pygame.time.Clock()
 playerObject=None
 
 #mapRoom=rooms.gameRoom(roomLayouts[random.randrange(len(roomLayouts))])
+global mapRoom
 mapRoom=rooms.menuRoom()
 print("Entering game in room "+str(mapRoom))
 
@@ -91,7 +92,8 @@ while 1:
             mapRoom=roomList[0]
             if playerObject==None:
                 if hasattr(mapRoom,'space'):
-                    playerObject=player.Player(mapRoom.space,200,150)
+                    playerObject=player.Player(mapRoom.space,200,150,mapRoom)
+                    mapRoom.addActor(playerObject)
             else:
                 if hasattr(mapRoom,'space'):
                     mapRoom.space.add(playerObject.body, playerObject.shape)
@@ -110,7 +112,9 @@ while 1:
             rooms.exitFlag=0
             mapRoom=roomList[roomPos]
             if playerObject==None:
-                playerObject=player.Player(mapRoom.space,200,150)
+                playerObject=player.Player(mapRoom.space,200,150,mapRoom)
+                mapRoom.addActor(playerObject)
             else:
-                mapRoom.space.add(playerObject.body, playerObject.shape)
+                mapRoom.addActor(playerObject)
+                #mapRoom.space.add(playerObject.body, playerObject.shape)
 

@@ -24,7 +24,7 @@ class Bad(actors.Actor):
     def __init__(self,space,x=0,y=0,dt=1/120):
         actors.Actor.__init__(self,space,x,y,dt)
         self.shape=pymunk.Circle(self.body,8)
-        space.space.add(self.body,self.shape)
+        #space.space.add(self.body,self.shape)
         self.anim = [loadImage("assets/hood/hood1.png"),
                 loadImage("assets/hood/hood2.png"),
                 loadImage("assets/hood/hood3.png"),
@@ -65,6 +65,10 @@ class Bad(actors.Actor):
 
     def update(self,space,player):
         actors.Actor.update(self)
+        if self.room != None:
+            if self.weapon.room == None:
+                self.weapon.room = self.room
+
         if self.hp<1 and not self.dead:
             self.dead=True
             sound.sounds["die"].play()
@@ -133,7 +137,6 @@ class Bad(actors.Actor):
 
     def hurt(self,amount):
         if debug: print(self.name+" got hurt for "+str(amount))
-        sound.hurtChannel.play(sound.sounds["hurt"])
         self.hp -= amount
 
 

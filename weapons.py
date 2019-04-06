@@ -16,6 +16,7 @@ class Weapon():
         self.anim=loadImage('assets/weapons/sword.png')
         self.face=[0,0]
         self.shot=shots.Shot
+        self.room = None
 
     def draw(self,surf,pos,weaponAnim):
         if debugFlags["anim"]:
@@ -32,6 +33,8 @@ class Weapon():
         if len(parent.shotList)<self.maxShot:
             self.face=face[:]
             newShot=self.shot(space,pos.x+16*self.face[0],pos.y+16*self.face[1],self.face[0],self.face[1],damage=self.damage)
+            newShot.room = parent.room
+            newShot.shape.room = parent.room
             parent.shotList.append(newShot)
             if self.charge > 0:
                 self.charge -=1
@@ -83,6 +86,8 @@ class Spear(Weapon):
             self.face=face[:]
             newShot=self.shot(space,pos.x+16*self.face[0],pos.y+16*self.face[1],self.face[0],self.face[1],
                     damage=self.damage,multi=self.power+1)
+            newShot.room = parent.room
+            newShot.shape.room = parent.room
             parent.shotList.append(newShot)
             if self.charge > 0:
                 self.charge -=1
@@ -125,11 +130,17 @@ class Axe(Weapon):
             faceRight=math.cos(angleR),math.sin(angleR)
             # Main shot.
             newShot=self.shot(space,pos.x+16*self.face[0],pos.y+16*self.face[1],self.face[0],self.face[1],damage=self.damage)
+            newShot.room = parent.room
+            newShot.shape.room = parent.room
             parent.shotList.append(newShot)
             # Subshots.
             spreadShot=self.shot2(space,pos.x+16*self.face[0],pos.y+16*self.face[1],faceLeft[0],faceLeft[1],damage=1)
+            spreadShot.room = parent.room
+            spreadShot.shape.room = parent.room
             parent.shotList.append(spreadShot)
             spreadShot=self.shot2(space,pos.x+16*self.face[0],pos.y+16*self.face[1],faceRight[0],faceRight[1],damage=1)
+            spreadShot.room = parent.room
+            spreadShot.shape.room = parent.room
             parent.shotList.append(spreadShot)
             if self.charge > 0:
                 self.charge -=1
@@ -174,14 +185,18 @@ class Dagger(Weapon):
             for i in range(0,self.power):
                 # Get a pair of angles for the split shots.
                 angle=math.atan2(self.face[1],self.face[0])
-                angleL=angle+math.pi*0.125*random.randrange(1,self.power+1)
-                angleR=angle-math.pi*0.125*random.randrange(1,self.power+1)
+                angleL=angle+math.pi*0.125*i+0.5#random.randrange(1,self.power+1)
+                angleR=angle-math.pi*0.125*i-0.5#random.randrange(1,self.power+1)
                 faceLeft=math.cos(angleL),math.sin(angleL)
                 faceRight=math.cos(angleR),math.sin(angleR)
                 # Subshots.
                 spreadShotLeft=self.shot(space,pos.x+16*self.face[0],pos.y+16*self.face[1],faceLeft[0],faceLeft[1],damage=1)
+                spreadShotLeft.room = parent.room
+                spreadShotLeft.shape.room = parent.room
                 parent.shotList.append(spreadShotLeft)
                 spreadShotRight=self.shot(space,pos.x+16*self.face[0],pos.y+16*self.face[1],faceRight[0],faceRight[1],damage=1)
+                spreadShotRight.room = parent.room
+                spreadShotRight.shape.room = parent.room
                 parent.shotList.append(spreadShotRight)
             if self.charge > 0:
                 self.charge -=1

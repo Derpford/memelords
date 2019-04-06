@@ -1,5 +1,5 @@
 import math, random, types, pymunk
-import actors,sound
+import actors,sound,rooms
 from helpers import *
 debug=debugFlags["shot"]
 
@@ -9,15 +9,28 @@ class hitSpark(actors.Actor):
         self.anim=[ loadImage('assets/shots/hitspark1.png'),
                     loadImage('assets/shots/hitspark2.png'),
                     loadImage('assets/shots/hitspark3.png')]
-        self.timeUp = 1
+        self.timeUp = 0.15 
 
-    def update(self):
+    def update(self,mapGrid):
+        self.t += self.dt
         if self.t > self.timeUp:
             self.removeFlag = True
 
     def draw(self,screen):
         pos=(self.body.position.x-8,self.body.position.y-8)
-        actors.drawAnimation(screen,self.anim,pos,8,self.t)
+        actors.drawAnimation(screen,self.anim,pos,16,self.t)
+
+class parrySpark(hitSpark):
+    def __init__(self,space,x,y,dt=1/120):
+        hitSpark.__init__(self,space,x,y,dt)
+        self.timeUp = 0.30
+        self.anim=[ loadImage('assets/shots/parry1.png'),
+                    loadImage('assets/shots/parry2.png'),
+                    loadImage('assets/shots/parry3.png'),
+                    loadImage('assets/shots/parry4.png'),
+                    loadImage('assets/shots/parry5.png'),
+                    loadImage('assets/shots/parry6.png'),
+                    loadImage('assets/shots/parry7.png')]
         
 
 class Shot(actors.Actor):
@@ -37,6 +50,7 @@ class Shot(actors.Actor):
         self.shape.removeFlag=False
         self.hp = 1
         self.shape.hurt=self.hurt
+        self.shape.hit=self.hit
         sound.shotChannel.play(sound.sounds["shot"])
 
 
@@ -71,11 +85,17 @@ class Shot(actors.Actor):
         actors.drawAnimation(screen,self.anim,pos,8,self.t)
 
     def hurt(self,amount):
-        global mapRoom
         self.shape.removeFlag = True        
-        spark = hitSpark(space,self.body.position.x,self.body.position.y)
-        mapRoom.fx.append(spark)
+        spark = parrySpark(self.space,self.body.position.x,self.body.position.y)
+        self.room.addActor(spark)
         sound.pingChannel.play(sound.sounds["ping"])
+
+    def hit(self):
+        self.shape.removeFlag = True
+        spark = hitSpark(self.space,self.body.position.x,self.body.position.y)
+        self.room.addActor(spark)
+        sound.hurtChannel.play(sound.sounds["hurt"])
+        #sound.sounds["hurt"].play()
 
 # Bad guy shot
 class BadShot(Shot):

@@ -186,6 +186,7 @@ class gameRoom(Room):
         self.bads=[]
         self.drops=[]
         self.fx=[]
+        self.actorList=[]
         # Tiled iterators.
         #Adding the tile bounding boxes.
         if 'tiles' in self.grid.layernames:
@@ -216,7 +217,7 @@ class gameRoom(Room):
                         #newBad=bads.badList[badName](self,obj.x+8,obj.y+8)
                         # Now we do it with the actor list.
                         newBad=actors.actorDict[badName](self,obj.x+8,obj.y+8)
-                        self.bads.append(newBad)
+                        self.addBad(newBad)
 
 
         #Adding exits.
@@ -260,6 +261,7 @@ class gameRoom(Room):
                 fy = height-fy+(24*exitFlag)
             player.body.jumpTo((fx,fy))
             player.newRoomFlag=True
+            #self.actorList.remove(player)
             if debug:
                 print("Exit num:"+str(exitFlag))
                 print("Xflip: "+str(exit.body.props['xflip'])+", new X: "+str(player.body.position.x))
@@ -276,6 +278,7 @@ class gameRoom(Room):
             if debugFlags["physics"]:print("Collision between "+str(shot.collision_type)+" and "+str(other.collision_type))
             if type(other.hurt)==types.MethodType:
                 other.hurt(shot.damage)
+            shot.hit()
             if shot.removeFlag != None:shot.removeFlag=True
             return True
         #def hitShot(arbiter,space,data):
@@ -296,8 +299,8 @@ class gameRoom(Room):
         #    return False
         def hitWall(arbiter,space,data):
             shot=arbiter.shapes[0]
+            shot.hit()
             if shot.removeFlag != None:shot.removeFlag=True
-            sound.sounds["hurt"].play()
             return False
         def hitFriend(arbiter,space,data):
             return False
@@ -331,6 +334,22 @@ class gameRoom(Room):
             
 
 
+    # Add an actor to actors list.
+    def addActor(self, actor):
+        if not actor in self.actorList:
+            self.actorList.append(actor)
+            actor.room = self
+            if actor.shape != None: 
+                self.space.add(actor.body, actor.shape)
+
+    # Add an actor to bad guys list.
+    def addBad(self, actor):
+        if not actor in self.bads:
+            self.bads.append(actor)
+            actor.room = self
+            if actor.shape != None: 
+                self.space.add(actor.body, actor.shape)
+
     # Update the room.
     def update(self,t,dt,player):
         self.keyDelay=max(0,self.keyDelay-dt)
@@ -347,18 +366,27 @@ class gameRoom(Room):
         if not self.pause:
             # Step through simulation.
             self.space.step(dt)
-            player.update(self)
+            #player.update(self)
             # Iterate through baddies.
             for bad in self.bads:
                 bad.update(self,player)
+            # And effects.
             for spark in self.fx:
                 spark.update()
+            # And items.
             for item in self.drops:
                 if item.shape.removeFlag: #and item.shape.collision_type !=collisionTypes["player"]:
                     self.space.remove(item.shape)
                     self.space.remove(item.body)
                     self.drops.remove(item)
                 item.update()
+            # And actors.
+            for actor in self.actorList:
+                if actor.removeFlag != None: #and item.shape.collision_type !=collisionTypes["player"]:
+                    if actor.shape in self.space.shapes:self.space.remove(actor.shape)
+                    if actor.body in self.space.bodies:self.space.remove(actor.body)
+                    self.actorList.remove(actor)
+                actor.update(self)
 
     # Draw the room.
     def draw(self,player,screen,clock,fps):
@@ -370,12 +398,17 @@ class gameRoom(Room):
         screen.fill((0,0,0))
         screen.blit(self.mapImg,(0,0))
         #Player.
-        player.draw(screen)
+        #player.draw(screen)
         #Bad guys.
         for bad in self.bads:
             bad.draw(screen)
+        # Generic actors.
+        for actor in self.actorList:
+            actor.draw(screen)
+        # Items.
         for item in self.drops:
             item.draw(screen)
+        # Effects.
         for spark in self.fx:
             spark.draw()
         #Debug info.

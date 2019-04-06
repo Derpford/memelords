@@ -27,6 +27,9 @@ def makeDeadAnim(anim):
 
 class Actor(pygame.sprite.Sprite):
     def __init__(self, space, x = 0, y = 0, dt = 1/120):
+        self.space = space
+        self.shape = None
+        self.removeFlag=None
         self.name=None
         self.dead=False
         pygame.sprite.Sprite.__init__(self)
